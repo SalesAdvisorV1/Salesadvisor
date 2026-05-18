@@ -1,0 +1,32 @@
+@import "tailwindcss";
+
+/* Scan entire src/ tree (app, components, etc.) */
+@source "..";
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: #0b0f17;
+  color: #e5e7eb;
+}
+
+.grid-bg {
+  background-image: radial-gradient(
+    circle at 1px 1px,
+    rgba(148, 163, 184, 0.14) 1px,
+    transparent 0
+  );
+  background-size: 28px 28px;
+}
+
+.glass {
+  background: rgba(15, 23, 42, 0.72);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(148, 163, 184, 0.16);
+}
+
+.text-balance {
+  text-wrap: balance;
+}

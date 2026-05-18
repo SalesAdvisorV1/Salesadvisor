@@ -1,0 +1,110 @@
+import type { DashboardData } from "@/types/dashboard";
+
+export const mockDashboardData: DashboardData = {
+  user: {
+    name: "Victor",
+    email: "victor@example.com",
+    plan: "Pro",
+  },
+  stats: {
+    searchesThisMonth: 12,
+    prospectsFound: 248,
+    averageScore: 78,
+    creditsRemaining: 92,
+    creditsTotal: 100,
+  },
+  activities: [
+    {
+      id: "act-1",
+      type: "search",
+      title: "Recherche Logistique Paris",
+      description: "32 prospects analysés, score moyen 84/100",
+      createdAt: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString(),
+    },
+    {
+      id: "act-2",
+      type: "search",
+      title: "Recherche Industrie Île-de-France",
+      description: "48 prospects, 11 prioritaires",
+      createdAt: new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString(),
+    },
+    {
+      id: "act-3",
+      type: "export",
+      title: "Export CSV",
+      description: "Fichier exporté vers le stockage",
+      createdAt: new Date(Date.now() - 26 * 60 * 60 * 1000).toISOString(),
+    },
+    {
+      id: "act-4",
+      type: "ai",
+      title: "Pitch généré — Supply Expert",
+      description: "Message personnalisé prêt à envoyer",
+      createdAt: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000).toISOString(),
+    },
+  ],
+  searchHistory: [
+    {
+      id: "hist-1",
+      sector: "Logistique",
+      city: "Paris",
+      prospectCount: 32,
+      averageScore: 84,
+      createdAt: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString(),
+    },
+    {
+      id: "hist-2",
+      sector: "Industrie",
+      city: "Lyon",
+      prospectCount: 21,
+      averageScore: 76,
+      createdAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(),
+    },
+    {
+      id: "hist-3",
+      sector: "Transport",
+      city: "Lille",
+      prospectCount: 18,
+      averageScore: 81,
+      createdAt: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000).toISOString(),
+    },
+    {
+      id: "hist-4",
+      sector: "Supply chain",
+      city: "Marseille",
+      prospectCount: 27,
+      averageScore: 79,
+      createdAt: new Date(Date.now() - 8 * 24 * 60 * 60 * 1000).toISOString(),
+    },
+  ],
+  priorityProspects: [
+    {
+      id: "pros-1",
+      name: "Translog France",
+      city: "Paris",
+      sector: "Logistique",
+      score: 91,
+    },
+    {
+      id: "pros-2",
+      name: "Supply Expert",
+      city: "Nanterre",
+      sector: "Transport",
+      score: 88,
+    },
+    {
+      id: "pros-3",
+      name: "Quick Freight",
+      city: "Lyon",
+      sector: "Transport",
+      score: 84,
+    },
+    {
+      id: "pros-4",
+      name: "Nord Cargo",
+      city: "Lille",
+      sector: "Logistique",
+      score: 82,
+    },
+  ],
+};

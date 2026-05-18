@@ -1,0 +1,7 @@
+{
+  "permissions": {
+    "allow": [
+      "PowerShell(Get-ChildItem -Recurse \"C:\\\\Users\\\\Victor\\\\Desktop\\\\Sales Advisor\\\\salesadvisor\" -Exclude node_modules,.next | Select-Object FullName | Where-Object { $_.FullName -notmatch \"node_modules|\\\\.next\" })"
+    ]
+  }
+}
