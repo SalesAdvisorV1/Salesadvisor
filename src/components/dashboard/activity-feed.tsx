@@ -9,7 +9,7 @@ const typeLabels: Record<ActivityItem["type"], string> = {
 };
 
 const typeColors: Record<ActivityItem["type"], string> = {
-  search: "bg-white/10 text-white",
+  search: "bg-white/10 text-white/80 border border-white/10",
   export: "bg-violet-500/15 text-violet-300",
   ai: "bg-amber-500/15 text-amber-300",
   enrichment: "bg-white/10 text-white border border-white/20",
