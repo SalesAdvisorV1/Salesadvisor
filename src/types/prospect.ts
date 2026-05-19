@@ -17,6 +17,13 @@ export interface ProspectResult {
   score: number;
   reason: string;
   website?: string;
+  role?: string;
+  size?: string;
+  employees?: string;
+  revenue?: string;
+  contact?: string;
+  phone?: string;
+  linkedin?: string;
 }
 
 export interface ProspectSearchResponse {

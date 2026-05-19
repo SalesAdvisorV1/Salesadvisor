@@ -111,10 +111,6 @@ export function ProspectSearchForm({
         </button>
       </form>
 
-      <p className="mt-6 rounded-2xl border border-slate-800 bg-slate-950 p-4 text-sm text-slate-400">
-        MVP : résultats simulés. Prochaine étape : Google Places + enrichissement
-        IA.
-      </p>
     </div>
   );
 }
