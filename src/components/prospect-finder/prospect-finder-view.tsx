@@ -55,8 +55,7 @@ export function ProspectFinderView() {
   return (
     <div className="mx-auto max-w-7xl">
       <header className="mb-8">
-        <p className="text-sm text-slate-400">Module 2</p>
-        <h1 className="mt-1 text-3xl font-semibold">Smart Prospect Finder</h1>
+        <h1 className="text-3xl font-semibold">Smart Prospect Finder</h1>
         <p className="mt-2 max-w-3xl text-slate-400">
           Recherche de prospects B2B qualifiés à partir de critères métier,
           géographiques et IA.
@@ -84,8 +83,8 @@ export function ProspectFinderView() {
 
         <div className="space-y-6">
           <div className="rounded-3xl border border-slate-800 bg-slate-900/60 p-6">
-            <h2 className="text-xl font-semibold">Carte prospect</h2>
-            <MapPlaceholder />
+            <h2 className="text-xl font-semibold">Zone de prospection</h2>
+            <ProspectionZone filters={lastFilters} />
           </div>
 
           <div className="rounded-3xl border border-slate-800 bg-slate-900/60 p-6">
@@ -127,10 +126,54 @@ export function ProspectFinderView() {
   );
 }
 
-function MapPlaceholder() {
+function ProspectionZone({ filters }: { filters: ProspectSearchFormValues | null }) {
+  const dots = Array.from({ length: 130 });
+
   return (
-    <div className="mt-4 flex h-80 items-center justify-center rounded-2xl border border-dashed border-slate-700 bg-slate-950 text-slate-500">
-      Carte Google Maps — à brancher
+    <div className="mt-4 relative h-80 overflow-hidden rounded-2xl border border-[#1e1e1e] bg-[#0a0a0a]">
+      {/* dot grid */}
+      <div className="absolute inset-0 grid grid-cols-[repeat(13,1fr)] gap-y-5 p-5 pointer-events-none">
+        {dots.map((_, i) => (
+          <span
+            key={i}
+            className="mx-auto h-[3px] w-[3px] rounded-full bg-white/10"
+          />
+        ))}
+      </div>
+
+      {/* center pulse */}
+      <div className="absolute inset-0 flex items-center justify-center">
+        <div className="relative flex items-center justify-center">
+          <span className="absolute h-24 w-24 rounded-full border border-white/5 animate-ping" style={{ animationDuration: "3s" }} />
+          <span className="absolute h-40 w-40 rounded-full border border-white/[0.03]" />
+          <span className="h-3 w-3 rounded-full bg-white/40" />
+        </div>
+      </div>
+
+      {/* filters overlay */}
+      <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/80 via-black/40 to-transparent">
+        {filters ? (
+          <div className="flex flex-wrap gap-2">
+            {filters.sector && (
+              <span className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-white/70">
+                {filters.sector}
+              </span>
+            )}
+            {filters.city && (
+              <span className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-white/70">
+                {filters.city}
+              </span>
+            )}
+            {filters.radius && (
+              <span className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-white/70">
+                {filters.radius}
+              </span>
+            )}
+          </div>
+        ) : (
+          <p className="text-xs text-white/20">Lance une recherche pour afficher la zone</p>
+        )}
+      </div>
     </div>
   );
 }
