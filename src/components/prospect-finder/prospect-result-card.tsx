@@ -4,67 +4,67 @@ interface Props { prospect: ProspectResult; }
 
 export function ProspectResultCard({ prospect }: Props) {
   return (
-    <div className="rounded-xl border border-white/10 bg-white/5 p-5 space-y-3 hover:border-white/20 transition-all">
-      <div className="flex items-start justify-between gap-3">
+    <div className="bg-[#111] border border-[#1e1e1e] rounded-xl p-5 hover:border-[#2a2a2a] hover:bg-[#141414] transition-all">
+      <div className="flex justify-between gap-3">
         <div>
-          <h3 className="font-semibold text-white text-base">{prospect.name}</h3>
-          <p className="text-sm text-gray-400">{prospect.sector} · {prospect.city}, {prospect.country}</p>
+          <h3 className="text-base font-semibold text-white">{prospect.name}</h3>
+          <p className="text-xs text-[#555] mt-0.5">{prospect.sector} · {prospect.city}, {prospect.country}</p>
         </div>
-        <span className="shrink-0 text-sm font-bold bg-white text-black rounded-full px-3 py-1">
+        <span className="bg-white text-black text-xs font-bold px-2.5 py-1 rounded-full shrink-0 h-fit">
           {prospect.score}/100
         </span>
       </div>
 
-      <div className="grid grid-cols-2 gap-2 text-sm">
+      <div className="grid grid-cols-2 gap-x-4 gap-y-3 mt-4">
         {prospect.role && (
           <div>
-            <p className="text-gray-500 text-xs">Poste ciblé</p>
-            <p className="text-white">{prospect.role}</p>
+            <p className="text-[10px] uppercase tracking-widest text-[#333]">Poste ciblé</p>
+            <p className="text-xs text-[#888]">{prospect.role}</p>
           </div>
         )}
         {prospect.size && (
           <div>
-            <p className="text-gray-500 text-xs">Taille</p>
-            <p className="text-white">{prospect.size} · {prospect.employees}</p>
+            <p className="text-[10px] uppercase tracking-widest text-[#333]">Taille</p>
+            <p className="text-xs text-[#888]">{prospect.size} · {prospect.employees}</p>
           </div>
         )}
         {prospect.revenue && (
           <div>
-            <p className="text-gray-500 text-xs">CA estimé</p>
-            <p className="text-white">{prospect.revenue}</p>
+            <p className="text-[10px] uppercase tracking-widest text-[#333]">CA estimé</p>
+            <p className="text-xs text-[#888]">{prospect.revenue}</p>
           </div>
         )}
         {prospect.website && (
           <div>
-            <p className="text-gray-500 text-xs">Site web</p>
-            <a href={`https://${prospect.website}`} target="_blank" rel="noopener noreferrer" className="text-white hover:underline truncate block">{prospect.website}</a>
+            <p className="text-[10px] uppercase tracking-widest text-[#333]">Site web</p>
+            <a href={`https://${prospect.website}`} target="_blank" rel="noopener noreferrer" className="text-xs text-[#888] hover:text-white transition-colors truncate block">{prospect.website}</a>
           </div>
         )}
       </div>
 
-      <div className="grid grid-cols-1 gap-1 text-sm pt-1 border-t border-white/10">
+      <div className="border-t border-[#1a1a1a] pt-3 mt-3 space-y-1.5">
         {prospect.contact && (
           <div className="flex items-center gap-2">
-            <span className="text-gray-500 text-xs w-16">Email</span>
-            <a href={`mailto:${prospect.contact}`} className="text-white hover:underline truncate">{prospect.contact}</a>
+            <span className="text-[10px] uppercase tracking-widest text-[#333] w-14">Email</span>
+            <a href={`mailto:${prospect.contact}`} className="text-xs text-[#888] hover:text-white transition-colors truncate">{prospect.contact}</a>
           </div>
         )}
         {prospect.phone && (
           <div className="flex items-center gap-2">
-            <span className="text-gray-500 text-xs w-16">Tél</span>
-            <a href={`tel:${prospect.phone}`} className="text-white">{prospect.phone}</a>
+            <span className="text-[10px] uppercase tracking-widest text-[#333] w-14">Tél</span>
+            <a href={`tel:${prospect.phone}`} className="text-xs text-[#888]">{prospect.phone}</a>
           </div>
         )}
         {prospect.linkedin && (
           <div className="flex items-center gap-2">
-            <span className="text-gray-500 text-xs w-16">LinkedIn</span>
-            <a href={`https://${prospect.linkedin}`} target="_blank" rel="noopener noreferrer" className="text-white hover:underline truncate">{prospect.linkedin}</a>
+            <span className="text-[10px] uppercase tracking-widest text-[#333] w-14">LinkedIn</span>
+            <a href={`https://${prospect.linkedin}`} target="_blank" rel="noopener noreferrer" className="text-xs text-[#888] hover:text-white transition-colors truncate">{prospect.linkedin}</a>
           </div>
         )}
       </div>
 
       {prospect.reason && (
-        <p className="text-xs text-gray-400 italic border-t border-white/10 pt-2">{prospect.reason}</p>
+        <p className="italic text-xs text-[#444] border-t border-[#1a1a1a] pt-2 mt-2">{prospect.reason}</p>
       )}
     </div>
   );

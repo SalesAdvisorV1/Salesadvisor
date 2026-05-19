@@ -9,36 +9,37 @@ export function CreditsOverview() {
   const percent = total > 0 ? Math.round((remaining / total) * 100) : 0;
 
   return (
-    <div className="rounded-3xl border border-slate-800 bg-slate-900/60 p-6">
-      <div className="flex items-start justify-between gap-4">
+    <div className="bg-[#111] border border-[#1e1e1e] rounded-xl p-5">
+      <div className="flex items-start justify-between gap-4 mb-5">
         <div>
-          <h3 className="text-xl font-semibold">Crédits IA</h3>
-          <p className="mt-1 text-sm text-slate-400">
-            Utilisés pour enrichissement, pitch et résumés
-          </p>
+          <h3 className="text-sm font-semibold text-white mb-1">Crédits IA</h3>
+          <p className="text-xs text-[#555]">Enrichissement, pitch et résumés</p>
         </div>
-        <span className="rounded-full border border-white/20 bg-white/10 px-3 py-1 text-sm font-medium text-white">
+        <span className="bg-white text-black text-[10px] px-2.5 py-1 rounded-full font-bold shrink-0">
           Plan Pro
         </span>
       </div>
 
-      <div className="mt-6 flex items-end gap-2">
-        <span className="text-5xl font-bold tracking-tight">
+      <div className="flex items-end gap-2 mb-3">
+        <span className="text-5xl font-black text-white tracking-tight">
           {initialized ? remaining : "—"}
         </span>
-        <span className="mb-2 text-slate-500">/ {total} restants</span>
+        <span className="mb-2 text-xs text-[#555]">/ {total} restants</span>
       </div>
 
-      <div className="mt-4 h-3 overflow-hidden rounded-full bg-slate-800">
+      <div className="w-full bg-[#1e1e1e] rounded-full h-2 mb-2">
         <div
-          className="h-full rounded-full bg-white/70 transition-all"
+          className="h-2 rounded-full bg-white transition-all duration-300"
           style={{ width: `${initialized ? percent : 0}%` }}
         />
       </div>
 
-      <CreditsMeta initialized={initialized} used={used} percent={percent} />
+      <div className="flex justify-between text-[10px] text-[#333] mb-5">
+        <span>{initialized ? `${used} utilisés ce mois` : "Chargement…"}</span>
+        <span>{initialized ? `${percent}% disponible` : ""}</span>
+      </div>
 
-      <div className="mt-6 grid grid-cols-2 gap-3 text-sm">
+      <div className="grid grid-cols-2 gap-2 mb-4">
         <CreditCost label="Recherche enrichie" cost={2} />
         <CreditCost label="Résumé IA" cost={1} />
         <CreditCost label="Pitch personnalisé" cost={3} />
@@ -47,7 +48,7 @@ export function CreditsOverview() {
 
       <Link
         href="/billing"
-        className="mt-6 flex w-full items-center justify-center rounded-2xl border border-slate-700 bg-slate-950 px-4 py-3 text-sm font-medium text-slate-200 hover:border-slate-600 hover:bg-slate-900"
+        className="flex w-full items-center justify-center bg-[#161616] border border-[#1e1e1e] rounded-xl py-2.5 text-sm text-white hover:bg-[#1e1e1e] transition-all duration-150"
       >
         Gérer mes crédits
       </Link>
@@ -55,28 +56,11 @@ export function CreditsOverview() {
   );
 }
 
-function CreditsMeta({
-  initialized,
-  used,
-  percent,
-}: {
-  initialized: boolean;
-  used: number;
-  percent: number;
-}) {
-  return (
-    <div className="mt-3 flex justify-between text-xs text-slate-500">
-      <span>{initialized ? `${used} utilisés ce mois` : "Chargement…"}</span>
-      <span>{initialized ? `${percent}% disponible` : ""}</span>
-    </div>
-  );
-}
-
 function CreditCost({ label, cost }: { label: string; cost: number }) {
   return (
-    <div className="rounded-xl border border-slate-800 bg-slate-950 px-3 py-2">
-      <div className="text-slate-500">{label}</div>
-      <div className="mt-0.5 font-medium text-white">{cost} cr.</div>
+    <div className="bg-[#161616] border border-[#1e1e1e] rounded-xl p-3">
+      <div className="text-[11px] text-[#555] mb-0.5">{label}</div>
+      <div className="text-sm font-semibold text-white">{cost} cr.</div>
     </div>
   );
 }

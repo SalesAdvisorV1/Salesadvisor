@@ -8,45 +8,34 @@ const typeLabels: Record<ActivityItem["type"], string> = {
   enrichment: "Enrichissement",
 };
 
-const typeColors: Record<ActivityItem["type"], string> = {
-  search: "bg-white/10 text-white/80 border border-white/10",
-  export: "bg-violet-500/15 text-violet-300",
-  ai: "bg-amber-500/15 text-amber-300",
-  enrichment: "bg-white/10 text-white border border-white/20",
-};
-
 export function ActivityFeed({ items }: { items: ActivityItem[] }) {
   return (
-    <div className="rounded-3xl border border-slate-800 bg-slate-900/60 p-6">
-      <h3 className="text-xl font-semibold">Activité récente</h3>
-      <div className="mt-6 space-y-4">
+    <div className="bg-[#111] border border-[#1e1e1e] rounded-xl p-5">
+      <h3 className="text-sm font-semibold text-white mb-4">Activité récente</h3>
+      <div className="space-y-1">
         {items.length === 0 ? (
-          <p className="text-sm text-slate-500">Aucune activité pour le moment.</p>
+          <p className="text-xs text-[#555] py-4 text-center">Aucune activité pour le moment.</p>
         ) : (
           items.map((item) => (
             <article
               key={item.id}
-              className="rounded-2xl border border-slate-800 bg-slate-950 p-4"
+              className="flex gap-3 p-3 rounded-xl hover:bg-[#161616] transition-all duration-150 border border-transparent hover:border-[#1e1e1e]"
             >
-              <div className="flex items-start justify-between gap-4">
-                <div className="min-w-0 flex-1">
-                  <div className="flex flex-wrap items-center gap-2">
-                    <span
-                      className={`rounded-full px-2 py-0.5 text-xs font-medium ${typeColors[item.type]}`}
-                    >
-                      {typeLabels[item.type]}
-                    </span>
-                    <h4 className="font-medium">{item.title}</h4>
-                  </div>
-                  <p className="mt-1 text-sm text-slate-400">{item.description}</p>
+              <div className="min-w-0 flex-1">
+                <div className="flex flex-wrap items-center gap-2 mb-1">
+                  <span className="bg-[#1e1e1e] text-[#888] text-[10px] px-2.5 py-1 rounded-full">
+                    {typeLabels[item.type]}
+                  </span>
+                  <h4 className="text-sm font-medium text-white">{item.title}</h4>
                 </div>
-                <time
-                  className="shrink-0 text-xs text-slate-500"
-                  dateTime={item.createdAt}
-                >
-                  {formatRelativeTime(item.createdAt)}
-                </time>
+                <p className="text-xs text-[#555]">{item.description}</p>
               </div>
+              <time
+                className="shrink-0 text-[10px] text-[#333] ml-auto pt-0.5"
+                dateTime={item.createdAt}
+              >
+                {formatRelativeTime(item.createdAt)}
+              </time>
             </article>
           ))
         )}

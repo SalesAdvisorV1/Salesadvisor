@@ -11,23 +11,23 @@ export function StatCard({ title, label, value, subtitle, sub, highlight }: Stat
   const heading = title || label || '';
   const caption = subtitle || sub || '';
   return (
-    <div className={`rounded-2xl border p-6 transition-all hover:scale-[1.01] ${
+    <div className={`rounded-xl border p-5 transition-all duration-150 ${
       highlight
-        ? 'bg-white border-white text-black shadow-lg'
-        : 'bg-[#111] border-[#222] hover:border-[#333] hover:bg-[#141414]'
+        ? 'bg-white border-white'
+        : 'bg-[#111] border-[#1e1e1e] hover:border-[#2a2a2a]'
     }`}>
-      <p className={`text-[11px] font-semibold uppercase tracking-widest mb-4 ${
-        highlight ? 'text-black/40' : 'text-[#555]'
+      <p className={`text-[11px] uppercase tracking-widest mb-3 ${
+        highlight ? 'text-black/40' : 'text-[#444]'
       }`}>
         {heading}
       </p>
-      <p className={`text-4xl font-black tracking-tight mb-1.5 ${
+      <p className={`text-3xl font-bold mb-1 ${
         highlight ? 'text-black' : 'text-white'
       }`}>
         {value}
       </p>
       {caption && (
-        <p className={`text-xs font-medium ${
+        <p className={`text-xs ${
           highlight ? 'text-black/50' : 'text-[#555]'
         }`}>{caption}</p>
       )}

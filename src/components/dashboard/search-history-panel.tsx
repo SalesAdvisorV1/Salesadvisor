@@ -4,41 +4,39 @@ import type { SearchHistoryItem } from "@/types/dashboard";
 
 export function SearchHistoryPanel({ items }: { items: SearchHistoryItem[] }) {
   return (
-    <div className="rounded-3xl border border-slate-800 bg-slate-900/60 p-6">
-      <div className="flex items-center justify-between">
-        <h3 className="text-xl font-semibold">Historique des recherches</h3>
+    <div>
+      <div className="flex justify-between mb-4">
+        <h3 className="text-sm font-semibold text-white">Historique des recherches</h3>
         <Link
           href="/history"
-          className="text-sm font-medium text-slate-400 hover:text-slate-300"
+          className="text-xs text-[#555] hover:text-white transition-colors"
         >
           Tout voir
         </Link>
       </div>
 
-      <div className="mt-6 space-y-3">
+      <div>
         {items.length === 0 ? (
-          <p className="text-sm text-slate-500">Aucune recherche enregistrée.</p>
+          <p className="text-xs text-[#555]">Aucune recherche enregistrée.</p>
         ) : (
           items.map((item) => (
             <Link
               key={item.id}
               href={`/history?id=${item.id}`}
-              className="flex items-center justify-between rounded-2xl border border-slate-800 bg-slate-950 px-4 py-3 transition-colors hover:border-slate-700 hover:bg-slate-900"
+              className="flex justify-between py-3 border-b border-[#1a1a1a] last:border-0 hover:bg-[#161616] rounded-lg px-2 transition-all cursor-pointer"
             >
               <div>
-                <div className="font-medium">
+                <div className="text-sm font-medium text-white">
                   {formatSearchLabel(item.sector, item.city)}
                 </div>
-                <div className="mt-0.5 text-xs text-slate-500">
-                  {formatRelativeTime(item.createdAt)} · score{" "}
-                  {item.averageScore}
+                <div className="text-xs text-[#555] mt-0.5">
+                  {formatRelativeTime(item.createdAt)} · score {item.averageScore}
                 </div>
               </div>
-              <div className="text-right">
-                <div className="text-sm font-medium text-white">
+              <div className="flex items-center">
+                <span className="bg-[#1e1e1e] text-[#888] text-xs px-2 py-0.5 rounded-full">
                   {item.prospectCount}
-                </div>
-                <div className="text-xs text-slate-500">prospects</div>
+                </span>
               </div>
             </Link>
           ))

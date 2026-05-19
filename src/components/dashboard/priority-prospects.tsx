@@ -3,34 +3,32 @@ import type { PriorityProspect } from "@/types/dashboard";
 
 export function PriorityProspects({ items }: { items: PriorityProspect[] }) {
   return (
-    <div className="rounded-3xl border border-slate-800 bg-slate-900/60 p-6">
-      <div className="flex items-center justify-between">
-        <h3 className="text-xl font-semibold">Prospects prioritaires</h3>
+    <div>
+      <div className="flex items-center justify-between mb-4">
+        <h3 className="text-sm font-semibold text-white">Prospects prioritaires</h3>
         <Link
           href="/prospect-finder"
-          className="text-sm font-medium text-slate-400 hover:text-slate-300"
+          className="text-xs text-[#555] hover:text-white transition-colors"
         >
           Explorer
         </Link>
       </div>
-      <div className="mt-6 space-y-4">
+      <div className="space-y-1">
         {items.map((prospect) => (
-          <article
+          <div
             key={prospect.id}
-            className="rounded-2xl border border-slate-800 bg-slate-950 p-4"
+            className="flex items-center justify-between p-3 rounded-xl hover:bg-[#161616] transition-all border border-transparent hover:border-[#1e1e1e] cursor-pointer"
           >
-            <div className="flex items-center justify-between gap-4">
-              <div>
-                <h4 className="font-medium">{prospect.name}</h4>
-                <p className="text-sm text-slate-400">
-                  {prospect.sector} · {prospect.city}
-                </p>
+            <div>
+              <div className="text-sm font-medium text-white">{prospect.name}</div>
+              <div className="text-xs text-[#555]">
+                {prospect.sector} · {prospect.city}
               </div>
-              <span className="rounded-full border border-white/20 bg-white/10 px-3 py-1 text-sm font-semibold text-white">
-                {prospect.score}
-              </span>
             </div>
-          </article>
+            <div className="w-9 h-9 rounded-full bg-[#1e1e1e] border border-[#2a2a2a] flex items-center justify-center text-xs font-bold text-white shrink-0">
+              {prospect.score}
+            </div>
+          </div>
         ))}
       </div>
     </div>
