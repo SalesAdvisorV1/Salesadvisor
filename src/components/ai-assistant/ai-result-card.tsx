@@ -25,24 +25,24 @@ function SummaryResult({ result }: { result: AiSummaryResult }) {
       </div>
 
       <div className="grid gap-4 sm:grid-cols-2">
-        <div className="rounded-2xl border border-emerald-500/20 bg-emerald-500/5 p-4">
-          <p className="text-sm font-medium text-emerald-400">Points forts</p>
+        <div className="rounded-2xl border border-white/20 bg-white/10 p-4">
+          <p className="text-sm font-medium text-white">Points forts</p>
           <ul className="mt-3 space-y-2">
             {result.strengths.map((s, i) => (
               <li key={i} className="flex items-start gap-2 text-sm text-slate-300">
-                <span className="mt-0.5 h-1.5 w-1.5 shrink-0 rounded-full bg-emerald-400" />
+                <span className="mt-0.5 h-1.5 w-1.5 shrink-0 rounded-full bg-white" />
                 {s}
               </li>
             ))}
           </ul>
         </div>
 
-        <div className="rounded-2xl border border-blue-500/20 bg-blue-500/5 p-4">
-          <p className="text-sm font-medium text-blue-400">Opportunités</p>
+        <div className="rounded-2xl border border-white/20 bg-white/10 p-4">
+          <p className="text-sm font-medium text-white">Opportunités</p>
           <ul className="mt-3 space-y-2">
             {result.opportunities.map((o, i) => (
               <li key={i} className="flex items-start gap-2 text-sm text-slate-300">
-                <span className="mt-0.5 h-1.5 w-1.5 shrink-0 rounded-full bg-blue-400" />
+                <span className="mt-0.5 h-1.5 w-1.5 shrink-0 rounded-full bg-white" />
                 {o}
               </li>
             ))}
@@ -68,9 +68,9 @@ function PitchResult({ result }: { result: AiPitchResult }) {
         </pre>
       </div>
 
-      <div className="rounded-2xl border border-blue-500/20 bg-blue-500/5 p-4">
-        <p className="text-xs font-medium uppercase tracking-wider text-blue-500">Call-to-action</p>
-        <p className="mt-1 font-semibold text-blue-300">{result.cta}</p>
+      <div className="rounded-2xl border border-white/20 bg-white/10 p-4">
+        <p className="text-xs font-medium uppercase tracking-wider text-white">Call-to-action</p>
+        <p className="mt-1 font-semibold text-white">{result.cta}</p>
       </div>
 
       <CopyButton text={`Objet : ${result.subject}\n\n${result.body}\n\n${result.cta}`} />
@@ -116,8 +116,8 @@ function CallPrepResult({ result }: { result: AiCallPrepResult }) {
         </div>
       </div>
 
-      <div className="rounded-2xl border border-emerald-500/20 bg-emerald-500/5 p-4">
-        <p className="text-xs font-medium uppercase tracking-wider text-emerald-500">Closing</p>
+      <div className="rounded-2xl border border-white/20 bg-white/10 p-4">
+        <p className="text-xs font-medium uppercase tracking-wider text-white">Closing</p>
         <p className="mt-2 text-sm leading-6 text-slate-200">{result.closingLine}</p>
       </div>
     </div>

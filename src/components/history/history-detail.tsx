@@ -43,7 +43,7 @@ export function HistoryDetail({ entry }: { entry: HistoryEntry }) {
                   <p className="mt-0.5 text-xs text-slate-500">{prospect.website}</p>
                 ) : null}
               </div>
-              <span className="shrink-0 rounded-full bg-blue-500/15 px-3 py-1 text-sm font-semibold text-blue-300">
+              <span className="shrink-0 rounded-full border border-white/20 bg-white/10 px-3 py-1 text-sm font-semibold text-white">
                 {prospect.score}
               </span>
             </div>

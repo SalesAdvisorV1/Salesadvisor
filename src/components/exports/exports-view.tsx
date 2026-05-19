@@ -53,7 +53,7 @@ export function ExportsView() {
   return (
     <div className="mx-auto max-w-4xl">
       <header className="mb-8">
-        <p className="text-sm text-blue-400">Exports</p>
+        <p className="text-sm text-slate-400">Exports</p>
         <h1 className="mt-1 text-3xl font-semibold">Exports CSV</h1>
         <p className="mt-2 text-slate-400">
           Télécharge tes recherches au format CSV pour les intégrer dans ton CRM ou Excel.
@@ -83,8 +83,8 @@ export function ExportsView() {
                 onClick={() => handleExport(entry.id, entry.sector, entry.city)}
                 className={`shrink-0 rounded-xl px-4 py-2 text-sm font-medium transition-colors ${
                   exported.has(entry.id)
-                    ? "bg-emerald-500/15 text-emerald-400"
-                    : "bg-blue-500/15 text-blue-300 hover:bg-blue-500/25"
+                    ? "bg-white/10 text-white"
+                    : "bg-white/10 text-white hover:bg-white/20"
                 }`}
               >
                 {exported.has(entry.id) ? "Téléchargé ✓" : "Télécharger CSV"}

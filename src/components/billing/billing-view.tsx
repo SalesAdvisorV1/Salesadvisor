@@ -52,7 +52,7 @@ export function BillingView() {
   return (
     <div className="mx-auto max-w-5xl">
       <header className="mb-8">
-        <p className="text-sm text-blue-400">Module 5</p>
+        <p className="text-sm text-slate-400">Module 5</p>
         <h1 className="mt-1 text-3xl font-semibold">Crédits & Facturation</h1>
         <p className="mt-2 text-slate-400">
           Gère ton plan, recharge tes crédits et consulte ton historique de paiement.
@@ -75,7 +75,7 @@ export function BillingView() {
         </div>
         <div className="mt-4 h-3 overflow-hidden rounded-full bg-slate-800">
           <div
-            className="h-full rounded-full bg-gradient-to-r from-blue-500 to-cyan-400 transition-all"
+            className="h-full rounded-full bg-white/70 transition-all"
             style={{ width: `${percent}%` }}
           />
         </div>

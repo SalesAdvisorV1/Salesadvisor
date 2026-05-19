@@ -85,7 +85,7 @@ export function SettingsView() {
   return (
     <div className="mx-auto max-w-2xl">
       <header className="mb-8">
-        <p className="text-sm text-blue-400">Paramètres</p>
+        <p className="text-sm text-slate-400">Paramètres</p>
         <h1 className="mt-1 text-3xl font-semibold">Paramètres du compte</h1>
         <p className="mt-2 text-slate-400">
           Configure ton profil et tes préférences de prospection.
@@ -117,8 +117,8 @@ export function SettingsView() {
           onClick={handleSave}
           className={`rounded-2xl px-6 py-3 text-sm font-semibold transition-colors ${
             saved
-              ? "bg-emerald-500/20 text-emerald-400"
-              : "bg-blue-500 text-white hover:bg-blue-400"
+              ? "bg-white/10 text-white"
+              : "bg-white text-black hover:bg-gray-100"
           }`}
         >
           {saved ? "Enregistré ✓" : "Enregistrer"}
@@ -148,7 +148,7 @@ function SettingsFieldRow({ field }: { field: SettingsField }) {
           aria-checked={toggleValue}
           onClick={() => setToggleValue(!toggleValue)}
           className={`relative h-6 w-11 rounded-full transition-colors ${
-            toggleValue ? "bg-blue-500" : "bg-slate-700"
+            toggleValue ? "bg-white/30" : "bg-slate-700"
           }`}
         >
           <span
@@ -172,7 +172,7 @@ function SettingsFieldRow({ field }: { field: SettingsField }) {
       {field.type === "select" ? (
         <select
           defaultValue={field.defaultValue as string}
-          className="w-full rounded-2xl border border-slate-700 bg-slate-950 px-4 py-3 text-white outline-none focus:border-blue-500"
+          className="w-full rounded-2xl border border-slate-700 bg-slate-950 px-4 py-3 text-white outline-none focus:border-white/20"
         >
           {field.options?.map((opt) => (
             <option key={opt} value={opt}>
@@ -184,7 +184,7 @@ function SettingsFieldRow({ field }: { field: SettingsField }) {
         <input
           type={field.type}
           defaultValue={field.defaultValue as string}
-          className="w-full rounded-2xl border border-slate-700 bg-slate-950 px-4 py-3 text-white outline-none placeholder:text-slate-500 focus:border-blue-500"
+          className="w-full rounded-2xl border border-slate-700 bg-slate-950 px-4 py-3 text-white outline-none placeholder:text-slate-500 focus:border-white/20"
         />
       )}
     </div>

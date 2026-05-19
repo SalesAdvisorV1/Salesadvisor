@@ -9,7 +9,7 @@ export function SearchHistoryPanel({ items }: { items: SearchHistoryItem[] }) {
         <h3 className="text-xl font-semibold">Historique des recherches</h3>
         <Link
           href="/history"
-          className="text-sm font-medium text-blue-400 hover:text-blue-300"
+          className="text-sm font-medium text-slate-400 hover:text-slate-300"
         >
           Tout voir
         </Link>
@@ -35,7 +35,7 @@ export function SearchHistoryPanel({ items }: { items: SearchHistoryItem[] }) {
                 </div>
               </div>
               <div className="text-right">
-                <div className="text-sm font-medium text-blue-300">
+                <div className="text-sm font-medium text-white">
                   {item.prospectCount}
                 </div>
                 <div className="text-xs text-slate-500">prospects</div>

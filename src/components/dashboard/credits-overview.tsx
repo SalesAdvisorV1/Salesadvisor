@@ -17,7 +17,7 @@ export function CreditsOverview() {
             Utilisés pour enrichissement, pitch et résumés
           </p>
         </div>
-        <span className="rounded-full bg-blue-500/15 px-3 py-1 text-sm font-medium text-blue-300">
+        <span className="rounded-full border border-white/20 bg-white/10 px-3 py-1 text-sm font-medium text-white">
           Plan Pro
         </span>
       </div>
@@ -31,7 +31,7 @@ export function CreditsOverview() {
 
       <div className="mt-4 h-3 overflow-hidden rounded-full bg-slate-800">
         <div
-          className="h-full rounded-full bg-gradient-to-r from-blue-500 to-cyan-400 transition-all"
+          className="h-full rounded-full bg-white/70 transition-all"
           style={{ width: `${initialized ? percent : 0}%` }}
         />
       </div>
@@ -76,7 +76,7 @@ function CreditCost({ label, cost }: { label: string; cost: number }) {
   return (
     <div className="rounded-xl border border-slate-800 bg-slate-950 px-3 py-2">
       <div className="text-slate-500">{label}</div>
-      <div className="mt-0.5 font-medium text-blue-300">{cost} cr.</div>
+      <div className="mt-0.5 font-medium text-white">{cost} cr.</div>
     </div>
   );
 }

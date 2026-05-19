@@ -105,7 +105,7 @@ export function ProspectSearchForm({
         <button
           type="submit"
           disabled={isLoading}
-          className="mt-2 w-full rounded-2xl bg-blue-500 px-4 py-3 font-semibold text-white hover:bg-blue-400 disabled:cursor-not-allowed disabled:opacity-60"
+          className="mt-2 w-full rounded-2xl bg-white px-4 py-3 font-semibold text-black hover:bg-gray-100 disabled:cursor-not-allowed disabled:opacity-60"
         >
           {isLoading ? "Recherche en cours…" : "Lancer la recherche (2 cr.)"}
         </button>
@@ -116,7 +116,7 @@ export function ProspectSearchForm({
 }
 
 const inputClass =
-  "w-full rounded-2xl border border-slate-700 bg-slate-950 px-4 py-3 text-white outline-none placeholder:text-slate-500 focus:border-blue-500";
+  "w-full rounded-2xl border border-slate-700 bg-slate-950 px-4 py-3 text-white outline-none placeholder:text-slate-500 focus:border-white/20";
 
 function Field({
   label,

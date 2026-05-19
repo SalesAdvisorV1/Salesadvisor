@@ -8,7 +8,7 @@ export function DashboardHeader({ userName }: DashboardHeaderProps) {
   return (
     <div className="mb-8 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
       <div>
-        <p className="text-sm text-blue-400">Tableau de bord</p>
+        <p className="text-sm text-slate-400">Tableau de bord</p>
         <h1 className="mt-1 text-3xl font-semibold">
           Bonjour, {userName}
         </h1>
@@ -19,7 +19,7 @@ export function DashboardHeader({ userName }: DashboardHeaderProps) {
       </div>
       <Link
         href="/prospect-finder"
-        className="inline-flex w-fit items-center justify-center rounded-2xl bg-blue-500 px-5 py-3 font-semibold text-white transition-colors hover:bg-blue-400"
+        className="inline-flex w-fit items-center justify-center rounded-2xl bg-white px-5 py-3 font-semibold text-black transition-colors hover:bg-gray-100"
       >
         Nouvelle recherche
       </Link>

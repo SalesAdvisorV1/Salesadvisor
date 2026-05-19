@@ -56,7 +56,7 @@ export function AiAssistantView() {
   return (
     <div className="mx-auto max-w-7xl">
       <header className="mb-8">
-        <p className="text-sm text-blue-400">Module 3</p>
+        <p className="text-sm text-slate-400">Module 3</p>
         <h1 className="mt-1 text-3xl font-semibold">Assistance IA</h1>
         <p className="mt-2 max-w-3xl text-slate-400">
           Génère un résumé prospect, un pitch personnalisé ou une préparation
@@ -89,7 +89,7 @@ export function AiAssistantView() {
           <div className="flex items-center justify-between">
             <h2 className="text-xl font-semibold">Résultat IA</h2>
             {mutation.data ? (
-              <span className="rounded-full bg-emerald-500/15 px-3 py-1 text-xs font-medium text-emerald-400">
+              <span className="rounded-full border border-white/20 bg-white/10 px-3 py-1 text-xs font-medium text-white">
                 Généré
               </span>
             ) : null}
@@ -113,7 +113,7 @@ export function AiAssistantView() {
 function AiEmptyState() {
   return (
     <div className="flex flex-col items-center justify-center py-16 text-center">
-      <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-blue-500/10 text-3xl">
+      <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-white/10 text-3xl">
         ✦
       </div>
       <p className="mt-4 font-medium text-slate-300">

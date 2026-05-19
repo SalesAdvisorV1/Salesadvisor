@@ -8,7 +8,7 @@ export function PriorityProspects({ items }: { items: PriorityProspect[] }) {
         <h3 className="text-xl font-semibold">Prospects prioritaires</h3>
         <Link
           href="/prospect-finder"
-          className="text-sm font-medium text-blue-400 hover:text-blue-300"
+          className="text-sm font-medium text-slate-400 hover:text-slate-300"
         >
           Explorer
         </Link>
@@ -26,7 +26,7 @@ export function PriorityProspects({ items }: { items: PriorityProspect[] }) {
                   {prospect.sector} · {prospect.city}
                 </p>
               </div>
-              <span className="rounded-full bg-blue-500/15 px-3 py-1 text-sm font-semibold text-blue-300">
+              <span className="rounded-full border border-white/20 bg-white/10 px-3 py-1 text-sm font-semibold text-white">
                 {prospect.score}
               </span>
             </div>

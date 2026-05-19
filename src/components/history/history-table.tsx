@@ -23,7 +23,7 @@ export function HistoryTable({ entries, selectedId, onSelect }: HistoryTableProp
               onClick={() => onSelect(entry)}
               className={`w-full rounded-2xl border px-4 py-3 text-left transition-colors ${
                 selectedId === entry.id
-                  ? "border-blue-500/50 bg-blue-500/10"
+                  ? "border-white/20 bg-white/10"
                   : "border-slate-800 bg-slate-950 hover:border-slate-700 hover:bg-slate-900"
               }`}
             >
@@ -42,7 +42,7 @@ export function HistoryTable({ entries, selectedId, onSelect }: HistoryTableProp
                   </div>
                 </div>
                 <div className="shrink-0 text-right">
-                  <div className="text-sm font-semibold text-blue-300">
+                  <div className="text-sm font-semibold text-white">
                     {entry.prospectCount}
                   </div>
                   <div className="text-xs text-slate-500">prospects</div>

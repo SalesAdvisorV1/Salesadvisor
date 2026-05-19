@@ -55,7 +55,7 @@ export function ProspectInputForm({
             onClick={() => onTaskChange(opt.value)}
             className={`flex w-full items-center justify-between rounded-2xl border px-4 py-3 text-left transition-colors ${
               selectedTask === opt.value
-                ? "border-blue-500/50 bg-blue-500/10 text-white"
+                ? "border-white/20 bg-white/10 text-white"
                 : "border-slate-700 bg-slate-950 text-slate-300 hover:border-slate-600"
             }`}
           >
@@ -118,7 +118,7 @@ export function ProspectInputForm({
         <button
           type="submit"
           disabled={isLoading}
-          className="mt-2 w-full rounded-2xl bg-blue-500 px-4 py-3 font-semibold text-white hover:bg-blue-400 disabled:cursor-not-allowed disabled:opacity-60"
+          className="mt-2 w-full rounded-2xl bg-white px-4 py-3 font-semibold text-black hover:bg-gray-100 disabled:cursor-not-allowed disabled:opacity-60"
         >
           {isLoading ? "Analyse IA en cours…" : "Lancer l'analyse IA"}
         </button>
@@ -128,7 +128,7 @@ export function ProspectInputForm({
 }
 
 const inputClass =
-  "w-full rounded-2xl border border-slate-700 bg-slate-950 px-4 py-3 text-white outline-none placeholder:text-slate-500 focus:border-blue-500";
+  "w-full rounded-2xl border border-slate-700 bg-slate-950 px-4 py-3 text-white outline-none placeholder:text-slate-500 focus:border-white/20";
 
 function Field({
   label,

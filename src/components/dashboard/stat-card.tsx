@@ -12,7 +12,7 @@ export function StatCard({
   highlight = false,
 }: StatCardProps) {
   const cardClass = highlight
-    ? "border-blue-500/40 bg-gradient-to-br from-blue-500/10 to-slate-900/60"
+    ? "border-white/20 bg-white/10"
     : "border-slate-800 bg-slate-900/60";
 
   return (

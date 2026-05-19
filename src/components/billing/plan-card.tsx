@@ -7,12 +7,12 @@ export function PlanCard({ plan }: { plan: Plan }) {
     <div
       className={`relative flex flex-col rounded-3xl border p-6 ${
         isHighlighted
-          ? "border-blue-500/50 bg-gradient-to-br from-blue-500/10 to-slate-900/60"
+          ? "border-white/20 bg-white/10"
           : "border-slate-800 bg-slate-900/60"
       }`}
     >
       {isHighlighted ? (
-        <span className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-blue-500 px-3 py-0.5 text-xs font-semibold text-white">
+        <span className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full border border-white/20 bg-white/10 px-3 py-0.5 text-xs font-semibold text-white">
           Plan actuel
         </span>
       ) : null}
@@ -28,12 +28,12 @@ export function PlanCard({ plan }: { plan: Plan }) {
         <span className="text-3xl font-bold">{plan.price}€</span>
         <span className="text-slate-500">/{plan.period === "month" ? "mois" : "an"}</span>
       </div>
-      <div className="mt-1 text-sm text-blue-300">{plan.credits} crédits / mois</div>
+      <div className="mt-1 text-sm text-white">{plan.credits} crédits / mois</div>
 
       <ul className="mt-6 flex-1 space-y-2">
         {plan.features.map((feature, i) => (
           <li key={i} className="flex items-start gap-2 text-sm text-slate-300">
-            <span className="mt-0.5 text-emerald-400">✓</span>
+            <span className="mt-0.5 text-white">✓</span>
             {feature}
           </li>
         ))}
@@ -46,7 +46,7 @@ export function PlanCard({ plan }: { plan: Plan }) {
           plan.current
             ? "cursor-default bg-slate-800 text-slate-500"
             : isHighlighted
-              ? "bg-blue-500 text-white hover:bg-blue-400"
+              ? "bg-white text-black hover:bg-gray-100"
               : "border border-slate-700 bg-slate-950 text-slate-200 hover:bg-slate-900"
         }`}
       >
