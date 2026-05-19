@@ -6,20 +6,19 @@ interface DashboardHeaderProps {
 
 export function DashboardHeader({ userName }: DashboardHeaderProps) {
   return (
-    <div className="flex flex-col gap-5 md:flex-row md:items-center md:justify-between mb-8">
+    <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between mb-8">
       <div>
-        <p className="text-[11px] uppercase tracking-[0.12em] text-[#444] font-medium mb-1">Tableau de bord</p>
-        <h1 className="text-2xl font-black text-white leading-tight">
+        <h1 className="text-2xl font-black text-gray-900 leading-tight">
           Bonjour, {userName}
         </h1>
-        <p className="text-[13px] text-[#555] mt-1.5 max-w-md leading-relaxed">
+        <p className="text-sm text-gray-500 mt-1 max-w-md leading-relaxed">
           Aperçu de ton activité, tes crédits et tes dernières recherches de prospects.
         </p>
       </div>
 
       <Link
         href="/prospect-finder"
-        className="inline-flex w-fit items-center gap-2 bg-white text-black text-[13px] font-bold px-5 py-2.5 rounded-lg hover:bg-[#e8e8e8] transition-colors duration-150 shrink-0"
+        className="inline-flex w-fit items-center gap-2 bg-black text-white text-[13px] font-semibold px-5 py-2.5 rounded-xl hover:bg-gray-800 transition-colors duration-150 shrink-0"
       >
         <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.2}>
           <circle cx="11" cy="11" r="7" />

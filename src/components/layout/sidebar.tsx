@@ -2,14 +2,13 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { useCreditsStore } from '@/stores/use-credits-store';
 
 const NAV_ITEMS = [
   {
     href: '/dashboard',
     label: 'Dashboard',
     icon: (
-      <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
+      <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
         <rect x="3" y="3" width="7" height="7" rx="1.5" />
         <rect x="14" y="3" width="7" height="7" rx="1.5" />
         <rect x="3" y="14" width="7" height="7" rx="1.5" />
@@ -21,7 +20,7 @@ const NAV_ITEMS = [
     href: '/prospect-finder',
     label: 'Prospect Finder',
     icon: (
-      <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
+      <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
         <circle cx="11" cy="11" r="7" />
         <path d="M21 21l-4.35-4.35" strokeLinecap="round" />
       </svg>
@@ -31,8 +30,8 @@ const NAV_ITEMS = [
     href: '/ai-assistant',
     label: 'Assistance IA',
     icon: (
-      <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
-        <path d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" strokeLinecap="round" strokeLinejoin="round" />
+      <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
+        <path d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" strokeLinecap="round" strokeLinejoin="round" />
       </svg>
     ),
   },
@@ -40,7 +39,7 @@ const NAV_ITEMS = [
     href: '/history',
     label: 'Historique',
     icon: (
-      <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
+      <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
         <circle cx="12" cy="12" r="9" />
         <path d="M12 7v5l3 3" strokeLinecap="round" strokeLinejoin="round" />
       </svg>
@@ -50,7 +49,7 @@ const NAV_ITEMS = [
     href: '/exports',
     label: 'Exports',
     icon: (
-      <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
+      <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
         <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3" strokeLinecap="round" strokeLinejoin="round" />
       </svg>
     ),
@@ -62,7 +61,7 @@ const BOTTOM_NAV = [
     href: '/billing',
     label: 'Facturation',
     icon: (
-      <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
+      <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
         <rect x="2" y="5" width="20" height="14" rx="2" />
         <path d="M2 10h20" strokeLinecap="round" />
       </svg>
@@ -72,7 +71,7 @@ const BOTTOM_NAV = [
     href: '/settings',
     label: 'Paramètres',
     icon: (
-      <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
+      <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
         <circle cx="12" cy="12" r="3" />
         <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42" strokeLinecap="round" />
       </svg>
@@ -84,50 +83,23 @@ function NavItem({ href, label, icon, isActive }: { href: string; label: string;
   return (
     <Link
       href={href}
-      className={`flex items-center gap-3 px-3 py-2 rounded-lg text-[13px] font-medium transition-all duration-100 group ${
-        isActive
-          ? 'bg-white text-black'
-          : 'text-[#666] hover:text-white hover:bg-[#161616]'
-      }`}
+      className="relative group flex items-center justify-center"
     >
-      <span className={`shrink-0 ${isActive ? 'text-black' : 'text-[#444] group-hover:text-white transition-colors'}`}>
+      <div
+        className={`w-10 h-10 rounded-xl flex items-center justify-center transition-all duration-150 ${
+          isActive
+            ? 'bg-black text-white'
+            : 'text-gray-400 hover:bg-gray-100 hover:text-gray-900'
+        }`}
+      >
         {icon}
-      </span>
-      {label}
+      </div>
+      {/* Tooltip */}
+      <div className="absolute left-full ml-3 px-2.5 py-1.5 bg-gray-900 text-white text-xs rounded-lg whitespace-nowrap opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity duration-150 z-50">
+        {label}
+        <div className="absolute right-full top-1/2 -translate-y-1/2 border-4 border-transparent border-r-gray-900" />
+      </div>
     </Link>
-  );
-}
-
-function CreditsWidget() {
-  const { remaining, total, initialized } = useCreditsStore();
-  const percent = total > 0 ? Math.round((remaining / total) * 100) : 0;
-  const used = total - remaining;
-
-  return (
-    <div className="bg-[#111] border border-[#1e1e1e] rounded-xl p-4">
-      <div className="flex items-center justify-between mb-3">
-        <span className="text-[10px] uppercase tracking-[0.12em] text-[#444] font-medium">Crédits IA</span>
-        <span className="bg-white text-black text-[9px] font-black px-2 py-0.5 rounded-full tracking-wide">PRO</span>
-      </div>
-
-      <div className="flex items-baseline gap-1.5 mb-3">
-        <span className="text-white text-2xl font-black tabular-nums">
-          {initialized ? remaining : '—'}
-        </span>
-        <span className="text-[#444] text-xs">/ {total}</span>
-      </div>
-
-      <div className="w-full bg-[#1e1e1e] rounded-full h-1 mb-2.5">
-        <div
-          className="h-1 rounded-full bg-white transition-all duration-500"
-          style={{ width: `${initialized ? percent : 0}%` }}
-        />
-      </div>
-
-      <p className="text-[#3a3a3a] text-[10px]">
-        {initialized ? `${used} utilisés · ${remaining} restants` : 'Chargement…'}
-      </p>
-    </div>
   );
 }
 
@@ -135,23 +107,20 @@ export function Sidebar() {
   const pathname = usePathname();
 
   return (
-    <aside className="fixed left-0 top-0 h-screen w-64 bg-[#0a0a0a] border-r border-[#1a1a1a] flex flex-col z-40">
+    <aside className="fixed left-0 top-0 h-screen w-16 bg-white border-r border-gray-100 shadow-sm flex flex-col items-center z-50">
 
-      {/* Brand */}
-      <div className="px-4 pt-5 pb-4 border-b border-[#1a1a1a]">
-        <Link href="/dashboard" className="flex items-center gap-3">
-          <div className="w-8 h-8 bg-white rounded-lg flex items-center justify-center shrink-0">
-            <span className="text-black text-[10px] font-black tracking-tight">SA</span>
-          </div>
-          <div>
-            <div className="text-white text-[13px] font-bold leading-tight">Sales Advisor</div>
-            <div className="text-[#3a3a3a] text-[10px] leading-tight mt-0.5">Prospection B2B</div>
-          </div>
+      {/* Logo */}
+      <div className="pt-4 pb-4">
+        <Link href="/dashboard" className="w-10 h-10 bg-black rounded-xl flex items-center justify-center">
+          <span className="text-white text-[11px] font-black tracking-tight">SA</span>
         </Link>
       </div>
 
+      {/* Separator */}
+      <div className="w-8 h-px bg-gray-100 mb-2" />
+
       {/* Main nav */}
-      <nav className="flex-1 px-3 py-4 space-y-0.5 overflow-y-auto">
+      <nav className="flex-1 flex flex-col items-center gap-1 py-2">
         {NAV_ITEMS.map((item) => (
           <NavItem
             key={item.href}
@@ -163,20 +132,24 @@ export function Sidebar() {
         ))}
       </nav>
 
-      {/* Bottom section */}
-      <div className="px-3 pb-4 space-y-3">
-        <CreditsWidget />
+      {/* Separator */}
+      <div className="w-8 h-px bg-gray-100 mb-2" />
 
-        <div className="border-t border-[#1a1a1a] pt-3 space-y-0.5">
-          {BOTTOM_NAV.map((item) => (
-            <NavItem
-              key={item.href}
-              href={item.href}
-              label={item.label}
-              icon={item.icon}
-              isActive={pathname === item.href}
-            />
-          ))}
+      {/* Bottom nav */}
+      <div className="flex flex-col items-center gap-1 pb-3">
+        {BOTTOM_NAV.map((item) => (
+          <NavItem
+            key={item.href}
+            href={item.href}
+            label={item.label}
+            icon={item.icon}
+            isActive={pathname === item.href}
+          />
+        ))}
+
+        {/* Avatar */}
+        <div className="w-10 h-10 mt-2 bg-black rounded-full flex items-center justify-center cursor-pointer hover:bg-gray-800 transition-colors">
+          <span className="text-white text-xs font-bold">V</span>
         </div>
       </div>
     </aside>

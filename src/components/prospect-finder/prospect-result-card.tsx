@@ -5,28 +5,30 @@ interface Props { prospect: ProspectResult; }
 function Field({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <div>
-      <p className="text-[9px] uppercase tracking-[0.14em] text-[#333] mb-1 font-medium">{label}</p>
-      <div className="text-[12px] text-[#888]">{children}</div>
+      <p className="text-[10px] uppercase tracking-[0.12em] text-gray-400 mb-1 font-medium">{label}</p>
+      <div className="text-[13px] text-gray-700">{children}</div>
     </div>
   );
 }
 
 export function ProspectResultCard({ prospect }: Props) {
   const score = prospect.score ?? 0;
-  const scoreColor = score >= 80 ? 'bg-green-500/10 text-green-400 border-green-500/20'
-    : score >= 60 ? 'bg-yellow-500/10 text-yellow-400 border-yellow-500/20'
-    : 'bg-[#1e1e1e] text-[#666] border-[#2a2a2a]';
+  const scoreConfig = score >= 85
+    ? { bg: 'bg-green-50',  text: 'text-green-700',  border: 'border-green-200' }
+    : score >= 70
+    ? { bg: 'bg-orange-50', text: 'text-orange-700', border: 'border-orange-200' }
+    : { bg: 'bg-red-50',    text: 'text-red-700',    border: 'border-red-200' };
 
   return (
-    <div className="bg-[#111] border border-[#1e1e1e] rounded-xl p-5 hover:border-[#2a2a2a] hover:bg-[#131313] transition-all duration-150">
+    <div className="bg-white border border-gray-100 rounded-2xl p-5 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-200">
 
       {/* Header */}
       <div className="flex items-start justify-between gap-3 mb-4">
         <div className="min-w-0">
-          <h3 className="text-[15px] font-bold text-white leading-tight">{prospect.name}</h3>
-          <p className="text-[11px] text-[#555] mt-0.5 truncate">{prospect.sector} · {prospect.city}, {prospect.country}</p>
+          <h3 className="text-[15px] font-bold text-gray-900 leading-tight">{prospect.name}</h3>
+          <p className="text-xs text-gray-400 mt-0.5 truncate">{prospect.sector} · {prospect.city}, {prospect.country}</p>
         </div>
-        <span className={`border text-[11px] font-bold px-2.5 py-1 rounded-lg shrink-0 tabular-nums ${scoreColor}`}>
+        <span className={`border text-[11px] font-bold px-2.5 py-1 rounded-lg shrink-0 tabular-nums ${scoreConfig.bg} ${scoreConfig.text} ${scoreConfig.border}`}>
           {prospect.score}/100
         </span>
       </div>
@@ -42,7 +44,7 @@ export function ProspectResultCard({ prospect }: Props) {
               href={`https://${prospect.website}`}
               target="_blank"
               rel="noopener noreferrer"
-              className="hover:text-white transition-colors truncate block"
+              className="hover:text-black transition-colors truncate block text-blue-600"
             >
               {prospect.website}
             </a>
@@ -52,31 +54,31 @@ export function ProspectResultCard({ prospect }: Props) {
 
       {/* Contact row */}
       {(prospect.contact || prospect.phone || prospect.linkedin) && (
-        <div className="border-t border-[#1a1a1a] pt-3 space-y-2">
+        <div className="border-t border-gray-100 pt-3 space-y-2">
           {prospect.contact && (
             <div className="flex items-center gap-3">
-              <span className="text-[9px] uppercase tracking-[0.14em] text-[#333] w-12 shrink-0 font-medium">Email</span>
-              <a href={`mailto:${prospect.contact}`} className="text-[12px] text-[#888] hover:text-white transition-colors truncate">
+              <span className="text-[10px] uppercase tracking-[0.12em] text-gray-400 w-12 shrink-0 font-medium">Email</span>
+              <a href={`mailto:${prospect.contact}`} className="text-xs text-gray-600 hover:text-black transition-colors truncate">
                 {prospect.contact}
               </a>
             </div>
           )}
           {prospect.phone && (
             <div className="flex items-center gap-3">
-              <span className="text-[9px] uppercase tracking-[0.14em] text-[#333] w-12 shrink-0 font-medium">Tél</span>
-              <a href={`tel:${prospect.phone}`} className="text-[12px] text-[#888] hover:text-white transition-colors">
+              <span className="text-[10px] uppercase tracking-[0.12em] text-gray-400 w-12 shrink-0 font-medium">Tél</span>
+              <a href={`tel:${prospect.phone}`} className="text-xs text-gray-600 hover:text-black transition-colors">
                 {prospect.phone}
               </a>
             </div>
           )}
           {prospect.linkedin && (
             <div className="flex items-center gap-3">
-              <span className="text-[9px] uppercase tracking-[0.14em] text-[#333] w-12 shrink-0 font-medium">LinkedIn</span>
+              <span className="text-[10px] uppercase tracking-[0.12em] text-gray-400 w-12 shrink-0 font-medium">LinkedIn</span>
               <a
                 href={`https://${prospect.linkedin}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-[12px] text-[#888] hover:text-white transition-colors truncate"
+                className="text-xs text-blue-600 hover:text-black transition-colors truncate"
               >
                 {prospect.linkedin}
               </a>
@@ -87,7 +89,7 @@ export function ProspectResultCard({ prospect }: Props) {
 
       {/* Reason */}
       {prospect.reason && (
-        <p className="italic text-[11px] text-[#3a3a3a] border-t border-[#1a1a1a] pt-3 mt-3 leading-relaxed">
+        <p className="italic text-xs text-gray-400 border-t border-gray-100 pt-3 mt-3 leading-relaxed">
           {prospect.reason}
         </p>
       )}
