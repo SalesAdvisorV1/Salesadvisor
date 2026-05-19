@@ -10,15 +10,18 @@ export function MobileNav() {
   const pathname = usePathname();
 
   return (
-    <div className="border-b border-slate-800 bg-slate-900/80 px-4 py-3 md:hidden">
+    <div className="border-b border-[#222] bg-black px-4 py-3 md:hidden">
       <div className="flex items-center justify-between">
-        <Link href="/dashboard" className="font-semibold text-white">
-          Sales Advisor
-        </Link>
+        <div className="flex items-center gap-2.5">
+          <div className="flex h-7 w-7 items-center justify-center rounded-lg border border-[#333] bg-[#111] text-xs font-bold text-white">
+            SA
+          </div>
+          <span className="text-sm font-semibold text-white">Sales Advisor</span>
+        </div>
         <button
           type="button"
           onClick={() => setOpen(!open)}
-          className="rounded-lg border border-slate-700 px-3 py-1.5 text-sm text-slate-300"
+          className="rounded-lg border border-[#333] bg-[#111] px-3 py-1.5 text-xs font-medium text-[#888] transition-colors hover:text-white"
           aria-expanded={open}
           aria-label="Menu"
         >
@@ -27,7 +30,7 @@ export function MobileNav() {
       </div>
 
       {open ? (
-        <nav className="mt-3 space-y-1 pb-2">
+        <nav className="mt-3 space-y-0.5 pb-2">
           {mainNavItems.map((item) => {
             const active = pathname === item.href;
             return (
@@ -35,10 +38,10 @@ export function MobileNav() {
                 key={item.href}
                 href={item.href}
                 onClick={() => setOpen(false)}
-                className={`block rounded-xl px-4 py-2.5 text-sm ${
+                className={`block rounded-xl px-4 py-2.5 text-sm font-medium transition-colors ${
                   active
-                    ? "bg-blue-500/15 text-white"
-                    : "text-slate-300 hover:bg-slate-800"
+                    ? "bg-[#111] border border-[#333] text-white"
+                    : "text-[#888] hover:bg-[#0d0d0d] hover:text-white border border-transparent"
                 }`}
               >
                 {item.label}

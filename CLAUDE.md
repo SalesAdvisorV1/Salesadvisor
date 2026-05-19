@@ -1,36 +1,37 @@
 # Sales Advisor — Contexte pour Claude Code
 
 ## Produit
-Plateforme SaaS de prospection commerciale assistée par IA.
-Inspirée de Lusha / Apollo mais plus légère et simple.
-Cible : commerciaux, SDR, freelances, petites équipes B2B.
+Plateforme SaaS de prospection commerciale assistee par IA.
+Inspiree de Lusha / Apollo mais plus legere et simple.
+Cible : commerciaux, SDR, freelances, petites equipes B2B.
 
 ## Stack
-- Next.js 14 (App Router) + TypeScript
+- Next.js 16 (App Router) + TypeScript
 - Tailwind CSS + Shadcn/ui
-- Supabase (base de données + auth)
+- Supabase (base de donnees + auth)
 - Zustand (state management)
-- React Query (data fetching)
 - OpenAI API (IA)
-- Vercel (déploiement)
+- PM2 (process manager)
+- VPS Hostinger 72.62.185.69
 
-## Modules à construire dans cet ordre
-1. Dashboard utilisateur (sidebar, stats, crédits restants, historique)
-2. Prospect Finder (recherche entreprise + enrichissement données)
-3. Assistance IA (résumé prospect, génération pitch, préparation appel)
+## Projet
+- Code : /var/www/salesadvisor
+- GitHub : https://github.com/SalesAdvisorV1/salesadvisor
+- App : http://72.62.185.69:3000
+
+## Modules
+1. Dashboard (stats, credits, historique)
+2. Prospect Finder (recherche B2B)
+3. Assistance IA (resume, pitch, prep appel)
 4. Historique des recherches
-5. Système de crédits + authentification
+5. Billing + credits
+6. Auth Supabase
 
-## Règles de développement
-- MVP d'abord, perfectionnement ensuite
-- Pas de complexité inutile
-- Composants dans /components
-- Pages dans /app
-- API routes dans /app/api
-- Types dans /types
-- UI avec Shadcn/ui + Tailwind uniquement
-- TypeScript strict partout
+## Regles
+- MVP d'abord, perfection ensuite
+- Apres chaque modif : npm run build + pm2 restart salesadvisor
+- Pusher sur GitHub apres chaque session
+- Ne pas demander de validation a chaque etape
 
-## Philosophie
-Aller vite, livrer quelque chose de fonctionnel, améliorer ensuite.
-L'utilisateur n'est pas développeur — le code doit être propre et autonome.
+## Utilisateur
+Victor — commercial, non developpeur, pilote via instructions.
