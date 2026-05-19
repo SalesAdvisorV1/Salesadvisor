@@ -3,13 +3,13 @@ import { Sidebar } from "@/components/layout/sidebar";
 
 export function AppShell({ children }: { children: React.ReactNode }) {
   return (
-    <div className="flex min-h-screen bg-black text-white">
-      <div className="hidden md:flex">
+    <div className="min-h-screen bg-black text-white">
+      <div className="hidden md:block fixed left-0 top-0 h-screen w-64 z-40">
         <Sidebar />
       </div>
-      <div className="flex min-w-0 flex-1 flex-col">
+      <div className="md:pl-64">
         <MobileNav />
-        <main className="flex-1 overflow-y-auto p-6 md:p-8">{children}</main>
+        <main className="min-h-screen p-8">{children}</main>
       </div>
     </div>
   );
