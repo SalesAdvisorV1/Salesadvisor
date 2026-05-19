@@ -56,7 +56,7 @@ export function AiAssistantView() {
   return (
     <div className="mx-auto max-w-7xl">
       <header className="mb-8">
-        <p className="text-sm text-slate-400">Module 3</p>
+        <p className="text-xs uppercase tracking-widest text-gray-500">Module 3</p>
         <h1 className="mt-1 text-3xl font-semibold">Assistance IA</h1>
         <p className="mt-2 max-w-3xl text-slate-400">
           Génère un résumé prospect, un pitch personnalisé ou une préparation
