@@ -1,11 +1,10 @@
-import { mockHistory } from "@/lib/mock/history";
 import { createAdminClient, isSupabaseConfigured } from "@/lib/supabase/server";
 import type { HistoryEntry } from "@/types/history";
 import type { ProspectResult } from "@/types/prospect";
 
 export async function GET() {
   if (!isSupabaseConfigured()) {
-    return Response.json({ entries: mockHistory, total: mockHistory.length });
+    return Response.json({ entries: [] });
   }
 
   try {
@@ -19,8 +18,13 @@ export async function GET() {
 
     if (error) throw error;
 
+    if ((data ?? []).length === 0) {
+      return Response.json({ entries: [] });
+    }
+
     const entries: HistoryEntry[] = (data ?? []).map((row) => {
-      const filters = safeParseFilters(row.query);
+      console.log("[history] raw row:", JSON.stringify(row));
+      const filters = safeParseFilters(row.id, row.query);
       const prospects = (row.results as ProspectResult[]) ?? [];
       const averageScore =
         prospects.length > 0
@@ -43,21 +47,18 @@ export async function GET() {
       };
     });
 
-    if (entries.length === 0) {
-      return Response.json({ entries: mockHistory, total: mockHistory.length });
-    }
-
     return Response.json({ entries, total: entries.length });
   } catch (err) {
     console.error("[history] Supabase error:", err);
-    return Response.json({ entries: mockHistory, total: mockHistory.length });
+    return Response.json({ entries: [] });
   }
 }
 
-function safeParseFilters(query: string | null): Record<string, string> {
+function safeParseFilters(rowId: string, query: string | null): Record<string, string> {
   try {
     return query ? JSON.parse(query) : {};
-  } catch {
+  } catch (err) {
+    console.error(`[history] JSON parse failed for row ${rowId}, raw query:`, query, "error:", err);
     return {};
   }
 }

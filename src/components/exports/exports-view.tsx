@@ -1,13 +1,10 @@
 "use client";
 
-import { useState } from "react";
-import { mockHistory } from "@/lib/mock/history";
+import { useEffect, useState } from "react";
 import { formatRelativeTime } from "@/lib/format";
+import type { HistoryEntry, HistoryListResponse } from "@/types/history";
 
-function buildCsv(id: string): string {
-  const entry = mockHistory.find((h) => h.id === id);
-  if (!entry) return "";
-
+function buildCsv(entry: HistoryEntry): string {
   const header = "Entreprise,Secteur,Ville,Pays,Score,Site web,Raison\n";
   const rows = entry.prospects
     .map((p) =>
@@ -37,17 +34,32 @@ function downloadCsv(filename: string, content: string) {
 }
 
 export function ExportsView() {
+  const [entries, setEntries] = useState<HistoryEntry[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [exported, setExported] = useState<Set<string>>(new Set());
 
-  function handleExport(id: string, sector: string, city: string) {
-    const csv = buildCsv(id);
+  useEffect(() => {
+    fetch("/api/history")
+      .then((res) => {
+        if (!res.ok) throw new Error("Erreur serveur");
+        return res.json() as Promise<HistoryListResponse>;
+      })
+      .then((data) => setEntries(data.entries))
+      .catch(() => setError("Impossible de charger l'historique."))
+      .finally(() => setLoading(false));
+  }, []);
+
+  function handleExport(entry: HistoryEntry) {
+    const csv = buildCsv(entry);
     if (!csv) return;
-    const filename = `prospects_${sector}_${city}_${new Date().toISOString().slice(0, 10)}.csv`.replace(
-      /\s+/g,
-      "_",
-    );
+    const filename =
+      `prospects_${entry.sector}_${entry.city}_${new Date().toISOString().slice(0, 10)}.csv`.replace(
+        /\s+/g,
+        "_",
+      );
     downloadCsv(filename, csv);
-    setExported((prev) => new Set(prev).add(id));
+    setExported((prev) => new Set(prev).add(entry.id));
   }
 
   return (
@@ -64,7 +76,21 @@ export function ExportsView() {
         <h2 className="text-xl font-semibold">Recherches disponibles</h2>
 
         <div className="mt-6 space-y-3">
-          {mockHistory.map((entry) => (
+          {loading && (
+            <p className="py-6 text-center text-sm text-slate-500">Chargement…</p>
+          )}
+
+          {error && (
+            <p className="py-6 text-center text-sm text-red-400">{error}</p>
+          )}
+
+          {!loading && !error && entries.length === 0 && (
+            <p className="py-6 text-center text-sm text-slate-500">
+              Aucune recherche disponible.
+            </p>
+          )}
+
+          {entries.map((entry) => (
             <div
               key={entry.id}
               className="flex items-center justify-between rounded-2xl border border-slate-800 bg-slate-950 px-4 py-3"
@@ -80,8 +106,9 @@ export function ExportsView() {
 
               <button
                 type="button"
-                onClick={() => handleExport(entry.id, entry.sector, entry.city)}
-                className={`shrink-0 rounded-xl px-4 py-2 text-sm font-medium transition-colors ${
+                onClick={() => handleExport(entry)}
+                disabled={entry.prospects.length === 0}
+                className={`shrink-0 rounded-xl px-4 py-2 text-sm font-medium transition-colors disabled:cursor-not-allowed disabled:opacity-40 ${
                   exported.has(entry.id)
                     ? "bg-white/10 text-white"
                     : "bg-white/10 text-white hover:bg-white/20"
