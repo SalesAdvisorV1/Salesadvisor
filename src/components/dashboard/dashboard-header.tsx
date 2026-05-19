@@ -8,7 +8,7 @@ export function DashboardHeader({ userName }: DashboardHeaderProps) {
   return (
     <div className="mb-8 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
       <div>
-        <p className="text-sm text-slate-400">Tableau de bord</p>
+        <p className="text-sm text-gray-400">Tableau de bord</p>
         <h1 className="mt-1 text-3xl font-semibold">
           Bonjour, {userName}
         </h1>
