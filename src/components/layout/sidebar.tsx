@@ -1,122 +1,161 @@
-"use client";
+'use client';
 
-import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { mainNavItems } from "@/lib/navigation";
-import { useCreditsStore } from "@/stores/use-credits-store";
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+
+const NAV_ITEMS = [
+  {
+    href: '/dashboard',
+    label: 'Dashboard',
+    icon: (
+      <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
+        <rect x="3" y="3" width="7" height="7" rx="1.5" /><rect x="14" y="3" width="7" height="7" rx="1.5" />
+        <rect x="3" y="14" width="7" height="7" rx="1.5" /><rect x="14" y="14" width="7" height="7" rx="1.5" />
+      </svg>
+    ),
+  },
+  {
+    href: '/prospect-finder',
+    label: 'Prospect Finder',
+    icon: (
+      <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
+        <circle cx="11" cy="11" r="7" /><path d="M21 21l-4.35-4.35" strokeLinecap="round" />
+      </svg>
+    ),
+  },
+  {
+    href: '/ai-assistant',
+    label: 'Assistance IA',
+    icon: (
+      <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
+        <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" strokeLinecap="round" strokeLinejoin="round" />
+      </svg>
+    ),
+  },
+  {
+    href: '/history',
+    label: 'Historique',
+    icon: (
+      <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
+        <circle cx="12" cy="12" r="9" /><path d="M12 7v5l3 3" strokeLinecap="round" strokeLinejoin="round" />
+      </svg>
+    ),
+  },
+  {
+    href: '/exports',
+    label: 'Exports',
+    icon: (
+      <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
+        <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3" strokeLinecap="round" strokeLinejoin="round" />
+      </svg>
+    ),
+  },
+];
+
+const BOTTOM_ITEMS = [
+  {
+    href: '/billing',
+    label: 'Facturation',
+    icon: (
+      <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
+        <rect x="2" y="5" width="20" height="14" rx="2" /><path d="M2 10h20" strokeLinecap="round" />
+      </svg>
+    ),
+  },
+  {
+    href: '/settings',
+    label: 'Paramètres',
+    icon: (
+      <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
+        <circle cx="12" cy="12" r="3" />
+        <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42" strokeLinecap="round" />
+      </svg>
+    ),
+  },
+];
 
 export function Sidebar() {
   const pathname = usePathname();
-  const { remaining, total, initialized } = useCreditsStore();
-  const creditsPercent = total > 0 ? Math.round((remaining / total) * 100) : 0;
 
   return (
-    <aside className="flex h-full w-64 shrink-0 flex-col border-r border-[#222] bg-black p-5">
-      <SidebarBrand />
+    <aside className="fixed left-0 top-0 h-screen w-64 bg-[#0a0a0a] border-r border-[#1a1a1a] flex flex-col z-40">
 
-      <nav className="mt-8 flex-1 space-y-0.5 overflow-y-auto">
-        {mainNavItems.map((item) => {
-          const active =
-            pathname === item.href ||
-            (item.href !== "/dashboard" && pathname.startsWith(item.href));
+      {/* Brand */}
+      <div className="px-5 py-5 border-b border-[#1a1a1a]">
+        <Link href="/dashboard" className="flex items-center gap-2.5">
+          <div className="w-7 h-7 bg-white rounded-lg flex items-center justify-center shrink-0">
+            <span className="text-black text-[11px] font-black tracking-tight">SA</span>
+          </div>
+          <div className="flex flex-col">
+            <span className="text-white font-semibold text-sm tracking-tight leading-tight">Sales Advisor</span>
+            <span className="text-[#444] text-[10px] tracking-wide">Prospection B2B</span>
+          </div>
+        </Link>
+      </div>
 
+      {/* Main nav */}
+      <nav className="flex-1 px-3 py-4 space-y-0.5 overflow-y-auto">
+        {NAV_ITEMS.map((item) => {
+          const isActive = pathname === item.href || pathname.startsWith(item.href + '/');
           return (
             <Link
               key={item.href}
               href={item.href}
-              className={`flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm transition-all ${
-                active
-                  ? "bg-[#111] border border-[#333] text-white"
-                  : "text-[#888] hover:bg-[#0d0d0d] hover:text-white border border-transparent"
+              className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all group ${
+                isActive
+                  ? 'bg-white text-black'
+                  : 'text-[#888] hover:text-white hover:bg-[#1a1a1a]'
               }`}
             >
-              <NavIcon href={item.href} active={active} />
-              <span className="font-medium">{item.label}</span>
+              <span className={`transition-colors ${isActive ? 'text-black' : 'text-[#555] group-hover:text-white'}`}>
+                {item.icon}
+              </span>
+              {item.label}
             </Link>
           );
         })}
       </nav>
 
-      <div className="mt-4 shrink-0 rounded-xl border border-[#222] bg-[#0a0a0a] p-4">
-        <div className="flex items-center justify-between">
-          <span className="text-xs font-medium text-[#888]">Crédits IA</span>
-          <span className="rounded-full border border-[#333] bg-[#111] px-2 py-0.5 text-xs font-medium text-white">
-            Actif
-          </span>
+      {/* Credits widget */}
+      <div className="px-3 py-3 border-t border-[#1a1a1a]">
+        <div className="bg-[#111] rounded-xl p-3.5 mb-2 border border-[#1e1e1e]">
+          <div className="flex items-center justify-between mb-2.5">
+            <span className="text-[11px] text-[#555] font-semibold uppercase tracking-widest">Crédits IA</span>
+            <span className="text-[10px] bg-white text-black px-2 py-0.5 rounded-full font-bold">Pro</span>
+          </div>
+          <div className="flex items-baseline gap-1 mb-2.5">
+            <span className="text-white font-bold text-xl">92</span>
+            <span className="text-[#444] text-xs">/ 100 crédits</span>
+          </div>
+          <div className="w-full bg-[#1a1a1a] rounded-full h-1.5 mb-1.5">
+            <div className="bg-white h-1.5 rounded-full transition-all" style={{ width: '92%' }}></div>
+          </div>
+          <p className="text-[10px] text-[#333]">Renouvellement le 1 juin</p>
         </div>
-        <div className="mt-3 flex items-baseline justify-between">
-          <span className="text-2xl font-bold text-white">
-            {initialized ? remaining : "—"}
-          </span>
-          <span className="text-xs text-[#444]">/ {total}</span>
+
+        {/* Bottom nav */}
+        <div className="space-y-0.5">
+          {BOTTOM_ITEMS.map((item) => {
+            const isActive = pathname === item.href;
+            return (
+              <Link
+                key={item.href}
+                href={item.href}
+                className={`flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-all group ${
+                  isActive
+                    ? 'bg-white text-black'
+                    : 'text-[#666] hover:text-white hover:bg-[#1a1a1a]'
+                }`}
+              >
+                <span className={`transition-colors ${isActive ? 'text-black' : 'text-[#444] group-hover:text-white'}`}>
+                  {item.icon}
+                </span>
+                {item.label}
+              </Link>
+            );
+          })}
         </div>
-        <div className="mt-3 h-1.5 overflow-hidden rounded-full bg-[#222]">
-          <div
-            className="h-full rounded-full bg-white transition-all duration-500"
-            style={{ width: `${initialized ? creditsPercent : 0}%` }}
-          />
-        </div>
-        <Link
-          href="/billing"
-          className="mt-3 block text-center text-xs font-medium text-[#888] transition-colors hover:text-white"
-        >
-          Recharger →
-        </Link>
       </div>
     </aside>
   );
-}
-
-function SidebarBrand() {
-  return (
-    <div className="flex items-center gap-3 px-1">
-      <div className="flex h-8 w-8 items-center justify-center rounded-lg border border-[#333] bg-[#111] text-xs font-bold text-white">
-        SA
-      </div>
-      <span className="text-sm font-semibold tracking-tight text-white">Sales Advisor</span>
-    </div>
-  );
-}
-
-function NavIcon({ href, active }: { href: string; active: boolean }) {
-  const color = active ? "#fff" : "#555";
-  const icons: Record<string, React.ReactNode> = {
-    "/dashboard": (
-      <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke={color} strokeWidth={1.75}>
-        <path strokeLinecap="round" strokeLinejoin="round" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z" />
-      </svg>
-    ),
-    "/prospect-finder": (
-      <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke={color} strokeWidth={1.75}>
-        <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
-      </svg>
-    ),
-    "/ai-assistant": (
-      <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke={color} strokeWidth={1.75}>
-        <path strokeLinecap="round" strokeLinejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09z" />
-      </svg>
-    ),
-    "/history": (
-      <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke={color} strokeWidth={1.75}>
-        <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
-      </svg>
-    ),
-    "/exports": (
-      <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke={color} strokeWidth={1.75}>
-        <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3" />
-      </svg>
-    ),
-    "/billing": (
-      <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke={color} strokeWidth={1.75}>
-        <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3m-3.75 3h15a2.25 2.25 0 002.25-2.25V6.75A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25v10.5A2.25 2.25 0 004.5 19.5z" />
-      </svg>
-    ),
-    "/settings": (
-      <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke={color} strokeWidth={1.75}>
-        <path strokeLinecap="round" strokeLinejoin="round" d="M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.324.196.72.257 1.075.124l1.217-.456a1.125 1.125 0 011.37.49l1.296 2.247a1.125 1.125 0 01-.26 1.431l-1.003.827c-.293.24-.438.613-.431.992a6.759 6.759 0 010 .255c-.007.378.138.75.43.99l1.005.828c.424.35.534.954.26 1.43l-1.298 2.247a1.125 1.125 0 01-1.369.491l-1.217-.456c-.355-.133-.75-.072-1.076.124a6.57 6.57 0 01-.22.128c-.331.183-.581.495-.644.869l-.213 1.28c-.09.543-.56.941-1.11.941h-2.594c-.55 0-1.02-.398-1.11-.94l-.213-1.281c-.062-.374-.312-.686-.644-.87a6.52 6.52 0 01-.22-.127c-.325-.196-.72-.257-1.076-.124l-1.217.456a1.125 1.125 0 01-1.369-.49l-1.297-2.247a1.125 1.125 0 01.26-1.431l1.004-.827c.292-.24.437-.613.43-.992a6.932 6.932 0 010-.255c.007-.378-.138-.75-.43-.99l-1.004-.828a1.125 1.125 0 01-.26-1.43l1.297-2.247a1.125 1.125 0 011.37-.491l1.216.456c.356.133.751.072 1.076-.124.072-.044.146-.087.22-.128.332-.183.582-.495.644-.869l.214-1.281z" />
-        <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-      </svg>
-    ),
-  };
-  return <span className="shrink-0">{icons[href] ?? null}</span>;
 }
