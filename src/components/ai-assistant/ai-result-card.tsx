@@ -25,7 +25,7 @@ function SummaryResult({ result }: { result: AiSummaryResult }) {
       </div>
 
       <div className="grid gap-4 sm:grid-cols-2">
-        <div className="rounded-2xl border border-white/20 bg-white/10 p-4">
+        <div className="rounded-xl border border-white/10 bg-white/5 p-4">
           <p className="text-sm font-medium text-white">Points forts</p>
           <ul className="mt-3 space-y-2">
             {result.strengths.map((s, i) => (
@@ -37,7 +37,7 @@ function SummaryResult({ result }: { result: AiSummaryResult }) {
           </ul>
         </div>
 
-        <div className="rounded-2xl border border-white/20 bg-white/10 p-4">
+        <div className="rounded-xl border border-white/10 bg-white/5 p-4">
           <p className="text-sm font-medium text-white">Opportunités</p>
           <ul className="mt-3 space-y-2">
             {result.opportunities.map((o, i) => (
