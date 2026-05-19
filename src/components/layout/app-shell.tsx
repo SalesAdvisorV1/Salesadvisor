@@ -9,7 +9,9 @@ export function AppShell({ children }: { children: React.ReactNode }) {
       </div>
       <div className="md:pl-64">
         <MobileNav />
-        <main className="min-h-screen p-8 bg-[#0a0a0a]">{children}</main>
+        <main className="min-h-screen px-8 py-8 bg-[#0a0a0a]">
+          {children}
+        </main>
       </div>
     </div>
   );
