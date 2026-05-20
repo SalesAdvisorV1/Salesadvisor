@@ -17,7 +17,7 @@ export function ActivityFeed({ items, activities }: ActivityFeedProps) {
   const list = items ?? activities ?? [];
 
   return (
-    <div className="bg-white border border-gray-100 rounded-2xl p-6 shadow-sm">
+    <div className="bg-white border border-gray-200 rounded-xl p-5 shadow-sm">
       <div className="flex items-center justify-between mb-5">
         <h3 className="text-sm font-semibold text-gray-900">Activité récente</h3>
         {list.length > 0 && (

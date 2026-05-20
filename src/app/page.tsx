@@ -331,21 +331,21 @@ export default function LandingPage() {
       </section>
 
       {/* Footer */}
-      <footer className="border-t border-gray-100 py-10 px-6 bg-gray-50">
+      <footer className="border-t border-gray-800 py-10 px-6 bg-gray-900">
         <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-gray-400">
           <div className="flex items-center gap-2">
-            <div className="w-6 h-6 bg-black rounded-md flex items-center justify-center">
-              <span className="text-white text-[9px] font-black leading-none">SA</span>
+            <div className="w-6 h-6 bg-white rounded-md flex items-center justify-center">
+              <span className="text-gray-900 text-[9px] font-black leading-none">SA</span>
             </div>
-            <span className="font-semibold text-gray-700">Sales Advisor</span>
+            <span className="font-semibold text-white">Sales Advisor</span>
           </div>
 
-          <p className="text-xs">© 2025 Sales Advisor. Tous droits réservés.</p>
+          <p className="text-xs text-gray-500">© 2025 Sales Advisor. Tous droits réservés.</p>
 
           <div className="flex gap-6 text-xs">
-            <a href="#" className="hover:text-gray-900 transition-colors">Confidentialité</a>
-            <a href="#" className="hover:text-gray-900 transition-colors">CGU</a>
-            <a href="mailto:contact@salesadvisor.io" className="hover:text-gray-900 transition-colors">Contact</a>
+            <a href="#" className="hover:text-white transition-colors">Confidentialité</a>
+            <a href="#" className="hover:text-white transition-colors">CGU</a>
+            <a href="mailto:contact@salesadvisor.io" className="hover:text-white transition-colors">Contact</a>
           </div>
         </div>
       </footer>

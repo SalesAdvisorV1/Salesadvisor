@@ -24,7 +24,7 @@ export function Header() {
   const pageName = getPageName(pathname);
 
   return (
-    <header className="fixed top-0 left-16 right-0 h-14 bg-white border-b border-gray-100 shadow-sm z-40 flex items-center px-6 gap-4">
+    <header className="fixed top-0 left-64 right-0 h-14 bg-white border-b border-gray-200 z-40 flex items-center px-6 gap-4">
 
       {/* Breadcrumb */}
       <div className="flex items-center gap-1.5 text-sm shrink-0">

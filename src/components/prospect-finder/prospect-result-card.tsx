@@ -20,7 +20,7 @@ export function ProspectResultCard({ prospect }: Props) {
     : { bg: 'bg-red-50',    text: 'text-red-700',    border: 'border-red-200' };
 
   return (
-    <div className="bg-white border border-gray-100 rounded-2xl p-5 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-200">
+    <div className="bg-white border border-gray-200 rounded-xl p-5 hover:shadow-md hover:-translate-y-0.5 transition-all duration-200">
 
       {/* Header */}
       <div className="flex items-start justify-between gap-3 mb-4">

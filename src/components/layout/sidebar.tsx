@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { useCreditsStore } from '@/stores/use-credits-store';
 
 const NAV_ITEMS = [
   {
@@ -83,44 +84,47 @@ function NavItem({ href, label, icon, isActive }: { href: string; label: string;
   return (
     <Link
       href={href}
-      className="relative group flex items-center justify-center"
+      className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-150 ${
+        isActive
+          ? 'bg-gray-900 text-white'
+          : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
+      }`}
     >
-      <div
-        className={`w-10 h-10 rounded-xl flex items-center justify-center transition-all duration-150 ${
-          isActive
-            ? 'bg-black text-white'
-            : 'text-gray-400 hover:bg-gray-100 hover:text-gray-900'
-        }`}
-      >
-        {icon}
-      </div>
-      {/* Tooltip */}
-      <div className="absolute left-full ml-3 px-2.5 py-1.5 bg-gray-900 text-white text-xs rounded-lg whitespace-nowrap opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity duration-150 z-50">
-        {label}
-        <div className="absolute right-full top-1/2 -translate-y-1/2 border-4 border-transparent border-r-gray-900" />
-      </div>
+      <span className="shrink-0">{icon}</span>
+      <span>{label}</span>
     </Link>
   );
 }
 
 export function Sidebar() {
   const pathname = usePathname();
+  const { remaining, total, initialized } = useCreditsStore();
+
+  const creditsValue = initialized ? remaining : 92;
+  const creditsTotal = initialized ? total : 100;
+  const percent = creditsTotal > 0 ? Math.round((creditsValue / creditsTotal) * 100) : 0;
 
   return (
-    <aside className="fixed left-0 top-0 h-screen w-16 bg-white border-r border-gray-100 shadow-sm flex flex-col items-center z-50">
+    <aside className="fixed left-0 top-0 h-screen w-64 bg-white border-r border-gray-200 flex flex-col z-50">
 
-      {/* Logo */}
-      <div className="pt-4 pb-4">
-        <Link href="/dashboard" className="w-10 h-10 bg-black rounded-xl flex items-center justify-center">
-          <span className="text-white text-[11px] font-black tracking-tight">SA</span>
+      {/* Logo + brand */}
+      <div className="px-4 pt-5 pb-4">
+        <Link href="/" className="flex items-center gap-2.5">
+          <div className="w-8 h-8 bg-gray-900 rounded-xl flex items-center justify-center shrink-0">
+            <span className="text-white text-[11px] font-black tracking-tight">SA</span>
+          </div>
+          <div>
+            <p className="text-sm font-bold text-gray-900 leading-tight">Sales Advisor</p>
+            <p className="text-[10px] text-gray-400 leading-tight">Prospection B2B</p>
+          </div>
         </Link>
       </div>
 
-      {/* Separator */}
-      <div className="w-8 h-px bg-gray-100 mb-2" />
+      <div className="mx-4 h-px bg-gray-100 mb-4" />
 
-      {/* Main nav */}
-      <nav className="flex-1 flex flex-col items-center gap-1 py-2">
+      {/* Main navigation */}
+      <nav className="flex-1 px-3 space-y-0.5 overflow-y-auto">
+        <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-wider px-3 mb-2">Navigation</p>
         {NAV_ITEMS.map((item) => (
           <NavItem
             key={item.href}
@@ -130,13 +134,9 @@ export function Sidebar() {
             isActive={pathname === item.href || pathname.startsWith(item.href + '/')}
           />
         ))}
-      </nav>
 
-      {/* Separator */}
-      <div className="w-8 h-px bg-gray-100 mb-2" />
+        <div className="h-px bg-gray-100 my-3" />
 
-      {/* Bottom nav */}
-      <div className="flex flex-col items-center gap-1 pb-3">
         {BOTTOM_NAV.map((item) => (
           <NavItem
             key={item.href}
@@ -146,10 +146,23 @@ export function Sidebar() {
             isActive={pathname === item.href}
           />
         ))}
+      </nav>
 
-        {/* Avatar */}
-        <div className="w-10 h-10 mt-2 bg-black rounded-full flex items-center justify-center cursor-pointer hover:bg-gray-800 transition-colors">
-          <span className="text-white text-xs font-bold">V</span>
+      {/* Credits widget */}
+      <div className="px-3 pb-4">
+        <div className="bg-gray-50 border border-gray-200 rounded-xl p-3">
+          <div className="flex items-center justify-between mb-2">
+            <span className="text-[10px] text-gray-500 font-medium">Crédits IA</span>
+            <span className="bg-gray-900 text-white text-[9px] font-bold px-2 py-0.5 rounded-full">PRO</span>
+          </div>
+          <p className="text-xl font-bold text-gray-900 tabular-nums">{creditsValue}</p>
+          <p className="text-[10px] text-gray-400 mb-2">sur {creditsTotal} disponibles</p>
+          <div className="w-full bg-gray-200 rounded-full h-1.5">
+            <div
+              className="h-1.5 rounded-full bg-gray-900 transition-all duration-500"
+              style={{ width: `${percent}%` }}
+            />
+          </div>
         </div>
       </div>
     </aside>

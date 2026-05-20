@@ -18,7 +18,7 @@ export function DashboardHeader({ userName }: DashboardHeaderProps) {
 
       <Link
         href="/prospect-finder"
-        className="inline-flex w-fit items-center gap-2 bg-black text-white text-[13px] font-semibold px-5 py-2.5 rounded-xl hover:bg-gray-800 transition-colors duration-150 shrink-0"
+        className="inline-flex w-fit items-center gap-2 bg-gray-900 text-white text-[13px] font-semibold px-4 py-2 rounded-xl hover:bg-gray-800 transition-colors duration-150 shrink-0"
       >
         <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.2}>
           <circle cx="11" cy="11" r="7" />

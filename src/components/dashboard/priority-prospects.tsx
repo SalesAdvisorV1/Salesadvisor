@@ -16,7 +16,7 @@ export function PriorityProspects({ items, prospects }: PriorityProspectsProps) 
   const list = items ?? prospects ?? [];
 
   return (
-    <div className="bg-white border border-gray-100 rounded-2xl p-6 shadow-sm">
+    <div className="bg-white border border-gray-200 rounded-xl p-5 shadow-sm">
       <div className="flex items-center justify-between mb-5">
         <h3 className="text-sm font-semibold text-gray-900">Prospects prioritaires</h3>
         <Link href="/prospect-finder" className="text-xs text-gray-400 hover:text-gray-700 transition-colors">

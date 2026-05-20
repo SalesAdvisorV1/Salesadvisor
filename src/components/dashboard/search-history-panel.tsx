@@ -11,7 +11,7 @@ export function SearchHistoryPanel({ items, searches }: SearchHistoryPanelProps)
   const list = items ?? searches ?? [];
 
   return (
-    <div className="bg-white border border-gray-100 rounded-2xl p-6 shadow-sm">
+    <div className="bg-white border border-gray-200 rounded-xl p-5 shadow-sm">
       <div className="flex items-center justify-between mb-5">
         <h3 className="text-sm font-semibold text-gray-900">Historique des recherches</h3>
         <Link href="/history" className="text-xs text-gray-400 hover:text-gray-700 transition-colors">

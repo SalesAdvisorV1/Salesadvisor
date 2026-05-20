@@ -41,7 +41,7 @@ export function StatCard({ title, label, value, subtitle, sub, highlight, trend,
   const isTrendNegative = trend && (trend.startsWith('-') || trend.includes('↓'));
 
   return (
-    <div className="bg-white border border-gray-100 rounded-2xl p-6 shadow-sm hover:shadow-md transition-all duration-200 animate-fade-up">
+    <div className="bg-white border border-gray-200 rounded-xl p-5 shadow-sm hover:shadow-md transition-all duration-200">
       {iconConf && (
         <div className={`w-10 h-10 ${iconConf.bg} ${iconConf.color} rounded-xl flex items-center justify-center mb-4`}>
           {iconConf.svg}

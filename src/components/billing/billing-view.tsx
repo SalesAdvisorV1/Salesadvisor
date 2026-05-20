@@ -28,14 +28,14 @@ export function BillingView() {
 
   if (isError || !data) {
     return (
-      <div className="mx-auto max-w-lg rounded-3xl border border-red-500/30 bg-red-500/10 p-8 text-center">
-        <h2 className="text-lg font-semibold text-red-200">
+      <div className="mx-auto max-w-lg rounded-xl border border-red-200 bg-red-50 p-8 text-center">
+        <h2 className="text-lg font-semibold text-red-700">
           Impossible de charger la facturation
         </h2>
         <button
           type="button"
           onClick={() => refetch()}
-          className="mt-6 rounded-2xl bg-slate-800 px-5 py-2.5 text-sm font-medium hover:bg-slate-700"
+          className="mt-6 rounded-xl bg-gray-900 px-5 py-2.5 text-sm font-medium text-white hover:bg-gray-800"
         >
           Réessayer
         </button>
@@ -51,40 +51,37 @@ export function BillingView() {
 
   return (
     <div className="mx-auto max-w-5xl">
-      <header className="mb-8">
-        <p className="text-sm text-slate-400">Module 5</p>
-        <h1 className="mt-1 text-3xl font-semibold">Crédits & Facturation</h1>
-        <p className="mt-2 text-slate-400">
+      <header className="mb-6">
+        <h1 className="text-2xl font-bold text-gray-900">Crédits & Facturation</h1>
+        <p className="mt-1 text-sm text-gray-500">
           Gère ton plan, recharge tes crédits et consulte ton historique de paiement.
         </p>
       </header>
 
       {/* Credits status */}
-      <div className="mb-8 rounded-3xl border border-slate-800 bg-slate-900/60 p-6">
+      <div className="mb-7 bg-white border border-gray-200 rounded-xl p-6 shadow-sm">
         <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div>
-            <h2 className="text-lg font-semibold">Crédits disponibles</h2>
-            <p className="text-sm text-slate-400">
-              Renouvellement le {renewalDate}
-            </p>
+            <h2 className="text-base font-semibold text-gray-900">Crédits disponibles</h2>
+            <p className="text-sm text-gray-500">Renouvellement le {renewalDate}</p>
           </div>
           <div className="text-right">
-            <span className="text-4xl font-bold">{remaining}</span>
-            <span className="ml-2 text-slate-500">/ {total}</span>
+            <span className="text-4xl font-bold text-gray-900">{remaining}</span>
+            <span className="ml-2 text-gray-400">/ {total}</span>
           </div>
         </div>
-        <div className="mt-4 h-3 overflow-hidden rounded-full bg-slate-800">
+        <div className="mt-4 h-2 overflow-hidden rounded-full bg-gray-100">
           <div
-            className="h-full rounded-full bg-white/70 transition-all"
+            className="h-full rounded-full bg-gray-900 transition-all"
             style={{ width: `${percent}%` }}
           />
         </div>
-        <p className="mt-2 text-right text-xs text-slate-500">{percent}% disponible</p>
+        <p className="mt-2 text-right text-xs text-gray-400">{percent}% disponible</p>
       </div>
 
       {/* Plans */}
       <section>
-        <h2 className="mb-4 text-xl font-semibold">Plans disponibles</h2>
+        <h2 className="mb-4 text-lg font-semibold text-gray-900">Plans disponibles</h2>
         <div className="grid gap-4 sm:grid-cols-3">
           {data.plans.map((plan) => (
             <PlanCard key={plan.id} plan={plan} />
@@ -94,8 +91,8 @@ export function BillingView() {
 
       {/* Credit packs */}
       <section className="mt-10">
-        <h2 className="mb-1 text-xl font-semibold">Packs de crédits supplémentaires</h2>
-        <p className="mb-4 text-sm text-slate-400">
+        <h2 className="mb-1 text-lg font-semibold text-gray-900">Packs de crédits supplémentaires</h2>
+        <p className="mb-4 text-sm text-gray-500">
           Idéal si tu as besoin de crédits ponctuellement sans changer de plan.
         </p>
         <div className="grid gap-4 sm:grid-cols-3">
@@ -105,7 +102,7 @@ export function BillingView() {
         </div>
       </section>
 
-      <p className="mt-8 text-center text-xs text-slate-600">
+      <p className="mt-8 text-center text-xs text-gray-400">
         MVP : paiement non intégré. Branchement Stripe prévu dans la prochaine version.
       </p>
     </div>
@@ -114,12 +111,12 @@ export function BillingView() {
 
 function BillingSkeleton() {
   return (
-    <div className="mx-auto max-w-5xl animate-pulse space-y-8">
-      <div className="h-24 rounded-3xl bg-slate-800/60" />
-      <div className="h-40 rounded-3xl bg-slate-800/60" />
+    <div className="mx-auto max-w-5xl animate-pulse space-y-6">
+      <div className="h-20 rounded-xl bg-gray-100" />
+      <div className="h-36 rounded-xl bg-gray-100" />
       <div className="grid gap-4 sm:grid-cols-3">
         {[1, 2, 3].map((i) => (
-          <div key={i} className="h-64 rounded-3xl bg-slate-800/60" />
+          <div key={i} className="h-56 rounded-xl bg-gray-100" />
         ))}
       </div>
     </div>

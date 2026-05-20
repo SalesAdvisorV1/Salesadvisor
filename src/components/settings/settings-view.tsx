@@ -26,11 +26,7 @@ const sections: SettingsSection[] = [
         defaultValue: "deletrezvictor@gmail.com",
         description: "Utilisé pour les notifications et la facturation",
       },
-      {
-        label: "Entreprise",
-        type: "text",
-        defaultValue: "",
-      },
+      { label: "Entreprise", type: "text", defaultValue: "" },
     ],
   },
   {
@@ -42,11 +38,7 @@ const sections: SettingsSection[] = [
         defaultValue: "Logistique",
         description: "Pré-rempli dans le Prospect Finder",
       },
-      {
-        label: "Pays par défaut",
-        type: "text",
-        defaultValue: "France",
-      },
+      { label: "Pays par défaut", type: "text", defaultValue: "France" },
       {
         label: "Rayon de recherche par défaut",
         type: "select",
@@ -74,6 +66,9 @@ const sections: SettingsSection[] = [
   },
 ];
 
+const inputClass =
+  "w-full bg-white border border-gray-300 rounded-xl px-4 py-3 text-gray-900 text-sm focus:ring-2 focus:ring-gray-900/10 focus:border-gray-400 focus:outline-none transition-all placeholder:text-gray-400";
+
 export function SettingsView() {
   const [saved, setSaved] = useState(false);
 
@@ -84,21 +79,17 @@ export function SettingsView() {
 
   return (
     <div className="mx-auto max-w-2xl">
-      <header className="mb-8">
-        <p className="text-sm text-slate-400">Paramètres</p>
-        <h1 className="mt-1 text-3xl font-semibold">Paramètres du compte</h1>
-        <p className="mt-2 text-slate-400">
+      <header className="mb-6">
+        <h1 className="text-2xl font-bold text-gray-900">Paramètres du compte</h1>
+        <p className="mt-1 text-sm text-gray-500">
           Configure ton profil et tes préférences de prospection.
         </p>
       </header>
 
-      <div className="space-y-8">
+      <div className="space-y-5">
         {sections.map((section) => (
-          <div
-            key={section.title}
-            className="rounded-3xl border border-slate-800 bg-slate-900/60 p-6"
-          >
-            <h2 className="mb-6 text-lg font-semibold">{section.title}</h2>
+          <div key={section.title} className="bg-white border border-gray-200 rounded-xl p-6 shadow-sm">
+            <h2 className="mb-5 text-base font-semibold text-gray-900">{section.title}</h2>
             <div className="space-y-4">
               {section.fields.map((field) => (
                 <SettingsFieldRow key={field.label} field={field} />
@@ -108,17 +99,17 @@ export function SettingsView() {
         ))}
       </div>
 
-      <div className="mt-8 flex items-center justify-between">
-        <p className="text-xs text-slate-600">
+      <div className="mt-6 flex items-center justify-between">
+        <p className="text-xs text-gray-400">
           MVP : les paramètres ne sont pas encore persistés côté serveur.
         </p>
         <button
           type="button"
           onClick={handleSave}
-          className={`rounded-2xl px-6 py-3 text-sm font-semibold transition-colors ${
+          className={`rounded-xl px-5 py-2.5 text-sm font-semibold transition-colors ${
             saved
-              ? "bg-white/10 text-white"
-              : "bg-white text-black hover:bg-gray-100"
+              ? "bg-green-50 text-green-700 border border-green-200"
+              : "bg-gray-900 text-white hover:bg-gray-800"
           }`}
         >
           {saved ? "Enregistré ✓" : "Enregistrer"}
@@ -137,9 +128,9 @@ function SettingsFieldRow({ field }: { field: SettingsField }) {
     return (
       <div className="flex items-center justify-between gap-4">
         <div>
-          <label className="text-sm font-medium text-white">{field.label}</label>
+          <label className="text-sm font-medium text-gray-900">{field.label}</label>
           {field.description ? (
-            <p className="mt-0.5 text-xs text-slate-500">{field.description}</p>
+            <p className="mt-0.5 text-xs text-gray-500">{field.description}</p>
           ) : null}
         </div>
         <button
@@ -148,7 +139,7 @@ function SettingsFieldRow({ field }: { field: SettingsField }) {
           aria-checked={toggleValue}
           onClick={() => setToggleValue(!toggleValue)}
           className={`relative h-6 w-11 rounded-full transition-colors ${
-            toggleValue ? "bg-white/30" : "bg-slate-700"
+            toggleValue ? "bg-gray-900" : "bg-gray-200"
           }`}
         >
           <span
@@ -163,28 +154,23 @@ function SettingsFieldRow({ field }: { field: SettingsField }) {
 
   return (
     <div>
-      <label className="mb-1.5 block text-sm font-medium text-slate-300">
+      <label className="mb-1.5 block text-xs font-medium text-gray-700 uppercase tracking-wider">
         {field.label}
       </label>
       {field.description ? (
-        <p className="mb-2 text-xs text-slate-500">{field.description}</p>
+        <p className="mb-2 text-xs text-gray-400">{field.description}</p>
       ) : null}
       {field.type === "select" ? (
-        <select
-          defaultValue={field.defaultValue as string}
-          className="w-full rounded-2xl border border-slate-700 bg-slate-950 px-4 py-3 text-white outline-none focus:border-white/20"
-        >
+        <select defaultValue={field.defaultValue as string} className={inputClass}>
           {field.options?.map((opt) => (
-            <option key={opt} value={opt}>
-              {opt}
-            </option>
+            <option key={opt} value={opt}>{opt}</option>
           ))}
         </select>
       ) : (
         <input
           type={field.type}
           defaultValue={field.defaultValue as string}
-          className="w-full rounded-2xl border border-slate-700 bg-slate-950 px-4 py-3 text-white outline-none placeholder:text-slate-500 focus:border-white/20"
+          className={inputClass}
         />
       )}
     </div>
