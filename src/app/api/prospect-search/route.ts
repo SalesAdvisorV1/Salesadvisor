@@ -55,24 +55,40 @@ function slugify(name: string) {
   return name.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
 }
 
-interface PappersEntreprise {
-  siren?: string;
-  denomination?: string;
-  siege?: { ville?: string; code_postal?: string };
-  tranche_effectif?: string;
-  site_web?: string;
-  domaine_email?: string;
+const CITY_TO_DEPT: Record<string, string> = {
+  paris: "75", marseille: "13", lyon: "69", toulouse: "31", nice: "06",
+  nantes: "44", montpellier: "34", strasbourg: "67", bordeaux: "33",
+  lille: "59", rennes: "35", reims: "51", grenoble: "38", dijon: "21",
+  angers: "49", nimes: "30", villeurbanne: "69", toulon: "83", limoges: "87",
+  clermont: "63", "clermont-ferrand": "63", brest: "29", tours: "37",
+  amiens: "80", aix: "13", "aix-en-provence": "13", caen: "14",
+  metz: "57", nancy: "54", rouen: "76", orleans: "45", mulhouse: "68",
+};
+
+function cityToDept(city: string): string | undefined {
+  const key = city.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "").split(/[\s,]/)[0];
+  return CITY_TO_DEPT[key];
 }
 
-function mapPappersToProspect(
-  e: PappersEntreprise,
+interface GouvernementEntreprise {
+  siren?: string;
+  denomination?: string;
+  nom_complet?: string;
+  siege?: {
+    ville?: string;
+    code_postal?: string;
+    tranche_effectif_salarie?: string;
+  };
+  tranche_effectif_salarie?: string;
+}
+
+function mapGouvernementToProspect(
+  e: GouvernementEntreprise,
   index: number,
   filters: { sector?: string; targetRole?: string; city?: string }
 ) {
-  const name = e.denomination || "Entreprise";
-  const tranche = e.tranche_effectif || "11";
-  const site = e.site_web || "";
-  const rawDomain = e.domaine_email || (site ? site.replace(/^https?:\/\//, "").split("/")[0] : "");
+  const name = e.denomination || e.nom_complet || "Entreprise";
+  const tranche = e.siege?.tranche_effectif_salarie || e.tranche_effectif_salarie || "11";
   const city = e.siege?.ville || filters.city || "France";
   const sector = filters.sector || "B2B";
   const role = filters.targetRole || "Décideur";
@@ -86,8 +102,8 @@ function mapPappersToProspect(
     country: "France",
     score: randBetween(72, 95),
     size,
-    website: site || `www.${slugify(name)}.fr`,
-    contact: generateEmail(name, rawDomain || undefined),
+    website: `www.${slugify(name)}.fr`,
+    contact: generateEmail(name),
     role,
     phone: generatePhone(),
     employees: generateEmployees(tranche),
@@ -97,14 +113,17 @@ function mapPappersToProspect(
   };
 }
 
-async function fetchPappers(sector: string, city: string, withDept: boolean): Promise<PappersEntreprise[]> {
-  const token = process.env.PAPPERS_API_KEY;
-  const params = new URLSearchParams({ api_token: token || "", q: sector, par_page: "5" });
-  if (withDept) params.set("departement", city);
-  const res = await fetch(`https://api.pappers.fr/v2/entreprises?${params}`);
-  if (!res.ok) throw new Error(`Pappers HTTP ${res.status}`);
+async function fetchGouvernement(sector: string, city: string, withDept: boolean): Promise<GouvernementEntreprise[]> {
+  const params = new URLSearchParams({ q: sector, per_page: "5" });
+  if (withDept) {
+    const dept = cityToDept(city);
+    if (dept) params.set("departement", dept);
+    else params.set("q", `${sector} ${city}`);
+  }
+  const res = await fetch(`https://recherche-entreprises.api.gouv.fr/search?${params}`);
+  if (!res.ok) throw new Error(`API gouv HTTP ${res.status}`);
   const data = await res.json();
-  return (data.resultats as PappersEntreprise[]) || [];
+  return (data.results as GouvernementEntreprise[]) || [];
 }
 
 export async function POST(request: Request) {
@@ -118,23 +137,22 @@ export async function POST(request: Request) {
     const f = parsed.data;
     let prospects = [];
 
-    // --- Pappers ---
+    // --- API gouvernementale ---
     try {
-      let entreprises = await fetchPappers(f.sector, f.city, true);
+      let entreprises = await fetchGouvernement(f.sector, f.city, true);
       if (entreprises.length === 0) {
-        // Fallback national sans filtre département
-        entreprises = await fetchPappers(f.sector, f.city, false);
+        entreprises = await fetchGouvernement(f.sector, f.city, false);
       }
       if (entreprises.length > 0) {
         prospects = entreprises.map((e, i) =>
-          mapPappersToProspect(e, i, { sector: f.sector, targetRole: f.targetRole, city: f.city })
+          mapGouvernementToProspect(e, i, { sector: f.sector, targetRole: f.targetRole, city: f.city })
         );
       }
-    } catch (pappersErr) {
-      console.error("[prospect-search] Pappers error:", pappersErr);
+    } catch (apiErr) {
+      console.error("[prospect-search] API gouv error:", apiErr);
     }
 
-    // --- Fallback OpenAI si Pappers échoue ou retourne vide ---
+    // --- Fallback OpenAI si API gouv échoue ou retourne vide ---
     if (prospects.length === 0) {
       const prompt = `5 entreprises B2B JSON pour: secteur=${f.sector}, ville=${f.city}, pays=${f.country}, taille=${f.companySize || "any"}, poste=${f.targetRole || "décideur"}.
 Format JSON strict, tableau uniquement, pas de markdown:
