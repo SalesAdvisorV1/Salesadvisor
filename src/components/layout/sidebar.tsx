@@ -80,10 +80,11 @@ const BOTTOM_NAV = [
   },
 ];
 
-function NavItem({ href, label, icon, isActive }: { href: string; label: string; icon: React.ReactNode; isActive: boolean }) {
+function NavItem({ href, label, icon, isActive, onClick }: { href: string; label: string; icon: React.ReactNode; isActive: boolean; onClick?: () => void }) {
   return (
     <Link
       href={href}
+      onClick={onClick}
       className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-150 ${
         isActive
           ? 'bg-gray-900 text-white'
@@ -96,7 +97,7 @@ function NavItem({ href, label, icon, isActive }: { href: string; label: string;
   );
 }
 
-export function Sidebar() {
+export function Sidebar({ onNavClick }: { onNavClick?: () => void } = {}) {
   const pathname = usePathname();
   const { remaining, total, initialized } = useCreditsStore();
 
@@ -132,6 +133,7 @@ export function Sidebar() {
             label={item.label}
             icon={item.icon}
             isActive={pathname === item.href || pathname.startsWith(item.href + '/')}
+            onClick={onNavClick}
           />
         ))}
 
@@ -144,6 +146,7 @@ export function Sidebar() {
             label={item.label}
             icon={item.icon}
             isActive={pathname === item.href}
+            onClick={onNavClick}
           />
         ))}
       </nav>
