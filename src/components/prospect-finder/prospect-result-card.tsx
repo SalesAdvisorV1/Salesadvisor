@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { ProspectResult } from "@/types/prospect";
 
 interface Props { prospect: ProspectResult; }
@@ -93,6 +94,15 @@ export function ProspectResultCard({ prospect }: Props) {
           {prospect.reason}
         </p>
       )}
+
+      {/* IA CTA */}
+      <Link
+        href={`/ai-assistant?company=${encodeURIComponent(prospect.name)}&sector=${encodeURIComponent(prospect.sector)}&city=${encodeURIComponent(prospect.city)}`}
+        className="mt-4 flex w-full items-center justify-center gap-2 rounded-xl border border-gray-200 bg-gray-50 py-2.5 text-[13px] font-semibold text-gray-700 hover:bg-gray-900 hover:text-white hover:border-gray-900 transition-all duration-200"
+      >
+        <span>✦</span>
+        Analyser avec IA
+      </Link>
     </div>
   );
 }

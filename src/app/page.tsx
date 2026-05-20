@@ -190,6 +190,28 @@ export default function Home() {
   return (
     <main className="bg-black min-h-screen text-white overflow-x-hidden">
 
+      {/* ══ HEADER FIXE ═════════════════════════════════════════════ */}
+      <header className="fixed top-0 left-0 right-0 z-50 bg-black/80 backdrop-blur-md border-b border-white/10 h-16 flex items-center justify-between px-8">
+        {/* Logo */}
+        <div className="flex items-center">
+          <div className="w-8 h-8 bg-white rounded-lg flex items-center justify-center text-black font-black text-sm">SA</div>
+          <span className="text-white font-bold text-lg ml-3">Sales Advisor</span>
+        </div>
+
+        {/* Nav centre */}
+        <nav className="hidden md:flex items-center gap-8">
+          <a href="#features" className="text-white/60 hover:text-white text-sm transition-colors">Fonctionnalités</a>
+          <a href="#pricing" className="text-white/60 hover:text-white text-sm transition-colors">Tarifs</a>
+          <a href="#testimonials" className="text-white/60 hover:text-white text-sm transition-colors">Témoignages</a>
+        </nav>
+
+        {/* Boutons droite */}
+        <div className="flex items-center gap-4">
+          <Link href="/auth/login" className="text-white/60 hover:text-white text-sm transition-colors">Se connecter</Link>
+          <Link href="/auth/signup" className="bg-white text-black px-4 py-2 rounded-xl text-sm font-semibold hover:bg-gray-100 transition-colors">Commencer</Link>
+        </div>
+      </header>
+
       {/* ══ HERO ════════════════════════════════════════════════════ */}
       <section ref={heroRef} className="relative h-screen flex items-center justify-center overflow-hidden">
 
@@ -206,7 +228,7 @@ export default function Home() {
 
         {/* Top-left headline */}
         <motion.div
-          className="absolute top-12 left-6 md:left-16 z-10"
+          className="absolute top-24 left-6 md:left-16 z-10"
           style={{ y: textTopY }}
         >
           <h1 className="text-6xl md:text-8xl font-black leading-[0.9] tracking-tight">
@@ -227,7 +249,7 @@ export default function Home() {
 
         {/* Badge pill */}
         <motion.div
-          className="absolute top-12 right-6 md:right-16 z-10"
+          className="absolute top-24 right-6 md:right-16 z-10"
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.6, duration: 0.5 }}
@@ -292,7 +314,7 @@ export default function Home() {
       </section>
 
       {/* ══ FEATURES ═════════════════════════════════════════════════ */}
-      <section className="py-16 px-4">
+      <section id="features" className="py-16 px-4">
         <motion.h2
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -385,7 +407,7 @@ export default function Home() {
       </section>
 
       {/* ══ SOCIAL PROOF ═════════════════════════════════════════════ */}
-      <section className="py-28 px-4">
+      <section id="testimonials" className="py-28 px-4">
         <motion.div
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
@@ -397,7 +419,7 @@ export default function Home() {
       </section>
 
       {/* ══ PRICING ══════════════════════════════════════════════════ */}
-      <section className="py-20 px-4">
+      <section id="pricing" className="py-20 px-4">
         <motion.h2
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}

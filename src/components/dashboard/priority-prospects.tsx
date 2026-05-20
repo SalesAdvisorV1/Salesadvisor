@@ -1,6 +1,15 @@
 import Link from "next/link";
 import type { PriorityProspect } from "@/types/dashboard";
 
+function prospectHref(prospect: PriorityProspect) {
+  const params = new URLSearchParams({
+    company: prospect.name,
+    sector: prospect.sector,
+    city: prospect.city,
+  });
+  return `/ai-assistant?${params.toString()}`;
+}
+
 function scoreConfig(score: number) {
   if (score > 85) return { avatar: 'bg-green-500',  badge: 'bg-green-50 text-green-700' };
   if (score > 70) return { avatar: 'bg-orange-500', badge: 'bg-orange-50 text-orange-700' };
@@ -31,9 +40,10 @@ export function PriorityProspects({ items, prospects }: PriorityProspectsProps) 
           {list.map((prospect) => {
             const conf = scoreConfig(prospect.score);
             return (
-              <div
+              <Link
                 key={prospect.id}
-                className="flex items-center justify-between px-3 py-2.5 rounded-xl hover:bg-gray-50 transition-colors cursor-pointer"
+                href={prospectHref(prospect)}
+                className="flex items-center justify-between px-3 py-2.5 rounded-xl hover:bg-gray-50 transition-colors"
               >
                 <div className="flex items-center gap-3 min-w-0">
                   <div className={`w-8 h-8 rounded-lg ${conf.avatar} flex items-center justify-center shrink-0`}>
@@ -50,7 +60,7 @@ export function PriorityProspects({ items, prospects }: PriorityProspectsProps) 
                 <span className={`text-xs font-bold px-2 py-0.5 rounded-full tabular-nums shrink-0 ml-3 ${conf.badge}`}>
                   {prospect.score}
                 </span>
-              </div>
+              </Link>
             );
           })}
         </div>
