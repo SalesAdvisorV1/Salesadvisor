@@ -27,6 +27,31 @@ function slugify(name: string) {
   return name.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
 }
 
+const NAF_MAPPING: Record<string, string> = {
+  logistique: "4941A,5210B,5229B",
+  transport: "4941A,4941B,4942Z",
+  tech: "6201Z,6202A,6311Z",
+  technologie: "6201Z,6202A,6311Z",
+  saas: "6201Z,6311Z",
+  industrie: "2511Z,2512Z,2550A",
+  btp: "4110A,4120A,4120B",
+  commerce: "4711A,4711B,4711D",
+  sante: "8610Z,8621Z,8622A",
+  immobilier: "6810Z,6820A,6831Z",
+  finance: "6411Z,6419Z,6491Z",
+  conseil: "7022Z,7112B,7490B",
+  marketing: "7311Z,7312Z,7319Z",
+  restauration: "5610A,5610C,5629A",
+};
+
+function sectorToNaf(sector: string): string {
+  const key = sector.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "");
+  for (const [k, v] of Object.entries(NAF_MAPPING)) {
+    if (key.includes(k)) return v;
+  }
+  return "";
+}
+
 const CITY_TO_DEPT: Record<string, string> = {
   paris: "75", marseille: "13", lyon: "69", toulouse: "31", nice: "06",
   nantes: "44", montpellier: "34", strasbourg: "67", bordeaux: "33",
@@ -104,12 +129,21 @@ Score entre 72 et 95. Utilise un vrai nom de personne et un domaine email réali
 }
 
 async function fetchGouvernement(sector: string, city: string, withDept: boolean): Promise<GouvernementEntreprise[]> {
-  const params = new URLSearchParams({ q: sector, per_page: "5" });
-  if (withDept) {
-    const dept = cityToDept(city);
-    if (dept) params.set("departement", dept);
-    else params.set("q", `${sector} ${city}`);
+  const nafCodes = sectorToNaf(sector);
+  const dept = city ? cityToDept(city) : undefined;
+
+  const params = new URLSearchParams({ per_page: "5" });
+
+  if (nafCodes) {
+    // Split multiple NAF codes and use the first as primary (API accepts one at a time)
+    params.set("activite_principale", nafCodes.split(",")[0]);
+    if (withDept && dept) params.set("departement", dept);
+  } else {
+    // No NAF mapping: use sector as full-text query
+    params.set("q", withDept && dept ? sector : `${sector} ${city || ""}`.trim());
+    if (withDept && dept) params.set("departement", dept);
   }
+
   const res = await fetch(`https://recherche-entreprises.api.gouv.fr/search?${params}`);
   if (!res.ok) throw new Error(`API gouv HTTP ${res.status}`);
   const data = await res.json();
