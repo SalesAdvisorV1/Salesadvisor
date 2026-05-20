@@ -22,9 +22,10 @@ interface ProspectInputFormProps {
   isLoading: boolean;
   selectedTask: AiTaskType;
   onTaskChange: (task: AiTaskType) => void;
+  defaultValues?: { companyName?: string; sector?: string; city?: string; targetRole?: string; context?: string; };
 }
 
-export function ProspectInputForm({ onSubmit, isLoading, selectedTask, onTaskChange }: ProspectInputFormProps) {
+export function ProspectInputForm({ onSubmit, isLoading, selectedTask, onTaskChange, defaultValues }: ProspectInputFormProps) {
   const {
     register,
     handleSubmit,
@@ -32,11 +33,11 @@ export function ProspectInputForm({ onSubmit, isLoading, selectedTask, onTaskCha
   } = useForm<AiProspectFormValues>({
     resolver: zodResolver(aiProspectSchema),
     defaultValues: {
-      companyName: "Translog France",
-      sector: "Logistique",
-      city: "Paris",
-      targetRole: "Directeur logistique",
-      context: "",
+      companyName: defaultValues?.companyName ?? "Translog France",
+      sector: defaultValues?.sector ?? "Logistique",
+      city: defaultValues?.city ?? "Paris",
+      targetRole: defaultValues?.targetRole ?? "Directeur logistique",
+      context: defaultValues?.context ?? "",
     },
   });
 
