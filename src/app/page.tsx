@@ -496,43 +496,59 @@ export default function Home() {
       </section>
 
       {/* ══ CTA FINAL ════════════════════════════════════════════════ */}
-      <section className="py-32 px-4 overflow-hidden">
-        <div className="max-w-6xl mx-auto text-center">
-          <motion.div
-            initial={{ clipPath: 'inset(0 100% 0 0)' }}
-            whileInView={{ clipPath: 'inset(0 0% 0 0)' }}
-            viewport={{ once: true, amount: 0.3 }}
-            transition={{ duration: 1.1, ease: [0.77, 0, 0.175, 1] }}
-            className="overflow-hidden"
-          >
-            <h2 className="text-6xl md:text-8xl lg:text-[7rem] font-black leading-none tracking-tight">
-              Commencez<br />aujourd&apos;hui
-            </h2>
-          </motion.div>
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.3 }}
-            transition={{ delay: 0.6, duration: 0.6 }}
-            className="mt-8 text-xl text-white/40 max-w-lg mx-auto"
-          >
-            Rejoignez les équipes commerciales qui prospectent mieux, plus vite.
-          </motion.p>
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.3 }}
-            transition={{ delay: 0.8, duration: 0.6 }}
-            className="mt-10"
-          >
+      <section className="bg-[#111] border-t border-b border-white/10 py-32 px-4">
+        <motion.div
+          initial={{ opacity: 0, y: 40 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.2 }}
+          transition={{ duration: 0.8, ease: 'easeOut' }}
+          className="max-w-3xl mx-auto text-center"
+        >
+          {/* Badge pill */}
+          <span className="inline-block bg-white/10 text-white/60 text-xs px-4 py-2 rounded-full mb-8">
+            Rejoignez 500+ commerciaux
+          </span>
+
+          {/* Titre */}
+          <h2 className="text-6xl font-black text-white max-w-3xl mx-auto text-center mb-6 leading-tight">
+            Commencez à prospecter intelligemment.
+          </h2>
+
+          {/* Sous-titre */}
+          <p className="text-lg text-white/50 max-w-2xl mx-auto text-center mb-10 leading-relaxed">
+            Sales Advisor combine IA et données B2B pour vous aider à trouver, qualifier et approcher vos prospects en quelques secondes.
+          </p>
+
+          {/* Boutons */}
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <Link
               href="/auth/signup"
-              className="inline-block bg-white text-black font-bold px-12 py-4 rounded-full text-lg hover:bg-white/90 hover:scale-105 transition-all"
+              className="bg-white text-black px-8 py-4 rounded-2xl font-bold text-base hover:scale-105 transition-all"
             >
               Créer mon compte gratuit
             </Link>
-          </motion.div>
-        </div>
+            <button className="border border-white/20 text-white px-8 py-4 rounded-2xl font-medium text-base hover:bg-white/5 transition-all">
+              Voir une démo
+            </button>
+          </div>
+
+          {/* Sous-boutons */}
+          <p className="text-xs text-white/30 mt-6">
+            Pas de carte bancaire requise · Accès immédiat · Annulable à tout moment
+          </p>
+
+          {/* Logos fictifs */}
+          <div className="mt-16">
+            <p className="text-xs text-white/20 uppercase tracking-widest mb-4">Ils nous font confiance</p>
+            <div className="flex items-center justify-center gap-10">
+              {['TechCorp', 'StartupXYZ', 'GrowthCo'].map((name) => (
+                <span key={name} className="text-white/20 font-bold text-sm tracking-widest uppercase">
+                  {name}
+                </span>
+              ))}
+            </div>
+          </div>
+        </motion.div>
       </section>
 
       {/* ══ FOOTER ═══════════════════════════════════════════════════ */}
