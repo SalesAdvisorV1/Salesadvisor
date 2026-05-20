@@ -1,6 +1,9 @@
 'use client';
 import Link from 'next/link';
 import Image from 'next/image';
+import dynamic from 'next/dynamic';
+
+const HeroCanvas = dynamic(() => import('@/components/landing/hero-canvas'), { ssr: false });
 
 export default function LandingPage() {
   return (
@@ -50,6 +53,9 @@ export default function LandingPage() {
           />
           <div className="absolute inset-0 bg-black/60" />
         </div>
+
+        {/* Globe 3D */}
+        <HeroCanvas />
 
         {/* Contenu hero */}
         <div className="relative z-10 max-w-5xl mx-auto px-6 text-center pt-24">
