@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
 const PAGE_NAMES: Record<string, string> = {
@@ -28,9 +29,9 @@ export function Header() {
 
       {/* Breadcrumb */}
       <div className="flex items-center gap-1.5 text-sm shrink-0">
-        <span className="text-gray-400">Sales Advisor</span>
+        <Link href="/" className="text-gray-400 hover:text-gray-700 transition-colors">Sales Advisor</Link>
         <span className="text-gray-300">/</span>
-        <span className="text-gray-900 font-semibold">{pageName}</span>
+        <Link href={pathname} className="text-gray-900 font-semibold hover:text-gray-600 transition-colors">{pageName}</Link>
       </div>
 
       {/* Search */}

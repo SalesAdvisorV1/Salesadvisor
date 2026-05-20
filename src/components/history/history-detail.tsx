@@ -47,7 +47,7 @@ export function HistoryDetail({ entry }: { entry: HistoryEntry }) {
       </div>
 
       <Link
-        href="/prospect-finder"
+        href={`/prospect-finder?sector=${encodeURIComponent(entry.sector)}&city=${encodeURIComponent(entry.city)}&radius=${encodeURIComponent(entry.radius)}`}
         className="flex w-full items-center justify-center rounded-xl bg-gray-900 text-white px-4 py-3 text-sm font-medium hover:bg-gray-800 transition-all"
       >
         Relancer une recherche similaire →

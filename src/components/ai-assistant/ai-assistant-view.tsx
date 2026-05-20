@@ -2,6 +2,7 @@
 
 import { useMutation } from "@tanstack/react-query";
 import { useState } from "react";
+import { useSearchParams } from "next/navigation";
 import { AiResultCard } from "@/components/ai-assistant/ai-result-card";
 import { ProspectInputForm } from "@/components/ai-assistant/prospect-input-form";
 import type { AiProspectFormValues } from "@/lib/schemas/ai-assist";
@@ -32,6 +33,13 @@ async function runAiAssist(task: AiTaskType, prospect: AiProspectFormValues): Pr
 export function AiAssistantView() {
   const [selectedTask, setSelectedTask] = useState<AiTaskType>("summary");
   const { remaining, consume, initialized } = useCreditsStore();
+  const searchParams = useSearchParams();
+
+  const prefill: Partial<AiProspectFormValues> = {
+    companyName: searchParams.get("company") ?? undefined,
+    sector: searchParams.get("sector") ?? undefined,
+    city: searchParams.get("city") ?? undefined,
+  };
 
   const mutation = useMutation({
     mutationFn: ({ task, prospect }: { task: AiTaskType; prospect: AiProspectFormValues }) =>
@@ -76,6 +84,7 @@ export function AiAssistantView() {
           isLoading={mutation.isPending}
           selectedTask={selectedTask}
           onTaskChange={setSelectedTask}
+          defaultValues={prefill}
         />
 
         <div className="bg-white border border-gray-200 rounded-xl shadow-sm p-6">
