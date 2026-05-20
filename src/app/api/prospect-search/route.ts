@@ -5,34 +5,6 @@ import OpenAI from "openai";
 
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
-function randBetween(min: number, max: number) {
-  return Math.floor(Math.random() * (max - min + 1)) + min;
-}
-
-function generatePhone() {
-  const n = () => String(randBetween(10, 99));
-  return `+33 ${randBetween(1, 9)} ${n()} ${n()} ${n()} ${n()}`;
-}
-
-function generateEmail(companyName: string, domain?: string) {
-  const firstNames = ["jean", "marie", "pierre", "sophie", "thomas", "claire", "nicolas", "julie", "david", "laura"];
-  const lastNames = ["martin", "bernard", "thomas", "petit", "robert", "richard", "durand", "moreau", "simon", "leroy"];
-  const first = firstNames[randBetween(0, firstNames.length - 1)];
-  const last = lastNames[randBetween(0, lastNames.length - 1)];
-  const d = domain || companyName.toLowerCase().replace(/[^a-z0-9]/g, "").substring(0, 12) + ".fr";
-  return `${first}.${last}@${d}`;
-}
-
-function generateRevenue(tranche: string) {
-  const map: Record<string, string> = {
-    "0": "< 500K€", "1": "< 500K€", "2": "500K-2M€", "3": "2-5M€",
-    "11": "2-5M€", "12": "5-10M€", "21": "10-20M€", "22": "20-50M€",
-    "31": "50-100M€", "32": "100-200M€", "41": "200-500M€", "42": "> 500M€",
-    "51": "> 1Mrd€", "52": "> 1Mrd€", "53": "> 1Mrd€",
-  };
-  return map[tranche] || "N/C";
-}
-
 function generateEmployees(tranche: string) {
   const map: Record<string, string> = {
     "0": "0", "1": "1-2", "2": "3-5", "3": "6-9",
@@ -82,35 +54,53 @@ interface GouvernementEntreprise {
   tranche_effectif_salarie?: string;
 }
 
-function mapGouvernementToProspect(
-  e: GouvernementEntreprise,
-  index: number,
-  filters: { sector?: string; targetRole?: string; city?: string }
-) {
-  const name = e.denomination || e.nom_complet || "Entreprise";
-  const tranche = e.siege?.tranche_effectif_salarie || e.tranche_effectif_salarie || "11";
-  const city = e.siege?.ville || filters.city || "France";
-  const sector = filters.sector || "B2B";
-  const role = filters.targetRole || "Décideur";
-  const size = generateSize(tranche);
+interface EnrichedData {
+  contact: string;
+  phone: string;
+  linkedin: string;
+  revenue: string;
+  score: number;
+  reason: string;
+}
 
-  return {
-    id: `p${index + 1}`,
-    name,
-    sector,
-    city,
-    country: "France",
-    score: randBetween(72, 95),
-    size,
-    website: `www.${slugify(name)}.fr`,
-    contact: generateEmail(name),
-    role,
-    phone: generatePhone(),
-    employees: generateEmployees(tranche),
-    revenue: generateRevenue(tranche),
-    linkedin: `linkedin.com/company/${slugify(name)}`,
-    reason: `${name} est une ${size} basée à ${city}, active dans le secteur ${sector}. Correspond à vos critères : cible ${role} dans une entreprise de taille ${size}.`,
-  };
+async function enrichWithOpenAI(
+  name: string,
+  city: string,
+  sector: string,
+  role: string,
+  size: string
+): Promise<EnrichedData> {
+  const prompt = `Pour l'entreprise "${name}" à ${city}, secteur ${sector}, taille ${size}, cible ${role}, génère en JSON strict (pas de markdown) :
+{"contact":"prenom.nom@domaine.fr","phone":"+33 X XX XX XX XX","linkedin":"linkedin.com/company/slug","revenue":"X-YM€","score":85,"reason":"Raison courte du match en 1 phrase"}
+Score entre 72 et 95. Utilise un vrai nom de personne et un domaine email réaliste basé sur le nom de l'entreprise.`;
+
+  try {
+    const completion = await openai.chat.completions.create({
+      model: "gpt-4o-mini",
+      messages: [{ role: "user", content: prompt }],
+      temperature: 0.7,
+      max_tokens: 200,
+    });
+    const raw = (completion.choices[0].message.content || "{}").replace(/```json|```/g, "").trim();
+    const parsed = JSON.parse(raw);
+    return {
+      contact: parsed.contact || `contact@${slugify(name)}.fr`,
+      phone: parsed.phone || "+33 1 00 00 00 00",
+      linkedin: parsed.linkedin || `linkedin.com/company/${slugify(name)}`,
+      revenue: parsed.revenue || "N/C",
+      score: typeof parsed.score === "number" ? Math.min(95, Math.max(72, parsed.score)) : 80,
+      reason: parsed.reason || `${name} correspond à vos critères de prospection.`,
+    };
+  } catch {
+    return {
+      contact: `contact@${slugify(name)}.fr`,
+      phone: "+33 1 00 00 00 00",
+      linkedin: `linkedin.com/company/${slugify(name)}`,
+      revenue: "N/C",
+      score: 80,
+      reason: `${name} est une entreprise ${size} active dans le secteur ${sector} à ${city}.`,
+    };
+  }
 }
 
 async function fetchGouvernement(sector: string, city: string, withDept: boolean): Promise<GouvernementEntreprise[]> {
@@ -143,9 +133,38 @@ export async function POST(request: Request) {
       if (entreprises.length === 0) {
         entreprises = await fetchGouvernement(f.sector, f.city, false);
       }
+
       if (entreprises.length > 0) {
-        prospects = entreprises.map((e, i) =>
-          mapGouvernementToProspect(e, i, { sector: f.sector, targetRole: f.targetRole, city: f.city })
+        // Enrichissement OpenAI en parallèle pour chaque entreprise
+        prospects = await Promise.all(
+          entreprises.map(async (e, i) => {
+            const name = e.denomination || e.nom_complet || "Entreprise";
+            const tranche = e.siege?.tranche_effectif_salarie || e.tranche_effectif_salarie || "11";
+            const city = e.siege?.ville || f.city || "France";
+            const sector = f.sector || "B2B";
+            const role = f.targetRole || "Décideur";
+            const size = generateSize(tranche);
+
+            const enriched = await enrichWithOpenAI(name, city, sector, role, size);
+
+            return {
+              id: `p${i + 1}`,
+              name,
+              sector,
+              city,
+              country: "France",
+              score: enriched.score,
+              size,
+              website: `www.${slugify(name)}.fr`,
+              contact: enriched.contact,
+              role,
+              phone: enriched.phone,
+              employees: generateEmployees(tranche),
+              revenue: enriched.revenue,
+              linkedin: enriched.linkedin,
+              reason: enriched.reason,
+            };
+          })
         );
       }
     } catch (apiErr) {
