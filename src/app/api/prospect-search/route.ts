@@ -88,66 +88,106 @@ interface EnrichedData {
   reason: string;
 }
 
-async function enrichWithOpenAI(
-  name: string,
-  city: string,
-  sector: string,
-  role: string,
-  size: string
-): Promise<EnrichedData> {
-  const prompt = `Pour l'entreprise "${name}" à ${city}, secteur ${sector}, taille ${size}, cible ${role}, génère en JSON strict (pas de markdown) :
-{"contact":"prenom.nom@domaine.fr","phone":"+33 X XX XX XX XX","linkedin":"linkedin.com/company/slug","revenue":"X-YM€","score":85,"reason":"Raison courte du match en 1 phrase"}
-Score entre 72 et 95. Utilise un vrai nom de personne et un domaine email réaliste basé sur le nom de l'entreprise.`;
+// Appels parallèles un par code NAF, déduplication par SIREN
+async function fetchByNafCodes(nafCodes: string[], dept?: string): Promise<GouvernementEntreprise[]> {
+  const results = await Promise.all(
+    nafCodes.map(naf => {
+      const params = new URLSearchParams({ per_page: "10", activite_principale: naf });
+      if (dept) params.set("departement", dept);
+      return fetch(`https://recherche-entreprises.api.gouv.fr/search?${params}`)
+        .then(r => r.ok ? r.json() : { results: [] })
+        .then(data => (data.results as GouvernementEntreprise[]) || [])
+        .catch(() => [] as GouvernementEntreprise[]);
+    })
+  );
+  const all = results.flatMap(r => r);
+  const unique = [...new Map(all.map(e => [e.siren, e])).values()];
+  return unique.slice(0, 5);
+}
+
+// Recherche texte libre (fallback quand pas de code NAF ou 0 résultats)
+async function fetchByText(query: string, dept?: string): Promise<GouvernementEntreprise[]> {
+  const params = new URLSearchParams({ per_page: "5", q: query });
+  if (dept) params.set("departement", dept);
+  const res = await fetch(`https://recherche-entreprises.api.gouv.fr/search?${params}`);
+  if (!res.ok) return [];
+  const data = await res.json();
+  return (data.results as GouvernementEntreprise[]) || [];
+}
+
+// Fallback intelligent : dept → national → texte dept → texte national
+async function fetchGouvernement(sector: string, city: string): Promise<GouvernementEntreprise[]> {
+  const dept = city ? cityToDept(city) : undefined;
+  const nafCodesStr = sectorToNaf(sector);
+  const nafCodes = nafCodesStr ? nafCodesStr.split(",").filter(Boolean) : [];
+
+  if (nafCodes.length > 0) {
+    // 1. NAF + département
+    if (dept) {
+      const res = await fetchByNafCodes(nafCodes, dept);
+      if (res.length > 0) return res;
+    }
+    // 2. NAF sans département (national)
+    const res = await fetchByNafCodes(nafCodes);
+    if (res.length > 0) return res;
+  }
+
+  // 3. Texte libre + département
+  if (dept) {
+    const res = await fetchByText(sector, dept);
+    if (res.length > 0) return res;
+  }
+
+  // 4. Texte libre sans département
+  return fetchByText(`${sector} ${city || ""}`.trim());
+}
+
+// Enrichissement batch : un seul appel OpenAI pour toutes les entreprises
+async function enrichBatchWithOpenAI(
+  companies: Array<{ name: string; city: string; sector: string; role: string; size: string }>
+): Promise<EnrichedData[]> {
+  const list = companies
+    .map((c, i) => `${i + 1}. "${c.name}" à ${c.city}, secteur ${c.sector}, taille ${c.size}, cible ${c.role}`)
+    .join("\n");
+
+  const prompt = `Pour ces ${companies.length} entreprises françaises, génère un tableau JSON (pas de markdown) :
+${list}
+
+Format exact : [{"contact":"prenom.nom@domaine.fr","phone":"+33 X XX XX XX XX","linkedin":"linkedin.com/company/slug","revenue":"X-YM€","score":85,"reason":"Raison courte du match"}, ...]
+Score entre 72 et 95. Email réaliste basé sur le nom de l'entreprise.`;
+
+  const defaultFor = (c: { name: string; sector: string; size: string; city: string }): EnrichedData => ({
+    contact: `contact@${slugify(c.name)}.fr`,
+    phone: "+33 1 00 00 00 00",
+    linkedin: `linkedin.com/company/${slugify(c.name)}`,
+    revenue: "N/C",
+    score: 80,
+    reason: `${c.name} est une entreprise ${c.size} active dans le secteur ${c.sector} à ${c.city}.`,
+  });
 
   try {
     const completion = await openai.chat.completions.create({
       model: "gpt-4o-mini",
       messages: [{ role: "user", content: prompt }],
       temperature: 0.7,
-      max_tokens: 200,
+      max_tokens: 200 * companies.length,
     });
-    const raw = (completion.choices[0].message.content || "{}").replace(/```json|```/g, "").trim();
-    const parsed = JSON.parse(raw);
-    return {
-      contact: parsed.contact || `contact@${slugify(name)}.fr`,
-      phone: parsed.phone || "+33 1 00 00 00 00",
-      linkedin: parsed.linkedin || `linkedin.com/company/${slugify(name)}`,
-      revenue: parsed.revenue || "N/C",
-      score: typeof parsed.score === "number" ? Math.min(95, Math.max(72, parsed.score)) : 80,
-      reason: parsed.reason || `${name} correspond à vos critères de prospection.`,
-    };
+    const raw = (completion.choices[0].message.content || "[]").replace(/```json|```/g, "").trim();
+    const parsed: EnrichedData[] = JSON.parse(raw);
+    return companies.map((c, i) => {
+      const d = parsed[i] || {};
+      return {
+        contact: d.contact || `contact@${slugify(c.name)}.fr`,
+        phone: d.phone || "+33 1 00 00 00 00",
+        linkedin: d.linkedin || `linkedin.com/company/${slugify(c.name)}`,
+        revenue: d.revenue || "N/C",
+        score: typeof d.score === "number" ? Math.min(95, Math.max(72, d.score)) : 80,
+        reason: d.reason || `${c.name} correspond à vos critères de prospection.`,
+      };
+    });
   } catch {
-    return {
-      contact: `contact@${slugify(name)}.fr`,
-      phone: "+33 1 00 00 00 00",
-      linkedin: `linkedin.com/company/${slugify(name)}`,
-      revenue: "N/C",
-      score: 80,
-      reason: `${name} est une entreprise ${size} active dans le secteur ${sector} à ${city}.`,
-    };
+    return companies.map(defaultFor);
   }
-}
-
-async function fetchGouvernement(sector: string, city: string, withDept: boolean): Promise<GouvernementEntreprise[]> {
-  const nafCodes = sectorToNaf(sector);
-  const dept = city ? cityToDept(city) : undefined;
-
-  const params = new URLSearchParams({ per_page: "5" });
-
-  if (nafCodes) {
-    // Split multiple NAF codes and use the first as primary (API accepts one at a time)
-    params.set("activite_principale", nafCodes.split(",")[0]);
-    if (withDept && dept) params.set("departement", dept);
-  } else {
-    // No NAF mapping: use sector as full-text query
-    params.set("q", withDept && dept ? sector : `${sector} ${city || ""}`.trim());
-    if (withDept && dept) params.set("departement", dept);
-  }
-
-  const res = await fetch(`https://recherche-entreprises.api.gouv.fr/search?${params}`);
-  if (!res.ok) throw new Error(`API gouv HTTP ${res.status}`);
-  const data = await res.json();
-  return (data.results as GouvernementEntreprise[]) || [];
 }
 
 export async function POST(request: Request) {
@@ -159,77 +199,54 @@ export async function POST(request: Request) {
     }
 
     const f = parsed.data;
-    let prospects = [];
+    let prospects: object[] = [];
 
-    // --- API gouvernementale ---
     try {
-      let entreprises = await fetchGouvernement(f.sector, f.city, true);
-      if (entreprises.length === 0) {
-        entreprises = await fetchGouvernement(f.sector, f.city, false);
-      }
+      const entreprises = await fetchGouvernement(f.sector, f.city);
 
       if (entreprises.length > 0) {
-        // Enrichissement OpenAI en parallèle pour chaque entreprise
-        prospects = await Promise.all(
-          entreprises.map(async (e, i) => {
-            const name = e.denomination || e.nom_complet || "Entreprise";
-            const tranche = e.siege?.tranche_effectif_salarie || e.tranche_effectif_salarie || "11";
-            const city = e.siege?.ville || f.city || "France";
-            const sector = f.sector || "B2B";
-            const role = f.targetRole || "Décideur";
-            const size = generateSize(tranche);
+        // Prépare les métadonnées de chaque entreprise
+        const companyMeta = entreprises.map(e => ({
+          name: e.denomination || e.nom_complet || "Entreprise",
+          tranche: e.siege?.tranche_effectif_salarie || e.tranche_effectif_salarie || "11",
+          city: e.siege?.ville || f.city || "France",
+          sector: f.sector || "B2B",
+          role: f.targetRole || "Décideur",
+        }));
 
-            const enriched = await enrichWithOpenAI(name, city, sector, role, size);
-
-            return {
-              id: `p${i + 1}`,
-              name,
-              sector,
-              city,
-              country: "France",
-              score: enriched.score,
-              size,
-              website: `www.${slugify(name)}.fr`,
-              contact: enriched.contact,
-              role,
-              phone: enriched.phone,
-              employees: generateEmployees(tranche),
-              revenue: enriched.revenue,
-              linkedin: enriched.linkedin,
-              reason: enriched.reason,
-            };
-          })
+        // Un seul appel OpenAI pour toutes les entreprises
+        const enriched = await enrichBatchWithOpenAI(
+          companyMeta.map(c => ({ ...c, size: generateSize(c.tranche) }))
         );
+
+        prospects = companyMeta.map((c, i) => ({
+          id: `p${i + 1}`,
+          name: c.name,
+          sector: c.sector,
+          city: c.city,
+          country: "France",
+          score: enriched[i].score,
+          size: generateSize(c.tranche),
+          website: `www.${slugify(c.name)}.fr`,
+          contact: enriched[i].contact,
+          role: c.role,
+          phone: enriched[i].phone,
+          employees: generateEmployees(c.tranche),
+          revenue: enriched[i].revenue,
+          linkedin: enriched[i].linkedin,
+          reason: enriched[i].reason,
+        }));
       }
     } catch (apiErr) {
       console.error("[prospect-search] API gouv error:", apiErr);
     }
 
-    // --- Fallback OpenAI si API gouv échoue ou retourne vide ---
     if (prospects.length === 0) {
-      const prompt = `5 entreprises B2B JSON pour: secteur=${f.sector}, ville=${f.city}, pays=${f.country}, taille=${f.companySize || "any"}, poste=${f.targetRole || "décideur"}.
-Format JSON strict, tableau uniquement, pas de markdown:
-[{"id":"p1","name":"...","sector":"...","city":"...","country":"...","score":85,"size":"PME","website":"...","contact":"prenom.nom@domaine.fr","role":"...","phone":"+33 1 XX XX XX XX","employees":"50-250","revenue":"8M€","linkedin":"linkedin.com/company/...","reason":"..."}]`;
-
-      const completion = await openai.chat.completions.create({
-        model: "gpt-4o-mini",
-        messages: [{ role: "user", content: prompt }],
-        temperature: 0.8,
-        max_tokens: 1200,
-      });
-
-      const raw = completion.choices[0].message.content || "[]";
-      try {
-        prospects = JSON.parse(raw.replace(/```json|```/g, "").trim());
-      } catch {
-        return NextResponse.json({ error: "Erreur parsing IA" }, { status: 500 });
-      }
+      return NextResponse.json({ prospects: [], total: 0, searchId: `search-${Date.now()}` });
     }
 
     const averageScore =
-      prospects.length > 0
-        ? Math.round(prospects.reduce((s: number, p: { score: number }) => s + p.score, 0) / prospects.length)
-        : 0;
+      Math.round(prospects.reduce((s: number, p) => s + (p as { score: number }).score, 0) / prospects.length);
 
     if (isSupabaseConfigured()) {
       try {
