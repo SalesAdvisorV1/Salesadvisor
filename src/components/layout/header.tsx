@@ -1,7 +1,8 @@
 'use client';
 
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
+import { signOut } from '@/lib/supabase/auth';
 
 const PAGE_NAMES: Record<string, string> = {
   '/dashboard':       'Dashboard',
@@ -22,7 +23,13 @@ function getPageName(pathname: string): string {
 
 export function Header() {
   const pathname = usePathname();
+  const router = useRouter();
   const pageName = getPageName(pathname);
+
+  async function handleSignOut() {
+    await signOut();
+    router.push('/login');
+  }
 
   return (
     <header className="fixed top-0 left-64 right-0 h-14 bg-white border-b border-gray-200 z-40 flex items-center px-6 gap-4">
@@ -61,10 +68,15 @@ export function Header() {
           <span className="absolute top-1.5 right-1.5 w-1.5 h-1.5 bg-red-500 rounded-full" />
         </button>
 
-        {/* Avatar */}
-        <div className="w-8 h-8 bg-black rounded-full flex items-center justify-center cursor-pointer hover:bg-gray-800 transition-colors">
+        {/* Logout button */}
+        <button
+          type="button"
+          onClick={handleSignOut}
+          title="Se déconnecter"
+          className="w-8 h-8 bg-black rounded-full flex items-center justify-center hover:bg-gray-800 transition-colors"
+        >
           <span className="text-white text-xs font-bold">V</span>
-        </div>
+        </button>
       </div>
     </header>
   );

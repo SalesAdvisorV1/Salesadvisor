@@ -207,8 +207,8 @@ export default function Home() {
 
         {/* Boutons droite */}
         <div className="flex items-center gap-4">
-          <Link href="/auth/login" className="text-white/60 hover:text-white text-sm transition-colors">Se connecter</Link>
-          <Link href="/auth/signup" className="bg-white text-black px-4 py-2 rounded-xl text-sm font-semibold hover:bg-gray-100 transition-colors">Commencer</Link>
+          <Link href="/login" className="text-white/60 hover:text-white text-sm transition-colors">Se connecter</Link>
+          <Link href="/register" className="bg-white text-black px-4 py-2 rounded-xl text-sm font-semibold hover:bg-gray-100 transition-colors">Commencer</Link>
         </div>
       </header>
 
@@ -272,13 +272,13 @@ export default function Home() {
           transition={{ delay: 0.8, duration: 0.6 }}
         >
           <Link
-            href="/auth/signup"
+            href="/register"
             className="bg-white text-black font-bold px-8 py-3 rounded-full hover:bg-white/90 transition-all hover:scale-105 text-sm tracking-wide"
           >
             Commencer gratuitement
           </Link>
           <Link
-            href="/auth/login"
+            href="/login"
             className="border border-white/30 text-white/70 hover:text-white hover:border-white/60 px-8 py-3 rounded-full transition-all text-sm tracking-wide"
           >
             Se connecter
@@ -467,7 +467,7 @@ export default function Home() {
               ))}
             </ul>
             <Link
-              href="/auth/signup"
+              href="/register"
               className="mt-6 bg-black text-white font-bold text-sm rounded-xl py-3 block text-center hover:bg-black/80 transition-all"
             >
               Choisir Pro
@@ -522,7 +522,7 @@ export default function Home() {
           {/* Boutons */}
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <Link
-              href="/auth/signup"
+              href="/register"
               className="bg-white text-black px-8 py-4 rounded-2xl font-bold text-base hover:scale-105 transition-all"
             >
               Créer mon compte gratuit
@@ -556,8 +556,8 @@ export default function Home() {
         <div className="max-w-6xl mx-auto flex flex-wrap items-center justify-between gap-4 text-xs text-white/20">
           <span className="font-black tracking-widest uppercase">SA</span>
           <div className="flex gap-6">
-            <Link href="/auth/login" className="hover:text-white/50 transition-colors">Connexion</Link>
-            <Link href="/auth/signup" className="hover:text-white/50 transition-colors">Inscription</Link>
+            <Link href="/login" className="hover:text-white/50 transition-colors">Connexion</Link>
+            <Link href="/register" className="hover:text-white/50 transition-colors">Inscription</Link>
             <span>contact@salesadvisor.fr</span>
           </div>
           <span>© 2026 Sales Advisor</span>
