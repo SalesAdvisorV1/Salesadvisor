@@ -28,29 +28,21 @@ function slugify(name: string) {
 }
 
 const NAF_MAPPING: Record<string, string> = {
-  logistique: "4941A,5210B,5229B",
-  transport: "4941A,4941B,4942Z",
-  tech: "6201Z,6202A,6311Z",
-  technologie: "6201Z,6202A,6311Z",
-  saas: "6201Z,6311Z",
-  industrie: "2511Z,2512Z,2550A",
-  btp: "4110A,4120A,4120B",
-  commerce: "4711A,4711B,4711D",
-  sante: "8610Z,8621Z,8622A",
-  immobilier: "6810Z,6820A,6831Z",
-  finance: "6411Z,6419Z,6491Z",
-  conseil: "7022Z,7112B,7490B",
-  marketing: "7311Z,7312Z,7319Z",
-  restauration: "5610A,5610C,5629A",
+  logistique: "49.41A,52.10B,52.29B",
+  transport: "49.41A,49.41B,49.42Z",
+  tech: "62.01Z,62.02A,63.11Z",
+  technologie: "62.01Z,62.02A,63.11Z",
+  saas: "62.01Z,63.11Z",
+  industrie: "25.11Z,25.12Z,25.50A",
+  btp: "41.10A,41.20A,41.20B",
+  commerce: "47.11A,47.11B,47.11D",
+  sante: "86.10Z,86.21Z,86.22A",
+  immobilier: "68.10Z,68.20A,68.31Z",
+  finance: "64.11Z,64.19Z,64.91Z",
+  conseil: "70.22Z,71.12B,74.90B",
+  marketing: "73.11Z,73.12Z,73.19Z",
+  restauration: "56.10A,56.10C,56.29A",
 };
-
-function sectorToNaf(sector: string): string {
-  const key = sector.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "");
-  for (const [k, v] of Object.entries(NAF_MAPPING)) {
-    if (key.includes(k)) return v;
-  }
-  return "";
-}
 
 const CITY_TO_DEPT: Record<string, string> = {
   paris: "75", marseille: "13", lyon: "69", toulouse: "31", nice: "06",
@@ -88,58 +80,14 @@ interface EnrichedData {
   reason: string;
 }
 
-// Appels parallèles un par code NAF, déduplication par SIREN
-async function fetchByNafCodes(nafCodes: string[], dept?: string): Promise<GouvernementEntreprise[]> {
-  const results = await Promise.all(
-    nafCodes.map(naf => {
-      const params = new URLSearchParams({ per_page: "10", activite_principale: naf });
-      if (dept) params.set("departement", dept);
-      return fetch(`https://recherche-entreprises.api.gouv.fr/search?${params}`)
-        .then(r => r.ok ? r.json() : { results: [] })
-        .then(data => (data.results as GouvernementEntreprise[]) || [])
-        .catch(() => [] as GouvernementEntreprise[]);
-    })
-  );
-  const all = results.flatMap(r => r);
-  const unique = [...new Map(all.map(e => [e.siren, e])).values()];
-  return unique.slice(0, 5);
-}
-
-// Recherche texte libre (fallback quand pas de code NAF ou 0 résultats)
-async function fetchByText(query: string, dept?: string): Promise<GouvernementEntreprise[]> {
-  const params = new URLSearchParams({ per_page: "5", q: query });
+async function fetchGouvernement(sector: string, city: string): Promise<GouvernementEntreprise[]> {
+  const dept = city ? cityToDept(city) : undefined;
+  const params = new URLSearchParams({ per_page: "10", q: sector });
   if (dept) params.set("departement", dept);
   const res = await fetch(`https://recherche-entreprises.api.gouv.fr/search?${params}`);
   if (!res.ok) return [];
   const data = await res.json();
   return (data.results as GouvernementEntreprise[]) || [];
-}
-
-// Fallback intelligent : dept → national → texte dept → texte national
-async function fetchGouvernement(sector: string, city: string): Promise<GouvernementEntreprise[]> {
-  const dept = city ? cityToDept(city) : undefined;
-  const nafCodesStr = sectorToNaf(sector);
-  const nafCodes = nafCodesStr ? nafCodesStr.split(",").filter(Boolean) : [];
-
-  if (nafCodes.length > 0) {
-    // 1. NAF + département
-    if (dept) {
-      const res = await fetchByNafCodes(nafCodes, dept);
-      if (res.length > 0) return res;
-    }
-    // 2. NAF sans département (national)
-    const res = await fetchByNafCodes(nafCodes);
-    if (res.length > 0) return res;
-  }
-
-  // 3. Texte libre + département
-  if (dept) {
-    const res = await fetchByText(sector, dept);
-    if (res.length > 0) return res;
-  }
-
-  // 4. Texte libre sans département
-  return fetchByText(`${sector} ${city || ""}`.trim());
 }
 
 // Enrichissement batch : un seul appel OpenAI pour toutes les entreprises
