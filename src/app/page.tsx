@@ -1,37 +1,36 @@
 'use client';
 import Link from 'next/link';
-import Image from 'next/image';
 import dynamic from 'next/dynamic';
 
 const HeroCanvas = dynamic(() => import('@/components/landing/hero-canvas'), { ssr: false });
 
 export default function LandingPage() {
   return (
-    <div className="min-h-screen bg-white text-gray-900 font-sans antialiased">
+    <div className="min-h-screen bg-black text-white font-sans antialiased">
 
-      {/* Header fixe */}
-      <header className="fixed top-0 left-0 right-0 z-50 bg-white/90 backdrop-blur-xl border-b border-gray-100 shadow-sm">
+      {/* ── Header ─────────────────────────────────────────────────────── */}
+      <header className="fixed top-0 left-0 right-0 z-50 bg-black/80 backdrop-blur-xl border-b border-white/10">
         <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
           <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 bg-black rounded-lg flex items-center justify-center shrink-0">
-              <span className="text-white text-xs font-black leading-none">SA</span>
+            <div className="w-8 h-8 bg-white rounded-lg flex items-center justify-center shrink-0">
+              <span className="text-black text-xs font-black leading-none">SA</span>
             </div>
-            <span className="font-bold text-gray-900 text-sm tracking-tight">Sales Advisor</span>
+            <span className="font-bold text-white text-sm tracking-tight">Sales Advisor</span>
           </div>
 
-          <nav className="hidden md:flex items-center gap-8 text-sm text-gray-500">
-            <a href="#features" className="hover:text-gray-900 transition-colors">Fonctionnalités</a>
-            <a href="#pricing" className="hover:text-gray-900 transition-colors">Tarifs</a>
-            <a href="#testimonials" className="hover:text-gray-900 transition-colors">Témoignages</a>
+          <nav className="hidden md:flex items-center gap-8 text-sm text-white/50">
+            <a href="#features" className="hover:text-white transition-colors">Fonctionnalités</a>
+            <a href="#pricing"  className="hover:text-white transition-colors">Tarifs</a>
+            <a href="#testimonials" className="hover:text-white transition-colors">Témoignages</a>
           </nav>
 
           <div className="flex items-center gap-3">
-            <Link href="/dashboard" className="text-sm text-gray-500 hover:text-gray-900 transition-colors hidden sm:block">
+            <Link href="/dashboard" className="text-sm text-white/50 hover:text-white transition-colors hidden sm:block">
               Se connecter
             </Link>
             <Link
               href="/dashboard"
-              className="text-sm bg-black text-white px-4 py-2 rounded-lg font-semibold hover:bg-gray-800 transition-all duration-200 shadow-sm"
+              className="text-sm bg-white text-black px-4 py-2 rounded-lg font-semibold hover:bg-white/90 transition-all duration-200"
             >
               Commencer →
             </Link>
@@ -39,63 +38,54 @@ export default function LandingPage() {
         </div>
       </header>
 
-      {/* Hero avec image de fond */}
-      <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
-        {/* Image de fond */}
-        <div className="absolute inset-0">
-          <Image
-            src="https://images.unsplash.com/photo-1600880292203-757bb62b4baf?w=1920"
-            alt="Sales team working"
-            fill
-            className="object-cover"
-            priority
-            unoptimized
-          />
-          <div className="absolute inset-0 bg-black/60" />
-        </div>
-
-        {/* Globe 3D */}
+      {/* ── Hero ────────────────────────────────────────────────────────── */}
+      <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-black">
         <HeroCanvas />
 
-        {/* Contenu hero */}
+        {/* Radial glow behind globe */}
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+          <div className="w-[600px] h-[600px] rounded-full bg-white/[0.03] blur-3xl" />
+        </div>
+
         <div className="relative z-10 max-w-5xl mx-auto px-6 text-center pt-24">
-          <div className="inline-flex items-center gap-2 border border-white/20 rounded-full px-4 py-1.5 text-xs text-white/70 mb-10 bg-white/10 backdrop-blur-sm">
+          <div className="inline-flex items-center gap-2 border border-white/15 rounded-full px-4 py-1.5 text-xs text-white/60 mb-10 bg-white/5 backdrop-blur-sm">
             <span className="w-1.5 h-1.5 rounded-full bg-green-400 inline-block animate-pulse" />
             Propulsé par GPT-4o · Données B2B en temps réel
           </div>
 
-          <h1 className="text-[68px] leading-[1.05] font-black tracking-tight mb-6 text-white">
+          <h1 className="text-[72px] leading-[1.04] font-black tracking-tight mb-6 text-white">
             Prospectez plus vite,<br />
-            <span className="text-white/60">vendez mieux.</span>
+            <span className="text-white/40">vendez mieux.</span>
           </h1>
 
-          <p className="text-lg text-white/70 max-w-xl mx-auto mb-10 leading-relaxed">
-            Sales Advisor combine recherche B2B et intelligence artificielle pour identifier, qualifier et approcher les bons prospects en quelques secondes.
+          <p className="text-lg text-white/55 max-w-xl mx-auto mb-10 leading-relaxed">
+            Sales Advisor combine recherche B2B et intelligence artificielle pour identifier,
+            qualifier et approcher les bons prospects en quelques secondes.
           </p>
 
           <div className="flex items-center justify-center gap-3 flex-wrap">
             <Link
               href="/dashboard"
-              className="bg-white text-black px-7 py-3.5 rounded-xl font-semibold text-sm hover:bg-gray-100 transition-all duration-200 shadow-lg"
+              className="bg-white text-black px-7 py-3.5 rounded-xl font-semibold text-sm hover:bg-white/90 transition-all duration-200 shadow-lg"
             >
               Commencer gratuitement
             </Link>
             <a
               href="#pricing"
-              className="border border-white/30 text-white px-7 py-3.5 rounded-xl font-semibold text-sm hover:bg-white/10 transition-all duration-200 backdrop-blur-sm"
+              className="border border-white/20 text-white/80 px-7 py-3.5 rounded-xl font-semibold text-sm hover:border-white/40 hover:text-white transition-all duration-200"
             >
               Voir les tarifs
             </a>
           </div>
 
-          <p className="text-xs text-white/40 mt-5">Pas de carte bancaire requise · Accès immédiat</p>
+          <p className="text-xs text-white/30 mt-5">Pas de carte bancaire requise · Accès immédiat</p>
         </div>
       </section>
 
-      {/* Stats strip */}
-      <section id="stats" className="bg-white border-y border-gray-100 py-14">
+      {/* ── Stats strip ─────────────────────────────────────────────────── */}
+      <section className="bg-[#111] border-y border-white/10 py-14">
         <div className="max-w-4xl mx-auto px-6">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-0 divide-x divide-gray-100">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-0 divide-x divide-white/10">
             {[
               ['2 000+', 'Prospects par mois'],
               ['95 %',   'Précision des données'],
@@ -103,41 +93,41 @@ export default function LandingPage() {
               ['GPT-4o', 'Modèle IA utilisé'],
             ].map(([value, label]) => (
               <div key={label} className="text-center px-8 py-4">
-                <p className="text-3xl font-black text-gray-900 mb-1">{value}</p>
-                <p className="text-xs text-gray-500 leading-snug">{label}</p>
+                <p className="text-3xl font-black text-white mb-1">{value}</p>
+                <p className="text-xs text-white/40 leading-snug">{label}</p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Features avec photos */}
-      <section id="features" className="py-28 px-6 bg-gray-50">
+      {/* ── Features ────────────────────────────────────────────────────── */}
+      <section id="features" className="py-28 px-6 bg-black">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-16">
-            <p className="text-xs text-gray-400 uppercase tracking-widest mb-4 font-semibold">Fonctionnalités</p>
-            <h2 className="text-4xl font-black tracking-tight text-gray-900 mb-4">Tout ce dont vous avez besoin</h2>
-            <p className="text-gray-500 text-base max-w-md mx-auto">Un outil complet conçu pour les équipes commerciales modernes.</p>
+            <p className="text-[10px] text-white/30 uppercase tracking-widest mb-4 font-semibold">Fonctionnalités</p>
+            <h2 className="text-4xl font-black tracking-tight text-white mb-4">Tout ce dont vous avez besoin</h2>
+            <p className="text-white/40 text-base max-w-md mx-auto">Un outil complet conçu pour les équipes commerciales modernes.</p>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-6">
+          <div className="grid md:grid-cols-3 gap-5">
             {[
               {
-                image: 'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=800',
+                icon: '⚡',
                 tag: 'Prospection',
                 title: 'Prospect Finder',
-                desc: 'Trouvez vos prospects B2B qualifiés en quelques secondes. Filtrez par secteur, taille d\'entreprise, ville et poste ciblé.',
+                desc: "Trouvez vos prospects B2B qualifiés en quelques secondes. Filtrez par secteur, taille d'entreprise, ville et poste ciblé.",
                 detail: 'Données vérifiées · Export CSV',
               },
               {
-                image: 'https://images.unsplash.com/photo-1551434678-e076c223a692?w=800',
+                icon: '🤖',
                 tag: 'Intelligence Artificielle',
                 title: 'Assistance IA',
                 desc: 'Générez des pitchs sur-mesure, préparez vos appels et obtenez des fiches de synthèse complètes sur chaque prospect.',
                 detail: 'Propulsé par GPT-4o',
               },
               {
-                image: 'https://images.unsplash.com/photo-1542744173-8e7e53415bb0?w=800',
+                icon: '📊',
                 tag: 'Analytics',
                 title: 'Dashboard & Suivi',
                 desc: 'Visualisez vos performances, suivez vos crédits et analysez toute votre activité depuis un tableau de bord centralisé.',
@@ -146,24 +136,16 @@ export default function LandingPage() {
             ].map((f) => (
               <div
                 key={f.title}
-                className="bg-white rounded-2xl overflow-hidden border border-gray-100 shadow-sm hover:shadow-md transition-all duration-300 flex flex-col"
+                className="bg-[#111] rounded-2xl border border-white/10 p-8 flex flex-col hover:border-white/20 transition-all duration-300"
               >
-                <div className="relative h-48 overflow-hidden">
-                  <Image
-                    src={f.image}
-                    alt={f.title}
-                    fill
-                    className="object-cover"
-                    unoptimized
-                  />
+                <div className="w-12 h-12 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-2xl mb-6">
+                  {f.icon}
                 </div>
-                <div className="p-6 flex flex-col flex-1">
-                  <p className="text-[10px] text-gray-400 uppercase tracking-widest mb-3 font-semibold">{f.tag}</p>
-                  <h3 className="text-lg font-bold text-gray-900 mb-2">{f.title}</h3>
-                  <p className="text-gray-500 text-sm leading-relaxed flex-1">{f.desc}</p>
-                  <div className="mt-5 pt-4 border-t border-gray-100">
-                    <span className="text-xs text-gray-400">{f.detail}</span>
-                  </div>
+                <p className="text-[10px] text-white/30 uppercase tracking-widest mb-3 font-semibold">{f.tag}</p>
+                <h3 className="text-lg font-bold text-white mb-3">{f.title}</h3>
+                <p className="text-white/40 text-sm leading-relaxed flex-1">{f.desc}</p>
+                <div className="mt-6 pt-5 border-t border-white/10">
+                  <span className="text-xs text-white/30">{f.detail}</span>
                 </div>
               </div>
             ))}
@@ -171,51 +153,45 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* Testimonials */}
-      <section id="testimonials" className="py-28 px-6 bg-white">
+      {/* ── Testimonials ────────────────────────────────────────────────── */}
+      <section id="testimonials" className="py-28 px-6 bg-[#0a0a0a] border-t border-white/10">
         <div className="max-w-5xl mx-auto">
           <div className="text-center mb-16">
-            <p className="text-xs text-gray-400 uppercase tracking-widest mb-4 font-semibold">Témoignages</p>
-            <h2 className="text-4xl font-black tracking-tight text-gray-900 mb-4">Ce qu&apos;ils en pensent</h2>
-            <p className="text-gray-500 text-base max-w-md mx-auto">Des commerciaux qui ont transformé leur prospection grâce à Sales Advisor.</p>
+            <p className="text-[10px] text-white/30 uppercase tracking-widest mb-4 font-semibold">Témoignages</p>
+            <h2 className="text-4xl font-black tracking-tight text-white mb-4">Ce qu&apos;ils en pensent</h2>
+            <p className="text-white/40 text-base max-w-md mx-auto">Des commerciaux qui ont transformé leur prospection grâce à Sales Advisor.</p>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-6">
+          <div className="grid md:grid-cols-3 gap-5">
             {[
               {
-                avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=80&h=80&fit=crop&crop=face',
+                initials: 'TR',
                 name: 'Thomas Renard',
                 role: 'SDR @ TechCorp',
-                quote: 'En 2 semaines, j\'ai trouvé plus de prospects qualifiés qu\'en 3 mois avec mes méthodes habituelles. Les pitchs IA sont bluffants.',
+                quote: "En 2 semaines, j'ai trouvé plus de prospects qualifiés qu'en 3 mois avec mes méthodes habituelles. Les pitchs IA sont bluffants.",
               },
               {
-                avatar: 'https://images.unsplash.com/photo-1494790108755-2616b612b050?w=80&h=80&fit=crop&crop=face',
+                initials: 'SM',
                 name: 'Sophie Martin',
                 role: 'Freelance B2B',
-                quote: 'L\'outil idéal pour un freelance. Je peux cibler exactement les décideurs que je cherche et préparer chaque appel avec un brief complet.',
+                quote: "L'outil idéal pour un freelance. Je peux cibler exactement les décideurs que je cherche et préparer chaque appel avec un brief complet.",
               },
               {
-                avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=80&h=80&fit=crop&crop=face',
+                initials: 'ML',
                 name: 'Marc Leblanc',
                 role: 'Directeur Commercial @ StartupXYZ',
-                quote: 'On a équipé toute l\'équipe commerciale. Le ROI est immédiat : moins de temps de recherche, plus de temps de vente.',
+                quote: "On a équipé toute l'équipe commerciale. Le ROI est immédiat : moins de temps de recherche, plus de temps de vente.",
               },
             ].map((t) => (
-              <div key={t.name} className="bg-gray-50 rounded-2xl p-6 border border-gray-100 hover:shadow-md transition-all duration-200">
-                <p className="text-gray-600 text-sm leading-relaxed mb-5 italic">&ldquo;{t.quote}&rdquo;</p>
+              <div key={t.name} className="bg-[#111] rounded-2xl p-6 border border-white/10 hover:border-white/20 transition-all duration-200">
+                <p className="text-white/50 text-sm leading-relaxed mb-6 italic">&ldquo;{t.quote}&rdquo;</p>
                 <div className="flex items-center gap-3">
-                  <div className="relative w-10 h-10 rounded-full overflow-hidden shrink-0">
-                    <Image
-                      src={t.avatar}
-                      alt={t.name}
-                      fill
-                      className="object-cover"
-                      unoptimized
-                    />
+                  <div className="w-10 h-10 rounded-full bg-white/10 border border-white/15 flex items-center justify-center shrink-0">
+                    <span className="text-xs font-bold text-white/70">{t.initials}</span>
                   </div>
                   <div>
-                    <p className="text-sm font-semibold text-gray-900">{t.name}</p>
-                    <p className="text-xs text-gray-400">{t.role}</p>
+                    <p className="text-sm font-semibold text-white">{t.name}</p>
+                    <p className="text-xs text-white/35">{t.role}</p>
                   </div>
                 </div>
               </div>
@@ -224,13 +200,13 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* Pricing */}
-      <section id="pricing" className="py-28 px-6 bg-gray-50 border-t border-gray-100">
+      {/* ── Pricing ─────────────────────────────────────────────────────── */}
+      <section id="pricing" className="py-28 px-6 bg-black border-t border-white/10">
         <div className="max-w-5xl mx-auto">
           <div className="text-center mb-16">
-            <p className="text-xs text-gray-400 uppercase tracking-widest mb-4 font-semibold">Tarifs</p>
-            <h2 className="text-4xl font-black tracking-tight text-gray-900 mb-4">Simple et transparent</h2>
-            <p className="text-gray-500 text-base max-w-md mx-auto">Choisissez le plan adapté à votre activité. Sans engagement.</p>
+            <p className="text-[10px] text-white/30 uppercase tracking-widest mb-4 font-semibold">Tarifs</p>
+            <h2 className="text-4xl font-black tracking-tight text-white mb-4">Simple et transparent</h2>
+            <p className="text-white/40 text-base max-w-md mx-auto">Choisissez le plan adapté à votre activité. Sans engagement.</p>
           </div>
 
           <div className="grid md:grid-cols-3 gap-5">
@@ -248,7 +224,7 @@ export default function LandingPage() {
                 price: '39',
                 desc: 'Pour les commerciaux actifs',
                 credits: '500 crédits / mois',
-                features: ['Tout Starter', 'Pitchs personnalisés', 'Préparation d\'appel', 'Support prioritaire'],
+                features: ['Tout Starter', 'Pitchs personnalisés', "Préparation d'appel", 'Support prioritaire'],
                 highlight: true,
               },
               {
@@ -262,39 +238,39 @@ export default function LandingPage() {
             ].map((plan) => (
               <div
                 key={plan.name}
-                className={`rounded-2xl p-8 border flex flex-col relative ${
+                className={`rounded-2xl p-8 border flex flex-col relative transition-all duration-300 ${
                   plan.highlight
-                    ? 'bg-black text-white border-black shadow-2xl scale-[1.02]'
-                    : 'bg-white border-gray-200 text-gray-900'
+                    ? 'bg-white text-black border-white shadow-2xl shadow-white/10 scale-[1.02]'
+                    : 'bg-[#111] border-white/10 text-white hover:border-white/20'
                 }`}
               >
                 {plan.highlight && (
-                  <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 bg-white text-black text-[10px] font-bold uppercase tracking-widest px-4 py-1.5 rounded-full border border-gray-200 whitespace-nowrap shadow-sm">
+                  <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 bg-black text-white text-[10px] font-bold uppercase tracking-widest px-4 py-1.5 rounded-full border border-white/20 whitespace-nowrap">
                     Le plus populaire
                   </div>
                 )}
 
                 <div className="mb-6">
-                  <h3 className={`text-xl font-black mb-1 ${plan.highlight ? 'text-white' : 'text-gray-900'}`}>
+                  <h3 className={`text-xl font-black mb-1 ${plan.highlight ? 'text-black' : 'text-white'}`}>
                     {plan.name}
                   </h3>
-                  <p className={`text-sm ${plan.highlight ? 'text-white/50' : 'text-gray-500'}`}>{plan.desc}</p>
+                  <p className={`text-sm ${plan.highlight ? 'text-black/50' : 'text-white/40'}`}>{plan.desc}</p>
                 </div>
 
                 <div className="mb-6">
-                  <span className={`text-5xl font-black ${plan.highlight ? 'text-white' : 'text-gray-900'}`}>
+                  <span className={`text-5xl font-black ${plan.highlight ? 'text-black' : 'text-white'}`}>
                     {plan.price}€
                   </span>
-                  <span className={`text-sm ml-1 ${plan.highlight ? 'text-white/50' : 'text-gray-500'}`}>/mois</span>
-                  <p className={`text-xs mt-1.5 ${plan.highlight ? 'text-white/40' : 'text-gray-400'}`}>
+                  <span className={`text-sm ml-1 ${plan.highlight ? 'text-black/50' : 'text-white/40'}`}>/mois</span>
+                  <p className={`text-xs mt-1.5 ${plan.highlight ? 'text-black/40' : 'text-white/30'}`}>
                     {plan.credits}
                   </p>
                 </div>
 
                 <ul className="space-y-2.5 mb-8 flex-1">
                   {plan.features.map((f) => (
-                    <li key={f} className={`text-sm flex items-center gap-2.5 ${plan.highlight ? 'text-white/80' : 'text-gray-600'}`}>
-                      <span className={`text-xs font-bold ${plan.highlight ? 'text-white/40' : 'text-gray-400'}`}>✓</span>
+                    <li key={f} className={`text-sm flex items-center gap-2.5 ${plan.highlight ? 'text-black/70' : 'text-white/55'}`}>
+                      <span className={`text-xs font-bold ${plan.highlight ? 'text-black/40' : 'text-white/30'}`}>✓</span>
                       {f}
                     </li>
                   ))}
@@ -304,8 +280,8 @@ export default function LandingPage() {
                   href="/dashboard"
                   className={`block text-center py-3.5 rounded-xl text-sm font-semibold transition-all duration-200 ${
                     plan.highlight
-                      ? 'bg-white text-black hover:bg-gray-100'
-                      : 'bg-gray-900 text-white hover:bg-black'
+                      ? 'bg-black text-white hover:bg-black/85'
+                      : 'bg-white/10 text-white hover:bg-white/15 border border-white/10'
                   }`}
                 >
                   Choisir {plan.name}
@@ -314,39 +290,39 @@ export default function LandingPage() {
             ))}
           </div>
 
-          <p className="text-center text-xs text-gray-400 mt-10">
+          <p className="text-center text-xs text-white/25 mt-10">
             Tous les plans incluent 14 jours d&apos;essai gratuit · Résiliez à tout moment
           </p>
         </div>
       </section>
 
-      {/* CTA final */}
-      <section className="py-28 px-6 bg-white border-t border-gray-100 text-center">
+      {/* ── CTA final ───────────────────────────────────────────────────── */}
+      <section className="py-28 px-6 bg-[#0a0a0a] border-t border-white/10 text-center">
         <div className="max-w-2xl mx-auto">
-          <h2 className="text-4xl font-black tracking-tight text-gray-900 mb-5">Prêt à prospecter autrement ?</h2>
-          <p className="text-gray-500 mb-10 text-base leading-relaxed">
+          <h2 className="text-4xl font-black tracking-tight text-white mb-5">Prêt à prospecter autrement ?</h2>
+          <p className="text-white/40 mb-10 text-base leading-relaxed">
             Rejoignez les commerciaux qui utilisent Sales Advisor pour trouver et convertir leurs prospects plus rapidement.
           </p>
           <Link
             href="/dashboard"
-            className="inline-block bg-black text-white px-9 py-4 rounded-xl font-semibold text-sm hover:bg-gray-800 transition-all duration-200 shadow-lg"
+            className="inline-block bg-white text-black px-9 py-4 rounded-xl font-semibold text-sm hover:bg-white/90 transition-all duration-200 shadow-lg"
           >
             Commencer gratuitement →
           </Link>
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="border-t border-gray-800 py-10 px-6 bg-gray-900">
-        <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-gray-400">
+      {/* ── Footer ──────────────────────────────────────────────────────── */}
+      <footer className="border-t border-white/10 py-10 px-6 bg-black">
+        <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-white/35">
           <div className="flex items-center gap-2">
             <div className="w-6 h-6 bg-white rounded-md flex items-center justify-center">
-              <span className="text-gray-900 text-[9px] font-black leading-none">SA</span>
+              <span className="text-black text-[9px] font-black leading-none">SA</span>
             </div>
             <span className="font-semibold text-white">Sales Advisor</span>
           </div>
 
-          <p className="text-xs text-gray-500">© 2025 Sales Advisor. Tous droits réservés.</p>
+          <p className="text-xs text-white/25">© 2025 Sales Advisor. Tous droits réservés.</p>
 
           <div className="flex gap-6 text-xs">
             <a href="#" className="hover:text-white transition-colors">Confidentialité</a>
