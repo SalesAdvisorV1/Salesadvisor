@@ -7,13 +7,21 @@ import { ProspectSearchForm } from "@/components/prospect-finder/prospect-search
 import type { ProspectSearchFormValues } from "@/lib/schemas/prospect-search";
 import { useCreditsStore } from "@/stores/use-credits-store";
 import type { ProspectSearchResponse } from "@/types/prospect";
+import { createClient } from "@/lib/supabase/client";
 
 const SEARCH_CREDIT_COST = 2;
 
 async function runProspectSearch(filters: ProspectSearchFormValues): Promise<ProspectSearchResponse> {
+  const supabase = createClient();
+  const { data: { session } } = await supabase.auth.getSession();
+  const headers: Record<string, string> = { "Content-Type": "application/json" };
+  if (session?.access_token) {
+    headers["Authorization"] = `Bearer ${session.access_token}`;
+  }
+
   const res = await fetch("/api/prospect-search", {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers,
     body: JSON.stringify(filters),
   });
 

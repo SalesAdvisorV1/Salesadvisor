@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { prospectSearchSchema } from "@/lib/schemas/prospect-search";
-import { createAdminClient, isSupabaseConfigured, getAuthenticatedUser } from "@/lib/supabase/server";
+import { createAdminClient, isSupabaseConfigured } from "@/lib/supabase/server";
 import OpenAI from "openai";
 
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
@@ -117,7 +117,12 @@ export async function POST(request: Request) {
     if (isSupabaseConfigured()) {
       try {
         const supabase = createAdminClient();
-        const user = await getAuthenticatedUser();
+        const token = request.headers.get("authorization")?.replace("Bearer ", "");
+        let userId: string | null = null;
+        if (token) {
+          const { data: { user } } = await supabase.auth.getUser(token);
+          if (user) userId = user.id;
+        }
         const { data: entry } = await supabase.from("search_history").insert({
           query: JSON.stringify(f), results: prospects, credits_used: 2
         }).select("id").single();
@@ -125,8 +130,8 @@ export async function POST(request: Request) {
           type: "search",
           description: `Recherche ${f.sector} — ${f.city} : ${prospects.length} prospects, score moyen ${avgScore}/100`
         });
-        if (user) {
-          await supabase.rpc("decrement_credits", { user_id: user.id, amount: 2 });
+        if (userId) {
+          await supabase.rpc("decrement_credits", { user_id: userId, amount: 2 });
         }
         return NextResponse.json({ prospects, total: prospects.length, searchId: entry?.id });
       } catch (err) { console.error(err); }
