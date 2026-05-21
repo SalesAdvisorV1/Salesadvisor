@@ -2,6 +2,7 @@
 
 import { useMutation } from "@tanstack/react-query";
 import { useState, useEffect } from "react";
+import { motion } from "framer-motion";
 import { useSearchParams } from "next/navigation";
 import { AiResultCard } from "@/components/ai-assistant/ai-result-card";
 import { ProspectInputForm } from "@/components/ai-assistant/prospect-input-form";
@@ -30,7 +31,6 @@ async function runAiAssist(task: AiTaskType, prospect: AiProspectFormValues, use
 
   const data = await res.json();
 
-  console.log('[credits] userId:', userId, 'amount:', taskCosts[task]);
   if (userId) {
     await fetch("/api/credits/decrement", {
       method: "POST",
@@ -77,12 +77,17 @@ export function AiAssistantView() {
 
   return (
     <div className="mx-auto max-w-7xl">
-      <header className="mb-6 pt-4">
+      <motion.header
+        className="mb-6 pt-4"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.3 }}
+      >
         <h1 className="text-2xl font-bold text-gray-900">Assistance IA</h1>
         <p className="mt-1 text-sm text-gray-500 max-w-2xl">
           Génère un résumé prospect, un pitch personnalisé ou une préparation d'appel en quelques secondes.
         </p>
-      </header>
+      </motion.header>
 
       {insufficientCredits ? (
         <div className="mb-5 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-700">
@@ -109,9 +114,13 @@ export function AiAssistantView() {
           <div className="flex items-center justify-between mb-5">
             <h2 className="text-base font-semibold text-gray-900">Résultat IA</h2>
             {mutation.data ? (
-              <span className="rounded-full border border-gray-200 bg-gray-50 px-3 py-1 text-xs font-medium text-gray-600">
-                Généré
-              </span>
+              <motion.span
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                className="rounded-full border border-green-200 bg-green-50 px-3 py-1 text-xs font-medium text-green-700"
+              >
+                ✓ Généré
+              </motion.span>
             ) : null}
           </div>
 
@@ -119,7 +128,13 @@ export function AiAssistantView() {
             {mutation.isPending ? (
               <AiLoadingState />
             ) : mutation.data ? (
-              <AiResultCard response={mutation.data} />
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.3 }}
+              >
+                <AiResultCard response={mutation.data} />
+              </motion.div>
             ) : (
               <AiEmptyState />
             )}
@@ -148,13 +163,29 @@ function AiEmptyState() {
 
 function AiLoadingState() {
   return (
-    <div className="space-y-3 animate-pulse">
-      <div className="h-20 rounded-xl bg-gray-100" />
-      <div className="grid grid-cols-2 gap-3">
-        <div className="h-32 rounded-xl bg-gray-100" />
-        <div className="h-32 rounded-xl bg-gray-100" />
+    <div className="space-y-3">
+      {/* Headline skeleton */}
+      <div className="rounded-xl border border-gray-100 p-4 space-y-2 animate-pulse">
+        <div className="h-5 w-3/4 bg-gray-200 rounded" />
+        <div className="h-4 w-full bg-gray-100 rounded" />
+        <div className="h-4 w-5/6 bg-gray-100 rounded" />
       </div>
-      <div className="h-16 rounded-xl bg-gray-100" />
+      {/* Cards skeleton */}
+      <div className="grid grid-cols-2 gap-3">
+        <div className="rounded-xl bg-green-50 border border-green-100 p-4 space-y-2 animate-pulse">
+          <div className="h-4 w-24 bg-green-200 rounded" />
+          <div className="h-3 w-full bg-green-100 rounded" />
+          <div className="h-3 w-5/6 bg-green-100 rounded" />
+          <div className="h-3 w-4/6 bg-green-100 rounded" />
+        </div>
+        <div className="rounded-xl bg-blue-50 border border-blue-100 p-4 space-y-2 animate-pulse">
+          <div className="h-4 w-24 bg-blue-200 rounded" />
+          <div className="h-3 w-full bg-blue-100 rounded" />
+          <div className="h-3 w-5/6 bg-blue-100 rounded" />
+          <div className="h-3 w-4/6 bg-blue-100 rounded" />
+        </div>
+      </div>
+      <div className="rounded-xl bg-gray-100 p-4 h-12 animate-pulse" />
       <p className="text-center text-sm text-gray-400">Analyse IA en cours…</p>
     </div>
   );

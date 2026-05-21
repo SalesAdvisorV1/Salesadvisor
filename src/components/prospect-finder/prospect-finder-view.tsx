@@ -2,6 +2,7 @@
 
 import { useMutation } from "@tanstack/react-query";
 import { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { ProspectResultCard } from "@/components/prospect-finder/prospect-result-card";
 import { ProspectSearchForm } from "@/components/prospect-finder/prospect-search-form";
 import type { ProspectSearchFormValues } from "@/lib/schemas/prospect-search";
@@ -25,7 +26,6 @@ async function runProspectSearch(filters: ProspectSearchFormValues, userId: stri
 
   const data = await res.json();
 
-  console.log('[credits] userId:', userId, 'amount: 2');
   if (userId) {
     await fetch("/api/credits/decrement", {
       method: "POST",
@@ -67,12 +67,17 @@ export function ProspectFinderView() {
 
   return (
     <div className="mx-auto max-w-7xl">
-      <header className="mb-6 pt-4">
+      <motion.header
+        className="mb-6 pt-4"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.3 }}
+      >
         <h1 className="text-2xl font-bold text-gray-900">Smart Prospect Finder</h1>
         <p className="mt-1 text-sm text-gray-500 max-w-2xl">
           Recherche de prospects B2B qualifiés à partir de critères métier, géographiques et IA.
         </p>
-      </header>
+      </motion.header>
 
       {insufficientCredits ? (
         <div className="mb-5 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-700">
@@ -103,19 +108,74 @@ export function ProspectFinderView() {
               ) : null}
             </div>
 
-            <div className="space-y-4">
+            <AnimatePresence mode="wait">
               {mutation.isPending ? (
-                <p className="text-sm text-gray-500">Analyse en cours…</p>
-              ) : null}
-
-              {!mutation.isPending && !mutation.data ? (
-                <p className="text-sm text-gray-400">Lance une recherche pour afficher les prospects.</p>
-              ) : null}
-
-              {mutation.data?.prospects.map((prospect) => (
-                <ProspectResultCard key={prospect.id} prospect={prospect} />
-              ))}
-            </div>
+                <motion.div
+                  key="loading"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  className="space-y-4"
+                >
+                  {[1, 2, 3].map((i) => (
+                    <div key={i} className="rounded-xl border border-gray-100 p-5 space-y-3 animate-pulse">
+                      <div className="flex items-start justify-between gap-3">
+                        <div className="flex items-start gap-3">
+                          <div className="w-9 h-9 rounded-full bg-gray-200 shrink-0" />
+                          <div className="space-y-2">
+                            <div className="h-4 w-36 bg-gray-200 rounded" />
+                            <div className="h-3 w-24 bg-gray-100 rounded" />
+                          </div>
+                        </div>
+                        <div className="w-11 h-11 rounded-full bg-gray-200 shrink-0" />
+                      </div>
+                      <div className="grid grid-cols-2 gap-3">
+                        <div className="h-10 bg-gray-100 rounded-lg" />
+                        <div className="h-10 bg-gray-100 rounded-lg" />
+                      </div>
+                      <div className="h-9 bg-gray-100 rounded-xl" />
+                    </div>
+                  ))}
+                </motion.div>
+              ) : !mutation.data ? (
+                <motion.div
+                  key="empty"
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="flex flex-col items-center justify-center py-16 text-center"
+                >
+                  <div className="w-16 h-16 rounded-2xl bg-gray-100 flex items-center justify-center mb-4">
+                    <svg width="28" height="28" fill="none" viewBox="0 0 24 24" stroke="#9ca3af" strokeWidth={1.5}>
+                      <circle cx="11" cy="11" r="7" />
+                      <path d="M21 21l-4.35-4.35" strokeLinecap="round" />
+                      <path d="M11 8v3l2 2" strokeLinecap="round" />
+                    </svg>
+                  </div>
+                  <p className="font-semibold text-gray-700 text-sm">Lancez votre première recherche</p>
+                  <p className="text-sm text-gray-400 mt-1 max-w-xs">
+                    Remplissez le formulaire et découvrez des prospects B2B qualifiés par IA.
+                  </p>
+                </motion.div>
+              ) : (
+                <motion.div
+                  key="results"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  className="space-y-4"
+                >
+                  {mutation.data.prospects.map((prospect, i) => (
+                    <motion.div
+                      key={prospect.id}
+                      initial={{ opacity: 0, y: 12 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: i * 0.05 }}
+                    >
+                      <ProspectResultCard prospect={prospect} />
+                    </motion.div>
+                  ))}
+                </motion.div>
+              )}
+            </AnimatePresence>
 
             {lastFilters && mutation.data ? (
               <p className="mt-4 text-xs text-gray-400">

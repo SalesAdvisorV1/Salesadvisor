@@ -231,7 +231,7 @@ export default function Home() {
           className="absolute top-24 left-6 md:left-16 z-10"
           style={{ y: textTopY }}
         >
-          <h1 className="text-6xl md:text-8xl font-black leading-[0.9] tracking-tight">
+          <h1 className="text-6xl md:text-8xl font-black leading-[0.9] tracking-tight gradient-text-hero">
             Prospectez<br />
             <span className="text-white/50">plus vite,</span>
           </h1>
@@ -242,7 +242,7 @@ export default function Home() {
           className="absolute bottom-28 right-6 md:right-16 z-10 text-right"
           style={{ y: textBotY }}
         >
-          <h1 className="text-6xl md:text-8xl font-black leading-[0.9] tracking-tight">
+          <h1 className="text-6xl md:text-8xl font-black leading-[0.9] tracking-tight gradient-text-hero">
             vendez<br />mieux.
           </h1>
         </motion.div>
@@ -273,7 +273,7 @@ export default function Home() {
         >
           <Link
             href="/register"
-            className="bg-white text-black font-bold px-8 py-3 rounded-full hover:bg-white/90 transition-all hover:scale-105 text-sm tracking-wide"
+            className="btn-shimmer bg-white text-black font-bold px-8 py-3 rounded-full hover:bg-white/95 hover:shadow-[0_0_30px_rgba(255,255,255,0.3)] transition-all hover:scale-105 text-sm tracking-wide"
           >
             Commencer gratuitement
           </Link>
@@ -523,7 +523,7 @@ export default function Home() {
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <Link
               href="/register"
-              className="bg-white text-black px-8 py-4 rounded-2xl font-bold text-base hover:scale-105 transition-all"
+              className="btn-shimmer bg-white text-black px-8 py-4 rounded-2xl font-bold text-base hover:scale-105 hover:shadow-[0_0_40px_rgba(255,255,255,0.25)] transition-all"
             >
               Créer mon compte gratuit
             </Link>

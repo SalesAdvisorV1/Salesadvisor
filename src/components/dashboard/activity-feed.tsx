@@ -1,11 +1,45 @@
 import { formatRelativeTime } from "@/lib/format";
 import type { ActivityItem } from "@/types/dashboard";
 
-const TYPE_CONFIG: Record<ActivityItem["type"], { label: string; dot: string }> = {
-  search:      { label: "Recherche",      dot: "bg-blue-500" },
-  export:      { label: "Export",         dot: "bg-green-500" },
-  ai:          { label: "IA",             dot: "bg-violet-500" },
-  enrichment:  { label: "Enrichissement", dot: "bg-orange-500" },
+const TYPE_CONFIG: Record<ActivityItem["type"], { label: string; dot: string; icon: React.ReactNode }> = {
+  search: {
+    label: "Recherche",
+    dot: "bg-blue-500",
+    icon: (
+      <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="white" strokeWidth={2.5}>
+        <circle cx="11" cy="11" r="7" /><path d="M21 21l-4.35-4.35" strokeLinecap="round" />
+      </svg>
+    ),
+  },
+  export: {
+    label: "Export",
+    dot: "bg-green-500",
+    icon: (
+      <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="white" strokeWidth={2.5}>
+        <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4" strokeLinecap="round" />
+        <polyline points="7 10 12 15 17 10" strokeLinecap="round" strokeLinejoin="round" />
+        <line x1="12" y1="15" x2="12" y2="3" strokeLinecap="round" />
+      </svg>
+    ),
+  },
+  ai: {
+    label: "IA",
+    dot: "bg-violet-500",
+    icon: (
+      <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="white" strokeWidth={2.5}>
+        <path d="M12 2l2 7h7l-5.5 4 2 7L12 16l-5.5 4 2-7L3 9h7z" strokeLinecap="round" strokeLinejoin="round" />
+      </svg>
+    ),
+  },
+  enrichment: {
+    label: "Enrichissement",
+    dot: "bg-orange-500",
+    icon: (
+      <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="white" strokeWidth={2.5}>
+        <circle cx="12" cy="12" r="10" /><path d="M12 8v4l3 3" strokeLinecap="round" />
+      </svg>
+    ),
+  },
 };
 
 interface ActivityFeedProps {
@@ -17,7 +51,7 @@ export function ActivityFeed({ items, activities }: ActivityFeedProps) {
   const list = items ?? activities ?? [];
 
   return (
-    <div className="bg-white border border-gray-200 rounded-xl p-5 shadow-sm">
+    <div className="bg-white border border-gray-200 rounded-xl p-5 shadow-sm hover:shadow-md transition-shadow duration-200">
       <div className="flex items-center justify-between mb-5">
         <h3 className="text-sm font-semibold text-gray-900">Activité récente</h3>
         {list.length > 0 && (
@@ -32,16 +66,18 @@ export function ActivityFeed({ items, activities }: ActivityFeedProps) {
       ) : (
         <div className="relative">
           {/* Timeline line */}
-          <div className="absolute left-[7px] top-2 bottom-2 w-px bg-gray-100" />
-          <div className="space-y-1">
+          <div className="absolute left-[11px] top-3 bottom-3 w-px bg-gray-100" />
+          <div className="space-y-0.5">
             {list.map((item) => {
               const config = TYPE_CONFIG[item.type];
               return (
                 <article
                   key={item.id}
-                  className="flex items-start gap-3 pl-5 pr-2 py-2.5 rounded-xl hover:bg-gray-50 transition-colors cursor-default relative"
+                  className="flex items-start gap-3 pl-7 pr-2 py-2.5 rounded-xl hover:bg-gray-50 transition-colors duration-150 cursor-default relative"
                 >
-                  <div className={`absolute left-[3px] top-[14px] w-3 h-3 rounded-full border-2 border-white ${config.dot}`} />
+                  <div className={`absolute left-[3px] top-[12px] w-[18px] h-[18px] rounded-full border-2 border-white ${config.dot} flex items-center justify-center shrink-0`}>
+                    {config.icon}
+                  </div>
                   <div className="min-w-0 flex-1">
                     <div className="flex items-center gap-2 mb-0.5">
                       <span className="text-[10px] text-gray-400 font-medium uppercase tracking-wide">{config.label}</span>

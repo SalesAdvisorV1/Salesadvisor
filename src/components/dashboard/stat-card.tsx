@@ -1,3 +1,8 @@
+"use client";
+
+import { useRef, useEffect, useState } from "react";
+import { useMotionValue, useSpring, useInView } from "framer-motion";
+
 interface StatCardProps {
   title?: string;
   label?: string;
@@ -32,16 +37,36 @@ const ICON_CONFIG = {
   )},
 };
 
+function AnimatedCounter({ value }: { value: number }) {
+  const ref = useRef<HTMLSpanElement>(null);
+  const inView = useInView(ref, { once: true });
+  const motionVal = useMotionValue(0);
+  const spring = useSpring(motionVal, { stiffness: 60, damping: 18 });
+  const [display, setDisplay] = useState(0);
+
+  useEffect(() => {
+    if (inView) motionVal.set(value);
+  }, [inView, motionVal, value]);
+
+  useEffect(() => {
+    const unsub = spring.on('change', (v) => setDisplay(Math.round(v)));
+    return unsub;
+  }, [spring]);
+
+  return <span ref={ref}>{display}</span>;
+}
+
 export function StatCard({ title, label, value, subtitle, sub, highlight, trend, icon }: StatCardProps) {
   const heading = title || label || '';
   const caption = subtitle || sub || '';
   const iconConf = icon ? ICON_CONFIG[icon] : null;
+  const isNumeric = typeof value === 'number';
 
   const isTrendPositive = trend && (trend.startsWith('+') || trend.includes('↑'));
   const isTrendNegative = trend && (trend.startsWith('-') || trend.includes('↓'));
 
   return (
-    <div className="bg-white border border-gray-200 rounded-xl p-5 shadow-sm hover:shadow-md transition-all duration-200">
+    <div className="bg-white border border-gray-200 rounded-xl p-5 shadow-sm hover:shadow-lg hover:scale-[1.02] hover:-translate-y-0.5 transition-all duration-200 cursor-default">
       {iconConf && (
         <div className={`w-10 h-10 ${iconConf.bg} ${iconConf.color} rounded-xl flex items-center justify-center mb-4`}>
           {iconConf.svg}
@@ -50,7 +75,9 @@ export function StatCard({ title, label, value, subtitle, sub, highlight, trend,
 
       <p className="text-sm text-gray-500 mt-0 leading-tight">{heading}</p>
 
-      <p className="text-3xl font-black text-gray-900 mt-1 tabular-nums">{value}</p>
+      <p className="text-3xl font-black text-gray-900 mt-1 tabular-nums">
+        {isNumeric ? <AnimatedCounter value={value as number} /> : value}
+      </p>
 
       <div className="flex items-center gap-2 mt-2">
         {caption && (
