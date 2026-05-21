@@ -29,7 +29,18 @@ function getSectorColors(sector: string): { bg: string; text: string } {
 export function HistoryTable({ entries, selectedId, onSelect }: HistoryTableProps) {
   return (
     <div>
-      <h2 className="text-sm font-semibold text-gray-900 mb-4">Recherches passées</h2>
+      <div className="flex items-center gap-2 mb-4">
+        <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="#6b7280" strokeWidth={1.8}>
+          <circle cx="11" cy="11" r="7" />
+          <path d="M21 21l-4.35-4.35" strokeLinecap="round" />
+        </svg>
+        <h2 className="text-sm font-semibold text-gray-900">Recherches passées</h2>
+        {entries.length > 0 && (
+          <span className="ml-auto rounded-full bg-gray-100 px-2 py-0.5 text-[10px] font-semibold text-gray-500">
+            {entries.length}
+          </span>
+        )}
+      </div>
 
       {entries.length === 0 ? (
         <div className="flex flex-col items-center justify-center py-12 text-center">
@@ -99,8 +110,16 @@ export function HistoryTable({ entries, selectedId, onSelect }: HistoryTableProp
                       {entry.prospectCount}
                     </div>
                     <div className={`text-[10px] ${isSelected ? 'text-white/50' : 'text-gray-400'}`}>prospects</div>
-                    <div className={`text-[10px] mt-0.5 ${isSelected ? 'text-white/50' : 'text-gray-400'}`}>
-                      score {entry.averageScore}
+                    <div className={`text-[10px] mt-1 font-semibold px-1.5 py-0.5 rounded-full ${
+                      isSelected
+                        ? 'bg-white/20 text-white'
+                        : entry.averageScore >= 70
+                          ? 'bg-green-100 text-green-700'
+                          : entry.averageScore >= 50
+                            ? 'bg-amber-100 text-amber-700'
+                            : 'bg-red-100 text-red-600'
+                    }`}>
+                      {entry.averageScore}
                     </div>
                   </div>
                 </button>

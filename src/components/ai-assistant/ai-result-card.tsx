@@ -40,49 +40,41 @@ function SummaryResult({ result }: { result: AiSummaryResult }) {
   return (
     <div className="space-y-4">
       <div className="rounded-xl border border-gray-200 bg-white p-4">
-        <h4 className="font-semibold text-gray-900">
+        <h4 className="font-bold text-gray-900">
           <TypewriterText text={result.headline} />
         </h4>
         <p className="mt-2 text-sm leading-6 text-gray-600">{result.description}</p>
       </div>
 
       <div className="grid gap-4 sm:grid-cols-2">
-        <div className="rounded-xl bg-green-50 border border-green-200 p-4 space-y-2">
+        <div className="rounded-xl bg-green-50 border border-green-100 p-4 space-y-2">
           <div className="flex items-center gap-2">
-            <div className="w-5 h-5 rounded-full bg-green-500 flex items-center justify-center shrink-0">
-              <svg width="10" height="10" fill="none" viewBox="0 0 24 24" stroke="white" strokeWidth={3}>
-                <polyline points="20 6 9 17 4 12" strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
-            </div>
-            <p className="text-sm font-semibold text-green-900">Points forts</p>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#15803d" strokeWidth={2.5} className="shrink-0">
+              <polyline points="20 6 9 17 4 12" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+            <p className="text-sm font-semibold text-green-700">Points forts</p>
           </div>
           <ul className="mt-1 space-y-2">
             {result.strengths.map((s, i) => (
-              <li key={i} className="flex items-start gap-2 text-sm text-gray-700">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#22c55e" strokeWidth={2.5} className="shrink-0 mt-0.5">
-                  <polyline points="20 6 9 17 4 12" strokeLinecap="round" strokeLinejoin="round" />
-                </svg>
+              <li key={i} className="flex items-start text-sm text-gray-700">
+                <span className="text-green-600 mr-2 shrink-0 font-medium">✓</span>
                 {s}
               </li>
             ))}
           </ul>
         </div>
 
-        <div className="rounded-xl bg-blue-50 border border-blue-200 p-4 space-y-2">
+        <div className="rounded-xl bg-blue-50 border border-blue-100 p-4 space-y-2">
           <div className="flex items-center gap-2">
-            <div className="w-5 h-5 rounded-full bg-blue-500 flex items-center justify-center shrink-0">
-              <svg width="10" height="10" fill="none" viewBox="0 0 24 24" stroke="white" strokeWidth={3}>
-                <path d="M5 12h14M12 5l7 7-7 7" strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
-            </div>
-            <p className="text-sm font-semibold text-blue-900">Opportunités</p>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1d4ed8" strokeWidth={2.5} className="shrink-0">
+              <path d="M5 12h14M12 5l7 7-7 7" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+            <p className="text-sm font-semibold text-blue-700">Opportunités</p>
           </div>
           <ul className="mt-1 space-y-2">
             {result.opportunities.map((o, i) => (
-              <li key={i} className="flex items-start gap-2 text-sm text-gray-700">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" strokeWidth={2.5} className="shrink-0 mt-0.5">
-                  <path d="M5 12h14M12 5l7 7-7 7" strokeLinecap="round" strokeLinejoin="round" />
-                </svg>
+              <li key={i} className="flex items-start text-sm text-gray-700">
+                <span className="text-blue-500 mr-2 shrink-0 font-medium">→</span>
                 {o}
               </li>
             ))}
