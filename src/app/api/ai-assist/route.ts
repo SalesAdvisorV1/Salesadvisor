@@ -66,18 +66,6 @@ export async function POST(request: Request) {
   const { task, prospect } = parsed.data;
   const cost = CREDIT_COSTS[task];
 
-  if (isSupabaseConfigured() && userId) {
-    const supabase = createAdminClient();
-    const { data: profile } = await supabase
-      .from("profiles")
-      .select("credits_remaining")
-      .eq("id", userId)
-      .single();
-    if (!profile || profile.credits_remaining < cost) {
-      return Response.json({ error: "Crédits insuffisants" }, { status: 403 });
-    }
-  }
-
   if (!isOpenAIConfigured()) {
     await new Promise((r) => setTimeout(r, 900));
     const response = mockAiAssist(task, prospect);

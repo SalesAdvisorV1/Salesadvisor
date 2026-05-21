@@ -61,7 +61,7 @@ export function ExportsView() {
 
   return (
     <div className="mx-auto max-w-4xl">
-      <header className="mb-6">
+      <header className="mb-6 pt-4">
         <h1 className="text-2xl font-bold text-gray-900">Exports CSV</h1>
         <p className="mt-1 text-sm text-gray-500">
           Télécharge tes recherches au format CSV pour les intégrer dans ton CRM ou Excel.

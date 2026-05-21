@@ -44,7 +44,7 @@ export function HistoryView() {
 
   return (
     <div className="mx-auto max-w-7xl">
-      <header className="mb-6">
+      <header className="mb-6 pt-4">
         <h1 className="text-2xl font-bold text-gray-900">Historique des recherches</h1>
         <p className="mt-1 text-sm text-gray-500">
           {data.total} recherche{data.total > 1 ? "s" : ""} enregistrée{data.total > 1 ? "s" : ""}

@@ -53,7 +53,7 @@ export function ProspectFinderView() {
 
   return (
     <div className="mx-auto max-w-7xl">
-      <header className="mb-6">
+      <header className="mb-6 pt-4">
         <h1 className="text-2xl font-bold text-gray-900">Smart Prospect Finder</h1>
         <p className="mt-1 text-sm text-gray-500 max-w-2xl">
           Recherche de prospects B2B qualifiés à partir de critères métier, géographiques et IA.

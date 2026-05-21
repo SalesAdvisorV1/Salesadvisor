@@ -6,7 +6,7 @@ interface DashboardHeaderProps {
 
 export function DashboardHeader({ userName }: DashboardHeaderProps) {
   return (
-    <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between mb-8">
+    <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between mb-8 pt-4">
       <div>
         <h1 className="text-2xl font-black text-gray-900 leading-tight">
           Bonjour, {userName}
