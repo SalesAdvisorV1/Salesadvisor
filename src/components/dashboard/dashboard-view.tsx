@@ -71,6 +71,39 @@ export function DashboardView() {
     <div className="mx-auto max-w-7xl">
       <DashboardHeader userName={user.name} />
 
+      {/* Actions rapides */}
+      <div className="flex gap-3 mt-4 mb-6 flex-wrap">
+        <Link
+          href="/prospect-finder"
+          className="flex items-center gap-2 bg-white border border-gray-200 rounded-xl px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 hover:border-gray-300 transition-all"
+        >
+          <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} className="text-blue-500">
+            <circle cx="11" cy="11" r="7" /><path d="M21 21l-4.35-4.35" strokeLinecap="round" />
+          </svg>
+          Nouvelle recherche
+        </Link>
+        <Link
+          href="/ai-assistant"
+          className="flex items-center gap-2 bg-white border border-gray-200 rounded-xl px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 hover:border-gray-300 transition-all"
+        >
+          <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} className="text-violet-500">
+            <path d="M12 2l2 7h7l-5.5 4 2 7L12 16l-5.5 4 2-7L3 9h7z" strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
+          Analyser IA
+        </Link>
+        <Link
+          href="/exports"
+          className="flex items-center gap-2 bg-white border border-gray-200 rounded-xl px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 hover:border-gray-300 transition-all"
+        >
+          <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} className="text-green-500">
+            <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4" strokeLinecap="round" />
+            <polyline points="7 10 12 15 17 10" strokeLinecap="round" strokeLinejoin="round" />
+            <line x1="12" y1="15" x2="12" y2="3" strokeLinecap="round" />
+          </svg>
+          Voir exports
+        </Link>
+      </div>
+
       <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
         {[
           { title: "Recherches", value: stats.searchesThisMonth, subtitle: "ce mois-ci", icon: "search" as const },
