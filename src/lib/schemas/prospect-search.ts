@@ -1,8 +1,8 @@
 import { z } from "zod";
 
 export const prospectSearchSchema = z.object({
-  sector: z.string().min(2, "Indique un secteur"),
-  city: z.string().min(2, "Indique une ville"),
+  sector: z.string(),
+  city: z.string(),
   country: z.string().min(2, "Indique un pays"),
   radius: z.enum(["10 km", "20 km", "50 km", "100 km"]),
   companySize: z.string().optional(),
