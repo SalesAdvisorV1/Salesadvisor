@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { prospectSearchSchema } from "@/lib/schemas/prospect-search";
-import { createAdminClient, isSupabaseConfigured } from "@/lib/supabase/server";
+import { createAdminClient, isSupabaseConfigured, getAuthenticatedUser } from "@/lib/supabase/server";
 import OpenAI from "openai";
 
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
@@ -37,6 +37,21 @@ export async function POST(request: Request) {
     const parsed = prospectSearchSchema.safeParse(body);
     if (!parsed.success) return NextResponse.json({ error: "Données invalides" }, { status: 400 });
     const f = parsed.data;
+
+    if (isSupabaseConfigured()) {
+      const user = await getAuthenticatedUser();
+      if (user) {
+        const supabase = createAdminClient();
+        const { data: profile } = await supabase
+          .from("profiles")
+          .select("credits_remaining")
+          .eq("id", user.id)
+          .single();
+        if (!profile || profile.credits_remaining < 2) {
+          return NextResponse.json({ error: "Crédits insuffisants" }, { status: 403 });
+        }
+      }
+    }
 
     const city = f.city.toLowerCase().trim();
     const dept = CITY_DEPT[city] || "";
@@ -117,6 +132,7 @@ export async function POST(request: Request) {
     if (isSupabaseConfigured()) {
       try {
         const supabase = createAdminClient();
+        const user = await getAuthenticatedUser();
         const { data: entry } = await supabase.from("search_history").insert({
           query: JSON.stringify(f), results: prospects, credits_used: 2
         }).select("id").single();
@@ -124,6 +140,9 @@ export async function POST(request: Request) {
           type: "search",
           description: `Recherche ${f.sector} — ${f.city} : ${prospects.length} prospects, score moyen ${avgScore}/100`
         });
+        if (user) {
+          await supabase.rpc("decrement_credits", { user_id: user.id, amount: 2 });
+        }
         return NextResponse.json({ prospects, total: prospects.length, searchId: entry?.id });
       } catch (err) { console.error(err); }
     }

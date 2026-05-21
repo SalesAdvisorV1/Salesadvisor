@@ -1,5 +1,5 @@
 import { mockDashboardData } from "@/lib/mock/dashboard";
-import { createAdminClient, isSupabaseConfigured } from "@/lib/supabase/server";
+import { createAdminClient, isSupabaseConfigured, getAuthenticatedUser } from "@/lib/supabase/server";
 import type { DashboardData } from "@/types/dashboard";
 import type { ProspectResult } from "@/types/prospect";
 
@@ -10,11 +10,12 @@ export async function GET() {
 
   try {
     const supabase = createAdminClient();
+    const user = await getAuthenticatedUser();
     const startOfMonth = new Date();
     startOfMonth.setDate(1);
     startOfMonth.setHours(0, 0, 0, 0);
 
-    const [searchesRes, activitiesRes, recentHistoryRes] = await Promise.all([
+    const [searchesRes, activitiesRes, recentHistoryRes, profileRes] = await Promise.all([
       supabase
         .from("search_history")
         .select("id, results, created_at")
@@ -29,11 +30,15 @@ export async function GET() {
         .select("id, query, results, created_at")
         .order("created_at", { ascending: false })
         .limit(5),
+      user
+        ? supabase.from("profiles").select("credits_remaining, plan").eq("id", user.id).single()
+        : Promise.resolve({ data: null }),
     ]);
 
     const searches = searchesRes.data ?? [];
     const activities = activitiesRes.data ?? [];
     const recentHistory = recentHistoryRes.data ?? [];
+    const profile = profileRes.data;
 
     const allProspects = searches.flatMap((r) => (r.results as ProspectResult[]) ?? []);
     const prospectsFound = allProspects.length;
@@ -71,8 +76,8 @@ export async function GET() {
         searchesThisMonth: searches.length,
         prospectsFound,
         averageScore,
-        creditsRemaining: mockDashboardData.stats.creditsRemaining,
-        creditsTotal: mockDashboardData.stats.creditsTotal,
+        creditsRemaining: profile?.credits_remaining ?? mockDashboardData.stats.creditsRemaining,
+        creditsTotal: 100,
       },
       activities:
         activities.length > 0

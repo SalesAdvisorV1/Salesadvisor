@@ -1,6 +1,7 @@
 import OpenAI from "openai";
 import { z } from "zod";
 import { mockAiAssist } from "@/lib/mock/ai-assistant";
+import { createAdminClient, isSupabaseConfigured, getAuthenticatedUser } from "@/lib/supabase/server";
 import type { AiTaskType, AiAssistResult } from "@/types/ai-assistant";
 
 const aiAssistSchema = z.object({
@@ -62,6 +63,22 @@ export async function POST(request: Request) {
   }
 
   const { task, prospect } = parsed.data;
+  const cost = CREDIT_COSTS[task];
+
+  if (isSupabaseConfigured()) {
+    const user = await getAuthenticatedUser();
+    if (user) {
+      const supabase = createAdminClient();
+      const { data: profile } = await supabase
+        .from("profiles")
+        .select("credits_remaining")
+        .eq("id", user.id)
+        .single();
+      if (!profile || profile.credits_remaining < cost) {
+        return Response.json({ error: "Crédits insuffisants" }, { status: 403 });
+      }
+    }
+  }
 
   if (!isOpenAIConfigured()) {
     await new Promise((r) => setTimeout(r, 900));
@@ -88,7 +105,15 @@ export async function POST(request: Request) {
 
     const raw = completion.choices[0]?.message?.content ?? "{}";
     const result = JSON.parse(raw) as unknown as Record<string, unknown>;
-    result.creditsUsed = CREDIT_COSTS[task];
+    result.creditsUsed = cost;
+
+    if (isSupabaseConfigured()) {
+      const user = await getAuthenticatedUser();
+      if (user) {
+        const supabase = createAdminClient();
+        await supabase.rpc("decrement_credits", { user_id: user.id, amount: cost });
+      }
+    }
 
     return Response.json({ task, result: result as unknown as AiAssistResult });
   } catch (err) {
