@@ -1,7 +1,7 @@
 "use client";
 
 import { useMutation } from "@tanstack/react-query";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 import { AiResultCard } from "@/components/ai-assistant/ai-result-card";
 import { ProspectInputForm } from "@/components/ai-assistant/prospect-input-form";
@@ -16,14 +16,11 @@ const taskCosts: Record<AiTaskType, number> = {
   "call-prep": 2,
 };
 
-async function runAiAssist(task: AiTaskType, prospect: AiProspectFormValues): Promise<AiAssistResponse> {
-  const supabase = createClient();
-  const { data: { user } } = await supabase.auth.getUser();
-
+async function runAiAssist(task: AiTaskType, prospect: AiProspectFormValues, userId: string | null): Promise<AiAssistResponse> {
   const res = await fetch("/api/ai-assist", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ task, prospect, userId: user?.id }),
+    body: JSON.stringify({ task, prospect, userId }),
   });
 
   if (!res.ok) {
@@ -33,11 +30,12 @@ async function runAiAssist(task: AiTaskType, prospect: AiProspectFormValues): Pr
 
   const data = await res.json();
 
-  if (user?.id) {
+  console.log('[credits] userId:', userId, 'amount:', taskCosts[task]);
+  if (userId) {
     await fetch("/api/credits/decrement", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ userId: user.id, amount: taskCosts[task] }),
+      body: JSON.stringify({ userId, amount: taskCosts[task] }),
     });
   }
 
@@ -46,8 +44,14 @@ async function runAiAssist(task: AiTaskType, prospect: AiProspectFormValues): Pr
 
 export function AiAssistantView() {
   const [selectedTask, setSelectedTask] = useState<AiTaskType>("summary");
+  const [userId, setUserId] = useState<string | null>(null);
   const { remaining, consume, initialized } = useCreditsStore();
   const searchParams = useSearchParams();
+
+  useEffect(() => {
+    const supabase = createClient();
+    supabase.auth.getUser().then(({ data }) => setUserId(data.user?.id || null));
+  }, []);
 
   const prefill: Partial<AiProspectFormValues> = {
     companyName: searchParams.get("company") ?? undefined,
@@ -57,7 +61,7 @@ export function AiAssistantView() {
 
   const mutation = useMutation({
     mutationFn: ({ task, prospect }: { task: AiTaskType; prospect: AiProspectFormValues }) =>
-      runAiAssist(task, prospect),
+      runAiAssist(task, prospect, userId),
     onSuccess: (_data, variables) => {
       consume(taskCosts[variables.task]);
     },

@@ -1,7 +1,7 @@
 "use client";
 
 import { useMutation } from "@tanstack/react-query";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { ProspectResultCard } from "@/components/prospect-finder/prospect-result-card";
 import { ProspectSearchForm } from "@/components/prospect-finder/prospect-search-form";
 import type { ProspectSearchFormValues } from "@/lib/schemas/prospect-search";
@@ -11,14 +11,11 @@ import { createClient } from "@/lib/supabase/client";
 
 const SEARCH_CREDIT_COST = 2;
 
-async function runProspectSearch(filters: ProspectSearchFormValues): Promise<ProspectSearchResponse> {
-  const supabase = createClient();
-  const { data: { user } } = await supabase.auth.getUser();
-
+async function runProspectSearch(filters: ProspectSearchFormValues, userId: string | null): Promise<ProspectSearchResponse> {
   const res = await fetch("/api/prospect-search", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ ...filters, userId: user?.id }),
+    body: JSON.stringify({ ...filters, userId }),
   });
 
   if (!res.ok) {
@@ -28,11 +25,12 @@ async function runProspectSearch(filters: ProspectSearchFormValues): Promise<Pro
 
   const data = await res.json();
 
-  if (user?.id) {
+  console.log('[credits] userId:', userId, 'amount: 2');
+  if (userId) {
     await fetch("/api/credits/decrement", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ userId: user.id, amount: 2 }),
+      body: JSON.stringify({ userId, amount: 2 }),
     });
   }
 
@@ -41,10 +39,16 @@ async function runProspectSearch(filters: ProspectSearchFormValues): Promise<Pro
 
 export function ProspectFinderView() {
   const [lastFilters, setLastFilters] = useState<ProspectSearchFormValues | null>(null);
+  const [userId, setUserId] = useState<string | null>(null);
   const { remaining, consume, initialized } = useCreditsStore();
 
+  useEffect(() => {
+    const supabase = createClient();
+    supabase.auth.getUser().then(({ data }) => setUserId(data.user?.id || null));
+  }, []);
+
   const mutation = useMutation({
-    mutationFn: runProspectSearch,
+    mutationFn: (filters: ProspectSearchFormValues) => runProspectSearch(filters, userId),
     onSuccess: (_data, variables) => {
       setLastFilters(variables);
       consume(SEARCH_CREDIT_COST);
