@@ -33,7 +33,7 @@ function ScoreBadge({ score }: { score: number }) {
     : { bg: 'bg-red-500', ring: 'ring-red-200' };
 
   return (
-    <div className={`w-11 h-11 rounded-full ${config.bg} ring-4 ${config.ring} flex items-center justify-center shrink-0`}>
+    <div className={`w-12 h-12 rounded-full ${config.bg} ring-4 ${config.ring} flex items-center justify-center shrink-0`}>
       <span className="text-white text-[11px] font-black leading-none">{score}</span>
     </div>
   );
@@ -52,13 +52,13 @@ function CopyEmailButton({ email }: { email: string }) {
     <button
       type="button"
       onClick={handleCopy}
-      className={`text-[10px] font-medium px-2 py-0.5 rounded-full border transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] min-h-[32px] ${
+      className={`text-xs px-2 py-1 rounded-lg transition-all ${
         copied
-          ? 'bg-green-50 text-green-700 border-green-200'
-          : 'bg-gray-50 text-gray-500 border-gray-200 hover:bg-gray-100'
+          ? 'bg-green-100 text-green-700'
+          : 'bg-gray-100 hover:bg-gray-200 text-gray-600'
       }`}
     >
-      {copied ? 'Copié ✓' : 'Copier'}
+      {copied ? 'Copié ✓' : 'Copier email'}
     </button>
   );
 }
@@ -79,7 +79,7 @@ export function ProspectResultCard({ prospect }: Props) {
       <div className="flex items-start justify-between gap-3 mb-4">
         <div className="flex items-start gap-3 min-w-0">
           {/* Company avatar */}
-          <div className={`w-9 h-9 rounded-full ${avatarColor} flex items-center justify-center shrink-0 text-white text-[11px] font-black`}>
+          <div className={`w-10 h-10 rounded-full ${avatarColor} flex items-center justify-center shrink-0 text-white text-[11px] font-black`}>
             {initials}
           </div>
           <div className="min-w-0">

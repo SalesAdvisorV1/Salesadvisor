@@ -25,7 +25,7 @@ type CompanySize = typeof SIZE_OPTIONS[number];
 const radiusOptions = ["10 km", "20 km", "50 km", "100 km"] as const;
 
 const inputClass =
-  "w-full bg-white border border-gray-300 rounded-xl px-4 py-3 text-gray-900 text-sm focus:ring-2 focus:ring-gray-900/10 focus:border-gray-400 focus:outline-none transition-all placeholder:text-gray-400";
+  "w-full bg-white border border-gray-300 rounded-xl px-4 py-3 text-gray-900 text-sm focus:ring-2 focus:ring-black/10 focus:border-gray-400 focus:outline-none transition-all duration-150 placeholder:text-gray-400";
 
 function getRoleSuggestions(sector: string): string[] {
   const s = sector.toLowerCase();
@@ -227,7 +227,7 @@ export function ProspectSearchForm({ onSubmit, isLoading }: ProspectSearchFormPr
         <button
           type="submit"
           disabled={isLoading}
-          className="mt-2 bg-gray-900 text-white font-semibold py-3.5 rounded-xl hover:bg-gray-800 transition-all w-full disabled:cursor-not-allowed disabled:opacity-60"
+          className="mt-2 bg-gray-900 text-white font-semibold py-3.5 rounded-xl hover:bg-gray-800 hover:scale-[1.02] active:scale-[0.98] transition-transform duration-150 w-full disabled:cursor-not-allowed disabled:opacity-60"
         >
           {isLoading ? "Recherche en cours…" : "Lancer la recherche (2 cr.)"}
         </button>

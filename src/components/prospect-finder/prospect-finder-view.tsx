@@ -117,24 +117,8 @@ export function ProspectFinderView() {
                   exit={{ opacity: 0 }}
                   className="space-y-4"
                 >
-                  {[1, 2, 3].map((i) => (
-                    <div key={i} className="rounded-xl border border-gray-100 p-5 space-y-3 animate-pulse">
-                      <div className="flex items-start justify-between gap-3">
-                        <div className="flex items-start gap-3">
-                          <div className="w-9 h-9 rounded-full bg-gray-200 shrink-0" />
-                          <div className="space-y-2">
-                            <div className="h-4 w-36 bg-gray-200 rounded" />
-                            <div className="h-3 w-24 bg-gray-100 rounded" />
-                          </div>
-                        </div>
-                        <div className="w-11 h-11 rounded-full bg-gray-200 shrink-0" />
-                      </div>
-                      <div className="grid grid-cols-2 gap-3">
-                        <div className="h-10 bg-gray-100 rounded-lg" />
-                        <div className="h-10 bg-gray-100 rounded-lg" />
-                      </div>
-                      <div className="h-9 bg-gray-100 rounded-xl" />
-                    </div>
+                  {[1, 2, 3, 4, 5].map((i) => (
+                    <div key={i} className="bg-gray-100 animate-pulse rounded-xl h-48" />
                   ))}
                 </motion.div>
               ) : !mutation.data ? (
@@ -148,12 +132,28 @@ export function ProspectFinderView() {
                     <svg width="28" height="28" fill="none" viewBox="0 0 24 24" stroke="#9ca3af" strokeWidth={1.5}>
                       <circle cx="11" cy="11" r="7" />
                       <path d="M21 21l-4.35-4.35" strokeLinecap="round" />
-                      <path d="M11 8v3l2 2" strokeLinecap="round" />
                     </svg>
                   </div>
-                  <p className="font-semibold text-gray-700 text-sm">Lancez votre première recherche</p>
-                  <p className="text-sm text-gray-400 mt-1 max-w-xs">
-                    Remplissez le formulaire et découvrez des prospects B2B qualifiés par IA.
+                  <p className="text-sm text-gray-400 max-w-xs">
+                    Définissez vos critères et lancez une recherche pour trouver vos prospects B2B
+                  </p>
+                </motion.div>
+              ) : mutation.data.prospects.length === 0 ? (
+                <motion.div
+                  key="no-results"
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="flex flex-col items-center justify-center py-16 text-center"
+                >
+                  <div className="w-16 h-16 rounded-2xl bg-gray-100 flex items-center justify-center mb-4">
+                    <svg width="28" height="28" fill="none" viewBox="0 0 24 24" stroke="#9ca3af" strokeWidth={1.5}>
+                      <circle cx="11" cy="11" r="7" />
+                      <path d="M21 21l-4.35-4.35" strokeLinecap="round" />
+                      <path d="M8 11h6" strokeLinecap="round" />
+                    </svg>
+                  </div>
+                  <p className="text-sm text-gray-400 max-w-xs">
+                    Aucun résultat trouvé. Essayez d'élargir votre rayon ou de modifier le secteur.
                   </p>
                 </motion.div>
               ) : (
