@@ -38,27 +38,6 @@ export async function POST(request: Request) {
     if (!parsed.success) return NextResponse.json({ error: "Données invalides" }, { status: 400 });
     const f = parsed.data;
 
-    if (isSupabaseConfigured()) {
-      try {
-        const user = await getAuthenticatedUser();
-        if (user) {
-          const supabase = createAdminClient();
-          const { data: profile } = await supabase
-            .from("profiles")
-            .select("credits_remaining")
-            .eq("id", user.id)
-            .single();
-          // Bloquer seulement si crédits explicitement insuffisants (pas null/undefined)
-          if (profile && profile.credits_remaining != null && profile.credits_remaining < 2) {
-            return NextResponse.json({ error: "Crédits insuffisants" }, { status: 403 });
-          }
-        }
-        // Si user non trouvé (cookies SSR absents), on laisse passer
-      } catch {
-        // Erreur auth → on laisse passer sans bloquer
-      }
-    }
-
     const city = f.city.toLowerCase().trim();
     const dept = CITY_DEPT[city] || "";
     const query = encodeURIComponent(f.sector);

@@ -101,7 +101,7 @@ export function Sidebar({ onNavClick }: { onNavClick?: () => void } = {}) {
   const pathname = usePathname();
   const { remaining, total, initialized } = useCreditsStore();
 
-  const creditsValue = initialized ? remaining : "—";
+  const creditsValue = initialized ? remaining : 100;
   const creditsTotal = initialized ? total : 100;
   const percent = initialized && creditsTotal > 0 ? Math.round((remaining / creditsTotal) * 100) : 0;
 

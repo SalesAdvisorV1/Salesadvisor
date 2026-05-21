@@ -114,6 +114,7 @@ export function ProspectSearchForm({ onSubmit, isLoading }: ProspectSearchFormPr
     },
   });
 
+  const cityRegister = register("city");
   const sector = watch("sector") ?? "";
   const roleSuggestions = getRoleSuggestions(sector);
 
@@ -146,7 +147,9 @@ export function ProspectSearchForm({ onSubmit, isLoading }: ProspectSearchFormPr
         <Field label="Ville" error={errors.city?.message}>
           <div ref={cityWrapperRef} className="relative">
             <input
-              {...register("city")}
+              name="city"
+              ref={cityRegister.ref}
+              onBlur={cityRegister.onBlur}
               value={cityInput}
               onChange={handleCityChange}
               onFocus={() => citySuggestions.length > 0 && setShowSuggestions(true)}
