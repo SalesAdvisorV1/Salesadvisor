@@ -2,7 +2,7 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import {
   prospectSearchSchema,
   type ProspectSearchFormValues,
@@ -14,13 +14,10 @@ const SECTORS = [
   "Immobilier", "Restauration", "Éducation",
 ];
 
-const CITIES = [
-  "Paris", "Lyon", "Marseille", "Toulouse", "Bordeaux", "Nantes",
-  "Strasbourg", "Lille", "Nice", "Rennes", "Grenoble", "Montpellier",
-  "Nancy", "Metz", "Tours", "Rouen", "Clermont-Ferrand", "Dijon",
-  "Angers", "Reims", "Saint-Étienne", "Le Havre", "Toulon", "Brest",
-  "Limoges", "Nîmes", "Perpignan", "Orléans", "Caen", "Mulhouse",
-];
+interface GeoCommune {
+  nom: string;
+  codesPostaux: string[];
+}
 
 const SIZE_OPTIONS = ["TPE", "PME", "ETI", "GE"] as const;
 type CompanySize = typeof SIZE_OPTIONS[number];
@@ -51,6 +48,52 @@ interface ProspectSearchFormProps {
 
 export function ProspectSearchForm({ onSubmit, isLoading }: ProspectSearchFormProps) {
   const [selectedSizes, setSelectedSizes] = useState<CompanySize[]>(["PME", "ETI"]);
+  const [cityInput, setCityInput] = useState("");
+  const [citySuggestions, setCitySuggestions] = useState<GeoCommune[]>([]);
+  const [showSuggestions, setShowSuggestions] = useState(false);
+  const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const cityWrapperRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    function handleClickOutside(e: MouseEvent) {
+      if (cityWrapperRef.current && !cityWrapperRef.current.contains(e.target as Node)) {
+        setShowSuggestions(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  function handleCityChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const val = e.target.value;
+    setCityInput(val);
+    setValue("city", val);
+    if (debounceRef.current) clearTimeout(debounceRef.current);
+    if (val.length < 2) {
+      setCitySuggestions([]);
+      setShowSuggestions(false);
+      return;
+    }
+    debounceRef.current = setTimeout(async () => {
+      try {
+        const res = await fetch(
+          `https://geo.api.gouv.fr/communes?nom=${encodeURIComponent(val)}&fields=nom,codesPostaux&boost=population&limit=10`
+        );
+        const data: GeoCommune[] = await res.json();
+        setCitySuggestions(data);
+        setShowSuggestions(true);
+      } catch {
+        setCitySuggestions([]);
+      }
+    }, 300);
+  }
+
+  function handleCitySelect(commune: GeoCommune) {
+    setCityInput(commune.nom);
+    setValue("city", commune.nom);
+    setCitySuggestions([]);
+    setShowSuggestions(false);
+  }
 
   const {
     register,
@@ -101,16 +144,30 @@ export function ProspectSearchForm({ onSubmit, isLoading }: ProspectSearchFormPr
         </Field>
 
         <Field label="Ville" error={errors.city?.message}>
-          <input
-            {...register("city")}
-            list="city-list"
-            className={inputClass}
-            placeholder="Paris, Lyon…"
-            autoComplete="off"
-          />
-          <datalist id="city-list">
-            {CITIES.map((c) => <option key={c} value={c} />)}
-          </datalist>
+          <div ref={cityWrapperRef} className="relative">
+            <input
+              {...register("city")}
+              value={cityInput}
+              onChange={handleCityChange}
+              onFocus={() => citySuggestions.length > 0 && setShowSuggestions(true)}
+              className={inputClass}
+              placeholder="Paris, Lyon…"
+              autoComplete="off"
+            />
+            {showSuggestions && citySuggestions.length > 0 && (
+              <ul className="absolute left-0 right-0 bg-white border border-gray-200 rounded-xl shadow-lg mt-1 z-50 overflow-hidden">
+                {citySuggestions.map((c) => (
+                  <li
+                    key={`${c.nom}-${c.codesPostaux[0]}`}
+                    onMouseDown={() => handleCitySelect(c)}
+                    className="py-2 px-4 hover:bg-gray-50 cursor-pointer text-sm text-gray-800"
+                  >
+                    {c.nom}{c.codesPostaux[0] ? ` (${c.codesPostaux[0]})` : ""}
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
         </Field>
 
         <Field label="Pays" error={errors.country?.message}>
