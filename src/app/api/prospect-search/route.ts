@@ -125,9 +125,6 @@ export async function POST(request: Request) {
           type: "search",
           description: `Recherche ${f.sector} — ${f.city} : ${prospects.length} prospects, score moyen ${avgScore}/100`
         });
-        if (userId) {
-          await supabase.rpc("decrement_credits", { user_id: userId, amount: 2 });
-        }
         return NextResponse.json({ prospects, total: prospects.length, searchId: entry?.id });
       } catch (err) { console.error(err); }
     }

@@ -1,7 +1,6 @@
 import OpenAI from "openai";
 import { z } from "zod";
 import { mockAiAssist } from "@/lib/mock/ai-assistant";
-import { createAdminClient, isSupabaseConfigured } from "@/lib/supabase/server";
 import type { AiTaskType, AiAssistResult } from "@/types/ai-assistant";
 
 const aiAssistSchema = z.object({
@@ -14,12 +13,6 @@ const aiAssistSchema = z.object({
     context: z.string().optional(),
   }),
 });
-
-const CREDIT_COSTS: Record<AiTaskType, number> = {
-  summary: 1,
-  pitch: 3,
-  "call-prep": 2,
-};
 
 function buildPrompt(task: AiTaskType, p: { companyName: string; sector: string; city: string; targetRole: string; context?: string }): string {
   const base = `Entreprise : ${p.companyName}\nSecteur : ${p.sector}\nVille : ${p.city}\nRôle cible : ${p.targetRole || "non spécifié"}${p.context ? `\nContexte : ${p.context}` : ""}`;
@@ -53,8 +46,7 @@ function isOpenAIConfigured(): boolean {
 
 export async function POST(request: Request) {
   const body = await request.json();
-  const { userId, ...rest } = body;
-  const parsed = aiAssistSchema.safeParse(rest);
+  const parsed = aiAssistSchema.safeParse(body);
 
   if (!parsed.success) {
     return Response.json(
@@ -64,7 +56,6 @@ export async function POST(request: Request) {
   }
 
   const { task, prospect } = parsed.data;
-  const cost = CREDIT_COSTS[task];
 
   if (!isOpenAIConfigured()) {
     await new Promise((r) => setTimeout(r, 900));
@@ -91,12 +82,6 @@ export async function POST(request: Request) {
 
     const raw = completion.choices[0]?.message?.content ?? "{}";
     const result = JSON.parse(raw) as unknown as Record<string, unknown>;
-    result.creditsUsed = cost;
-
-    if (isSupabaseConfigured() && userId) {
-      const supabase = createAdminClient();
-      await supabase.rpc("decrement_credits", { user_id: userId, amount: cost });
-    }
 
     return Response.json({ task, result: result as unknown as AiAssistResult });
   } catch (err) {

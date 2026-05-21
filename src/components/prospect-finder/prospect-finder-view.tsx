@@ -26,7 +26,17 @@ async function runProspectSearch(filters: ProspectSearchFormValues): Promise<Pro
     throw new Error(err.error ?? "Recherche impossible");
   }
 
-  return res.json();
+  const data = await res.json();
+
+  if (user?.id) {
+    await fetch("/api/credits/decrement", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ userId: user.id, amount: 2 }),
+    });
+  }
+
+  return data;
 }
 
 export function ProspectFinderView() {

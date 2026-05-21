@@ -66,7 +66,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
         </div>
 
         <Header />
-        <main className="min-h-screen pt-20 p-4 md:p-8 bg-gray-50">
+        <main className="min-h-screen pt-24 p-4 md:p-8 bg-gray-50">
           {children}
         </main>
       </div>

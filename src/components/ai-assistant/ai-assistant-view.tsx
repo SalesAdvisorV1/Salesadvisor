@@ -31,7 +31,17 @@ async function runAiAssist(task: AiTaskType, prospect: AiProspectFormValues): Pr
     throw new Error(err.error ?? "Analyse impossible");
   }
 
-  return res.json();
+  const data = await res.json();
+
+  if (user?.id) {
+    await fetch("/api/credits/decrement", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ userId: user.id, amount: taskCosts[task] }),
+    });
+  }
+
+  return data;
 }
 
 export function AiAssistantView() {
