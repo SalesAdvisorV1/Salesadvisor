@@ -8,6 +8,7 @@ import { ProspectInputForm } from "@/components/ai-assistant/prospect-input-form
 import type { AiProspectFormValues } from "@/lib/schemas/ai-assist";
 import { useCreditsStore } from "@/stores/use-credits-store";
 import type { AiAssistResponse, AiTaskType } from "@/types/ai-assistant";
+import { createClient } from "@/lib/supabase/client";
 
 const taskCosts: Record<AiTaskType, number> = {
   summary: 1,
@@ -16,9 +17,16 @@ const taskCosts: Record<AiTaskType, number> = {
 };
 
 async function runAiAssist(task: AiTaskType, prospect: AiProspectFormValues): Promise<AiAssistResponse> {
+  const supabase = createClient();
+  const { data: { session } } = await supabase.auth.getSession();
+  const headers: Record<string, string> = { "Content-Type": "application/json" };
+  if (session?.access_token) {
+    headers["Authorization"] = `Bearer ${session.access_token}`;
+  }
+
   const res = await fetch("/api/ai-assist", {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers,
     body: JSON.stringify({ task, prospect }),
   });
 
