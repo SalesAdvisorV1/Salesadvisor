@@ -13,16 +13,12 @@ const SEARCH_CREDIT_COST = 2;
 
 async function runProspectSearch(filters: ProspectSearchFormValues): Promise<ProspectSearchResponse> {
   const supabase = createClient();
-  const { data: { session } } = await supabase.auth.getSession();
-  const headers: Record<string, string> = { "Content-Type": "application/json" };
-  if (session?.access_token) {
-    headers["Authorization"] = `Bearer ${session.access_token}`;
-  }
+  const { data: { user } } = await supabase.auth.getUser();
 
   const res = await fetch("/api/prospect-search", {
     method: "POST",
-    headers,
-    body: JSON.stringify(filters),
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ ...filters, userId: user?.id }),
   });
 
   if (!res.ok) {

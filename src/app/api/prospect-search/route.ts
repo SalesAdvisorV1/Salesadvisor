@@ -34,7 +34,8 @@ function formatEmployees(tranche: string): string {
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const parsed = prospectSearchSchema.safeParse(body);
+    const { userId, ...rest } = body;
+    const parsed = prospectSearchSchema.safeParse(rest);
     if (!parsed.success) return NextResponse.json({ error: "Données invalides" }, { status: 400 });
     const f = parsed.data;
 
@@ -117,12 +118,6 @@ export async function POST(request: Request) {
     if (isSupabaseConfigured()) {
       try {
         const supabase = createAdminClient();
-        const token = request.headers.get("authorization")?.replace("Bearer ", "");
-        let userId: string | null = null;
-        if (token) {
-          const { data: { user } } = await supabase.auth.getUser(token);
-          if (user) userId = user.id;
-        }
         const { data: entry } = await supabase.from("search_history").insert({
           query: JSON.stringify(f), results: prospects, credits_used: 2
         }).select("id").single();

@@ -1,7 +1,7 @@
 import OpenAI from "openai";
 import { z } from "zod";
 import { mockAiAssist } from "@/lib/mock/ai-assistant";
-import { createAdminClient, isSupabaseConfigured, getAuthenticatedUser } from "@/lib/supabase/server";
+import { createAdminClient, isSupabaseConfigured } from "@/lib/supabase/server";
 import type { AiTaskType, AiAssistResult } from "@/types/ai-assistant";
 
 const aiAssistSchema = z.object({
@@ -53,7 +53,8 @@ function isOpenAIConfigured(): boolean {
 
 export async function POST(request: Request) {
   const body = await request.json();
-  const parsed = aiAssistSchema.safeParse(body);
+  const { userId, ...rest } = body;
+  const parsed = aiAssistSchema.safeParse(rest);
 
   if (!parsed.success) {
     return Response.json(
@@ -65,18 +66,15 @@ export async function POST(request: Request) {
   const { task, prospect } = parsed.data;
   const cost = CREDIT_COSTS[task];
 
-  if (isSupabaseConfigured()) {
-    const user = await getAuthenticatedUser();
-    if (user) {
-      const supabase = createAdminClient();
-      const { data: profile } = await supabase
-        .from("profiles")
-        .select("credits_remaining")
-        .eq("id", user.id)
-        .single();
-      if (!profile || profile.credits_remaining < cost) {
-        return Response.json({ error: "Crédits insuffisants" }, { status: 403 });
-      }
+  if (isSupabaseConfigured() && userId) {
+    const supabase = createAdminClient();
+    const { data: profile } = await supabase
+      .from("profiles")
+      .select("credits_remaining")
+      .eq("id", userId)
+      .single();
+    if (!profile || profile.credits_remaining < cost) {
+      return Response.json({ error: "Crédits insuffisants" }, { status: 403 });
     }
   }
 
@@ -107,12 +105,9 @@ export async function POST(request: Request) {
     const result = JSON.parse(raw) as unknown as Record<string, unknown>;
     result.creditsUsed = cost;
 
-    if (isSupabaseConfigured()) {
-      const user = await getAuthenticatedUser();
-      if (user) {
-        const supabase = createAdminClient();
-        await supabase.rpc("decrement_credits", { user_id: user.id, amount: cost });
-      }
+    if (isSupabaseConfigured() && userId) {
+      const supabase = createAdminClient();
+      await supabase.rpc("decrement_credits", { user_id: userId, amount: cost });
     }
 
     return Response.json({ task, result: result as unknown as AiAssistResult });

@@ -2,11 +2,15 @@
 
 import { useQuery } from "@tanstack/react-query";
 import { useEffect } from "react";
+import { createClient } from "@/lib/supabase/client";
 import { useCreditsStore } from "@/stores/use-credits-store";
 import type { DashboardData } from "@/types/dashboard";
 
 async function fetchDashboard(): Promise<DashboardData> {
-  const res = await fetch("/api/dashboard");
+  const supabase = createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+  const url = user?.id ? `/api/dashboard?userId=${user.id}` : "/api/dashboard";
+  const res = await fetch(url);
   if (!res.ok) throw new Error("Impossible de charger le dashboard");
   return res.json();
 }

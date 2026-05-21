@@ -18,16 +18,12 @@ const taskCosts: Record<AiTaskType, number> = {
 
 async function runAiAssist(task: AiTaskType, prospect: AiProspectFormValues): Promise<AiAssistResponse> {
   const supabase = createClient();
-  const { data: { session } } = await supabase.auth.getSession();
-  const headers: Record<string, string> = { "Content-Type": "application/json" };
-  if (session?.access_token) {
-    headers["Authorization"] = `Bearer ${session.access_token}`;
-  }
+  const { data: { user } } = await supabase.auth.getUser();
 
   const res = await fetch("/api/ai-assist", {
     method: "POST",
-    headers,
-    body: JSON.stringify({ task, prospect }),
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ task, prospect, userId: user?.id }),
   });
 
   if (!res.ok) {

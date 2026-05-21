@@ -1,16 +1,18 @@
 import { mockDashboardData } from "@/lib/mock/dashboard";
-import { createAdminClient, isSupabaseConfigured, getAuthenticatedUser } from "@/lib/supabase/server";
+import { createAdminClient, isSupabaseConfigured } from "@/lib/supabase/server";
 import type { DashboardData } from "@/types/dashboard";
 import type { ProspectResult } from "@/types/prospect";
 
-export async function GET() {
+export async function GET(request: Request) {
   if (!isSupabaseConfigured()) {
     return Response.json(mockDashboardData);
   }
 
+  const { searchParams } = new URL(request.url);
+  const userId = searchParams.get("userId");
+
   try {
     const supabase = createAdminClient();
-    const user = await getAuthenticatedUser();
     const startOfMonth = new Date();
     startOfMonth.setDate(1);
     startOfMonth.setHours(0, 0, 0, 0);
@@ -30,8 +32,8 @@ export async function GET() {
         .select("id, query, results, created_at")
         .order("created_at", { ascending: false })
         .limit(5),
-      user
-        ? supabase.from("profiles").select("credits_remaining, plan").eq("id", user.id).single()
+      userId
+        ? supabase.from("profiles").select("credits_remaining, plan").eq("id", userId).single()
         : Promise.resolve({ data: null }),
     ]);
 
