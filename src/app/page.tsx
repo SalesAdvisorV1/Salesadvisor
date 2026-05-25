@@ -178,36 +178,53 @@ export default function LandingPage() {
       <nav
         style={{
           position: 'fixed',
-          top: 0,
-          left: 0,
-          right: 0,
+          top: 16,
+          left: 16,
+          right: 16,
           zIndex: 100,
-          background: 'rgba(255,255,255,0.92)',
-          backdropFilter: 'saturate(180%) blur(20px)',
-          WebkitBackdropFilter: 'saturate(180%) blur(20px)',
-          borderBottom: '1px solid rgba(0,0,0,0.06)',
-          height: 64,
+          display: 'flex',
+          justifyContent: 'center',
+          pointerEvents: 'none',
         }}
       >
         <div
+          className="sa-navbar"
           style={{
-            maxWidth: 1200,
-            margin: '0 auto',
-            padding: '0 24px',
-            height: '100%',
+            width: '100%',
+            maxWidth: 1600,
+            height: 64,
+            padding: '0 12px 0 18px',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
+            gap: 16,
+            background: 'rgba(255,255,255,0.72)',
+            backdropFilter: 'saturate(180%) blur(22px)',
+            WebkitBackdropFilter: 'saturate(180%) blur(22px)',
+            border: '1px solid rgba(255,255,255,0.6)',
+            borderRadius: 9999,
+            boxShadow:
+              '0 6px 24px rgba(99,102,241,0.10), 0 1px 0 rgba(255,255,255,0.6) inset',
+            pointerEvents: 'auto',
           }}
         >
           {/* Logo */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: 10, textDecoration: 'none' }}>
+          <Link
+            href="/"
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: 10,
+              textDecoration: 'none',
+              flexShrink: 0,
+            }}
+          >
             <div
               style={{
-                width: 36,
-                height: 36,
-                background: '#6366f1',
-                borderRadius: 8,
+                width: 38,
+                height: 38,
+                background: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)',
+                borderRadius: 11,
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
@@ -215,6 +232,8 @@ export default function LandingPage() {
                 fontWeight: 800,
                 fontSize: 13,
                 letterSpacing: '-0.02em',
+                boxShadow:
+                  '0 4px 12px rgba(99,102,241,0.35), 0 1px 0 rgba(255,255,255,0.4) inset',
                 flexShrink: 0,
               }}
             >
@@ -224,55 +243,88 @@ export default function LandingPage() {
               style={{
                 fontWeight: 700,
                 fontSize: 16,
-                letterSpacing: '-0.02em',
-                color: '#0a0a0a',
+                letterSpacing: '-0.025em',
+                background: 'linear-gradient(135deg, #0a0a0a 0%, #4f46e5 100%)',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+                backgroundClip: 'text',
+                color: 'transparent',
               }}
             >
               Sales Advisor
             </span>
-          </div>
+          </Link>
 
-          {/* Nav links — hidden on small screens via CSS trick */}
+          {/* Nav links — spread across the navbar width */}
           <div
             style={{
               display: 'flex',
-              gap: 32,
+              flex: 1,
+              justifyContent: 'space-evenly',
               alignItems: 'center',
+              gap: 8,
+              margin: '0 12px',
             }}
           >
-            {['Fonctionnalités', 'Processus', 'Tarifs', 'Ressources'].map((item) => (
+            {[
+              { label: 'Fonctionnalités', href: '#fonctionnalités' },
+              { label: 'Processus', href: '#processus' },
+              { label: 'Tarifs', href: '#tarifs' },
+              { label: 'Ressources', href: '#ressources' },
+            ].map((item) => (
               <a
-                key={item}
-                href={`#${item.toLowerCase()}`}
+                key={item.label}
+                href={item.href}
                 style={{
+                  position: 'relative',
                   fontSize: 14,
                   fontWeight: 500,
-                  color: '#4b5563',
+                  color: '#374151',
                   textDecoration: 'none',
-                  transition: 'color 0.15s',
+                  padding: '8px 14px',
+                  borderRadius: 9999,
+                  transition: 'color 0.15s ease, background 0.15s ease',
+                  whiteSpace: 'nowrap',
                 }}
-                onMouseEnter={(e) =>
-                  ((e.currentTarget as HTMLAnchorElement).style.color = '#6366f1')
-                }
-                onMouseLeave={(e) =>
-                  ((e.currentTarget as HTMLAnchorElement).style.color = '#4b5563')
-                }
+                onMouseEnter={(e) => {
+                  const t = e.currentTarget as HTMLAnchorElement
+                  t.style.color = '#4f46e5'
+                  t.style.background = 'rgba(99,102,241,0.08)'
+                }}
+                onMouseLeave={(e) => {
+                  const t = e.currentTarget as HTMLAnchorElement
+                  t.style.color = '#374151'
+                  t.style.background = 'transparent'
+                }}
               >
-                {item}
+                {item.label}
               </a>
             ))}
           </div>
 
-          {/* CTA */}
-          <div style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
+          {/* CTA group */}
+          <div style={{ display: 'flex', gap: 8, alignItems: 'center', flexShrink: 0 }}>
             <Link
               href="/login"
               style={{
                 fontSize: 14,
                 fontWeight: 500,
-                color: '#4b5563',
+                color: '#374151',
                 textDecoration: 'none',
-                transition: 'color 0.15s',
+                padding: '8px 14px',
+                borderRadius: 9999,
+                transition: 'color 0.15s ease, background 0.15s ease',
+                whiteSpace: 'nowrap',
+              }}
+              onMouseEnter={(e) => {
+                const t = e.currentTarget as HTMLAnchorElement
+                t.style.color = '#4f46e5'
+                t.style.background = 'rgba(99,102,241,0.08)'
+              }}
+              onMouseLeave={(e) => {
+                const t = e.currentTarget as HTMLAnchorElement
+                t.style.color = '#374151'
+                t.style.background = 'transparent'
               }}
             >
               Connexion
@@ -280,16 +332,29 @@ export default function LandingPage() {
             <Link
               href="/register"
               style={{
-                background: '#6366f1',
+                background: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)',
                 color: '#fff',
-                padding: '9px 20px',
+                padding: '10px 20px',
                 borderRadius: 9999,
                 fontSize: 14,
                 fontWeight: 600,
                 textDecoration: 'none',
                 whiteSpace: 'nowrap',
-                transition: 'background 0.15s',
-                boxShadow: '0 1px 3px rgba(99,102,241,0.35)',
+                transition: 'transform 0.15s ease, box-shadow 0.15s ease',
+                boxShadow:
+                  '0 4px 14px rgba(99,102,241,0.45), 0 1px 0 rgba(255,255,255,0.3) inset',
+              }}
+              onMouseEnter={(e) => {
+                const t = e.currentTarget as HTMLAnchorElement
+                t.style.transform = 'translateY(-1px)'
+                t.style.boxShadow =
+                  '0 8px 20px rgba(99,102,241,0.55), 0 1px 0 rgba(255,255,255,0.3) inset'
+              }}
+              onMouseLeave={(e) => {
+                const t = e.currentTarget as HTMLAnchorElement
+                t.style.transform = 'translateY(0)'
+                t.style.boxShadow =
+                  '0 4px 14px rgba(99,102,241,0.45), 0 1px 0 rgba(255,255,255,0.3) inset'
               }}
             >
               Essayer 14 jours gratuits
@@ -301,7 +366,7 @@ export default function LandingPage() {
       {/* ── HERO ─────────────────────────────────────────────────── */}
       <section
         style={{
-          paddingTop: 64,
+          paddingTop: 96,
           minHeight: '100vh',
           display: 'flex',
           overflow: 'hidden',

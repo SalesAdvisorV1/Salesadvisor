@@ -302,3 +302,36 @@ button, a, [role="button"] {
   .sa-mesh-bg__blob--4 { width: 380px; height: 380px; }
   .sa-mesh-bg__blob--5 { width: 440px; height: 440px; }
 }
+
+/* =============================================================
+   FLOATING NAVBAR — capsule + glassmorphism
+   ============================================================= */
+.sa-navbar {
+  transition: box-shadow 0.2s ease, background 0.2s ease, transform 0.2s ease;
+}
+
+.sa-navbar:hover {
+  box-shadow:
+    0 10px 32px rgba(99, 102, 241, 0.14),
+    0 1px 0 rgba(255, 255, 255, 0.6) inset;
+}
+
+/* Tablet: tighter spacing */
+@media (max-width: 1024px) {
+  .sa-navbar {
+    padding: 0 10px 0 14px !important;
+    gap: 8px !important;
+  }
+  .sa-navbar a {
+    font-size: 13px !important;
+  }
+}
+
+/* Mobile: hide nav links + connexion, keep logo + CTA */
+@media (max-width: 720px) {
+  .sa-navbar > div:nth-child(2) { display: none !important; }
+  .sa-navbar > div:nth-child(3) > a:first-child { display: none !important; }
+  .sa-navbar {
+    padding: 0 8px 0 14px !important;
+  }
+}
