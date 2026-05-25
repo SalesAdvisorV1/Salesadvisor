@@ -539,8 +539,8 @@ export default function LandingPage() {
               position: 'relative',
               borderRadius: 28,
               overflow: 'hidden',
-              background: 'linear-gradient(145deg, #0d0b1e 0%, #1a1650 50%, #0d0b1e 100%)',
-              boxShadow: '0 20px 60px rgba(99,102,241,0.25), 0 4px 16px rgba(0,0,0,0.3)',
+              background: 'linear-gradient(145deg, #f5f3ff 0%, #ede9fe 60%, #ddd6fe 100%)',
+              boxShadow: '0 20px 60px rgba(99,102,241,0.15), 0 4px 16px rgba(0,0,0,0.06)',
             }}
           >
             <HeroCanvas />
