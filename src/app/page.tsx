@@ -303,29 +303,26 @@ export default function LandingPage() {
       <section
         style={{
           paddingTop: 64,
-          paddingBottom: 0,
           minHeight: '100vh',
           display: 'flex',
-          alignItems: 'center',
+          overflow: 'hidden',
         }}
       >
-        <div
-          style={{
-            maxWidth: 1200,
-            margin: '0 auto',
-            padding: '0 32px',
-            display: 'grid',
-            gridTemplateColumns: '1fr 1fr',
-            gap: 48,
-            alignItems: 'center',
-            width: '100%',
-          }}
-        >
           {/* Left — text */}
           <motion.div
             initial="hidden"
             animate="visible"
             variants={{ visible: { transition: { staggerChildren: 0.09 } } }}
+            style={{
+              flex: '0 0 50%',
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'center',
+              paddingLeft: 'clamp(32px, 7vw, 140px)',
+              paddingRight: 52,
+              paddingTop: 40,
+              paddingBottom: 80,
+            }}
           >
             {/* Badge */}
             <motion.div variants={fadeUp} custom={0}>
@@ -363,7 +360,7 @@ export default function LandingPage() {
               variants={fadeUp}
               custom={1}
               style={{
-                fontSize: 'clamp(38px, 4.5vw, 60px)',
+                fontSize: 'clamp(44px, 5.2vw, 72px)',
                 fontWeight: 800,
                 letterSpacing: '-0.04em',
                 lineHeight: 1.06,
@@ -531,15 +528,16 @@ export default function LandingPage() {
             </motion.div>
           </motion.div>
 
-          {/* Right — Globe GÉANT + badges flottants */}
+          {/* Right — Globe plein bord */}
           <motion.div
-            initial={{ opacity: 0, scale: 0.96 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.9, delay: 0.2, ease: 'easeOut' }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 1.0, delay: 0.2 }}
             style={{
-              height: 600,
+              flex: '0 0 50%',
               position: 'relative',
-              overflow: 'visible',
+              minHeight: '100vh',
+              overflow: 'hidden',
             }}
           >
             <HeroCanvas />
@@ -551,8 +549,8 @@ export default function LandingPage() {
               transition={{ delay: 1.0, duration: 0.5 }}
               style={{
                 position: 'absolute',
-                top: '12%',
-                left: '-10px',
+                top: '14%',
+                left: '6%',
                 background: 'rgba(255,255,255,0.92)',
                 backdropFilter: 'blur(12px)',
                 border: '1px solid rgba(99,102,241,0.15)',
@@ -580,8 +578,8 @@ export default function LandingPage() {
               transition={{ delay: 1.2, duration: 0.5 }}
               style={{
                 position: 'absolute',
-                top: '38%',
-                right: '-10px',
+                top: '40%',
+                right: '6%',
                 background: 'rgba(255,255,255,0.92)',
                 backdropFilter: 'blur(12px)',
                 border: '1px solid rgba(99,102,241,0.15)',
@@ -659,7 +657,6 @@ export default function LandingPage() {
               </div>
             </motion.div>
           </motion.div>
-        </div>
       </section>
 
       {/* ── SOCIAL PROOF ─────────────────────────────────────────── */}
