@@ -1,6 +1,14 @@
 import type { Metadata, Viewport } from "next";
+import { Geist } from "next/font/google";
 import { QueryProvider } from "@/components/providers/query-provider";
 import "./globals.css";
+
+const geist = Geist({
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-geist",
+  weight: ["300", "400", "500", "600", "700", "800", "900"],
+});
 
 export const metadata: Metadata = {
   title: "Sales Advisor — Prospection B2B intelligente",
@@ -32,7 +40,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="fr">
+    <html lang="fr" className={geist.variable}>
       <body className="antialiased">
         {/* Animated mesh gradient background — fixed behind all content */}
         <div className="sa-mesh-bg" aria-hidden="true">
