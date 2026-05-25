@@ -755,7 +755,7 @@ export default function LandingPage() {
           background: '#fafafa',
         }}
       >
-        <div style={{ maxWidth: 1100, margin: '0 auto', textAlign: 'center' }}>
+        <div style={{ padding: '0 clamp(32px, 6vw, 120px)', textAlign: 'center' }}>
           <p
             style={{
               fontSize: 11,
@@ -799,8 +799,7 @@ export default function LandingPage() {
       <section id="processus" style={{ padding: '96px 24px' }}>
         <div
           style={{
-            maxWidth: 1200,
-            margin: '0 auto',
+            padding: '0 clamp(32px, 6vw, 120px)',
             display: 'grid',
             gridTemplateColumns: '1fr 1.2fr',
             gap: 80,
@@ -925,7 +924,7 @@ export default function LandingPage() {
         id="fonctionnalités"
         style={{ padding: '96px 24px', background: '#fafafa' }}
       >
-        <div style={{ maxWidth: 1200, margin: '0 auto' }}>
+        <div style={{ padding: '0 clamp(32px, 6vw, 120px)' }}>
           <motion.div
             initial={{ opacity: 0, y: 24 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -1010,7 +1009,7 @@ export default function LandingPage() {
 
       {/* ── TESTIMONIALS ─────────────────────────────────────────── */}
       <section style={{ padding: '96px 24px' }}>
-        <div style={{ maxWidth: 1200, margin: '0 auto' }}>
+        <div style={{ padding: '0 clamp(32px, 6vw, 120px)' }}>
           <motion.div
             initial={{ opacity: 0, y: 24 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -1104,7 +1103,7 @@ export default function LandingPage() {
 
       {/* ── PRICING ──────────────────────────────────────────────── */}
       <section id="tarifs" style={{ padding: '96px 24px', background: '#fafafa' }}>
-        <div style={{ maxWidth: 1100, margin: '0 auto' }}>
+        <div style={{ padding: '0 clamp(32px, 6vw, 120px)' }}>
           <motion.div
             initial={{ opacity: 0, y: 24 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -1308,8 +1307,7 @@ export default function LandingPage() {
       >
         <div
           style={{
-            maxWidth: 1000,
-            margin: '0 auto',
+            padding: '0 clamp(32px, 6vw, 120px)',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
@@ -1394,8 +1392,7 @@ export default function LandingPage() {
       >
         <div
           style={{
-            maxWidth: 1200,
-            margin: '0 auto',
+            padding: '0 clamp(32px, 6vw, 120px)',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
