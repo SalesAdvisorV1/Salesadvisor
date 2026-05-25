@@ -32,13 +32,37 @@ export function Header() {
   }
 
   return (
-    <header className="fixed top-0 left-64 right-0 h-14 bg-white border-b border-gray-200 z-40 flex items-center px-6 gap-4">
-
+    <header
+      className="fixed top-0 left-64 right-0 h-16 z-40 flex items-center px-6 gap-4 hidden md:flex"
+      style={{
+        background: 'rgba(255,255,255,0.72)',
+        backdropFilter: 'saturate(180%) blur(22px)',
+        WebkitBackdropFilter: 'saturate(180%) blur(22px)',
+        borderBottom: '1px solid rgba(99,102,241,0.10)',
+      }}
+    >
       {/* Breadcrumb */}
       <div className="flex items-center gap-1.5 text-sm shrink-0">
-        <Link href="/" className="text-gray-400 hover:text-gray-700 transition-colors">Sales Advisor</Link>
+        <Link
+          href="/"
+          className="text-gray-400 hover:text-indigo-600 transition-colors font-medium"
+        >
+          Sales Advisor
+        </Link>
         <span className="text-gray-300">/</span>
-        <Link href={pathname} className="text-gray-900 font-semibold hover:text-gray-600 transition-colors">{pageName}</Link>
+        <Link
+          href={pathname}
+          className="font-semibold transition-colors"
+          style={{
+            background: 'linear-gradient(135deg, #0a0a0a 0%, #4f46e5 100%)',
+            WebkitBackgroundClip: 'text',
+            WebkitTextFillColor: 'transparent',
+            backgroundClip: 'text',
+            color: 'transparent',
+          }}
+        >
+          {pageName}
+        </Link>
       </div>
 
       {/* Search */}
@@ -54,18 +78,47 @@ export function Header() {
         <input
           type="text"
           placeholder="Recherche rapide…"
-          className="w-full bg-gray-50 border border-gray-200 rounded-xl pl-9 pr-4 py-1.5 text-sm text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-black/10 focus:border-gray-300 transition-all"
+          className="w-full rounded-full pl-9 pr-4 py-2 text-sm text-gray-700 placeholder-gray-400 transition-all"
+          style={{
+            background: 'rgba(255,255,255,0.6)',
+            border: '1px solid rgba(99,102,241,0.15)',
+            outline: 'none',
+          }}
+          onFocus={(e) => {
+            e.target.style.borderColor = '#6366f1';
+            e.target.style.boxShadow = '0 0 0 3px rgba(99,102,241,0.15)';
+            e.target.style.background = '#ffffff';
+          }}
+          onBlur={(e) => {
+            e.target.style.borderColor = 'rgba(99,102,241,0.15)';
+            e.target.style.boxShadow = 'none';
+            e.target.style.background = 'rgba(255,255,255,0.6)';
+          }}
         />
       </div>
 
       {/* Right actions */}
-      <div className="flex items-center gap-3 ml-auto">
+      <div className="flex items-center gap-2 ml-auto">
         {/* Notification bell */}
-        <button type="button" className="relative w-8 h-8 flex items-center justify-center rounded-lg hover:bg-gray-100 transition-colors text-gray-500">
+        <button
+          type="button"
+          className="relative w-9 h-9 flex items-center justify-center rounded-full text-gray-500 transition-colors"
+          style={{ background: 'rgba(99,102,241,0.06)' }}
+          onMouseEnter={(e) => {
+            const t = e.currentTarget as HTMLButtonElement;
+            t.style.background = 'rgba(99,102,241,0.14)';
+            t.style.color = '#4f46e5';
+          }}
+          onMouseLeave={(e) => {
+            const t = e.currentTarget as HTMLButtonElement;
+            t.style.background = 'rgba(99,102,241,0.06)';
+            t.style.color = '#6b7280';
+          }}
+        >
           <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
             <path d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" strokeLinecap="round" strokeLinejoin="round" />
           </svg>
-          <span className="absolute top-1.5 right-1.5 w-1.5 h-1.5 bg-red-500 rounded-full" />
+          <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-red-500 rounded-full ring-2 ring-white" />
         </button>
 
         {/* Logout button */}
@@ -73,7 +126,17 @@ export function Header() {
           type="button"
           onClick={handleSignOut}
           title="Se déconnecter"
-          className="w-8 h-8 bg-black rounded-full flex items-center justify-center hover:bg-gray-800 transition-colors"
+          className="w-9 h-9 rounded-full flex items-center justify-center transition-transform"
+          style={{
+            background: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)',
+            boxShadow: '0 4px 12px rgba(99,102,241,0.35), 0 1px 0 rgba(255,255,255,0.3) inset',
+          }}
+          onMouseEnter={(e) => {
+            (e.currentTarget as HTMLButtonElement).style.transform = 'scale(1.06)';
+          }}
+          onMouseLeave={(e) => {
+            (e.currentTarget as HTMLButtonElement).style.transform = 'scale(1)';
+          }}
         >
           <span className="text-white text-xs font-bold">V</span>
         </button>

@@ -71,40 +71,7 @@ export function DashboardView() {
     <div className="mx-auto max-w-7xl">
       <DashboardHeader userName={user.name} />
 
-      {/* Actions rapides */}
-      <div className="flex gap-3 mt-4 mb-6 flex-wrap">
-        <Link
-          href="/prospect-finder"
-          className="flex items-center gap-2 bg-white border border-gray-200 rounded-xl px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 hover:border-gray-300 transition-all"
-        >
-          <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} className="text-blue-500">
-            <circle cx="11" cy="11" r="7" /><path d="M21 21l-4.35-4.35" strokeLinecap="round" />
-          </svg>
-          Nouvelle recherche
-        </Link>
-        <Link
-          href="/ai-assistant"
-          className="flex items-center gap-2 bg-white border border-gray-200 rounded-xl px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 hover:border-gray-300 transition-all"
-        >
-          <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} className="text-violet-500">
-            <path d="M12 2l2 7h7l-5.5 4 2 7L12 16l-5.5 4 2-7L3 9h7z" strokeLinecap="round" strokeLinejoin="round" />
-          </svg>
-          Analyser IA
-        </Link>
-        <Link
-          href="/exports"
-          className="flex items-center gap-2 bg-white border border-gray-200 rounded-xl px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 hover:border-gray-300 transition-all"
-        >
-          <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} className="text-green-500">
-            <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4" strokeLinecap="round" />
-            <polyline points="7 10 12 15 17 10" strokeLinecap="round" strokeLinejoin="round" />
-            <line x1="12" y1="15" x2="12" y2="3" strokeLinecap="round" />
-          </svg>
-          Voir exports
-        </Link>
-      </div>
-
-      <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+      <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4 mt-6">
         {[
           { title: "Recherches", value: stats.searchesThisMonth, subtitle: "ce mois-ci", icon: "search" as const },
           { title: "Prospects trouvés", value: stats.prospectsFound, subtitle: "entreprises qualifiées", icon: "users" as const },
@@ -119,70 +86,79 @@ export function DashboardView() {
 
       {/* Chart */}
       <motion.div
-        className="mt-6 bg-white border border-gray-200 rounded-xl p-5 shadow-sm hover:shadow-md transition-shadow duration-200"
+        className="mt-6 rounded-2xl p-5 transition-shadow duration-200"
+        style={{
+          background: 'rgba(255,255,255,0.78)',
+          backdropFilter: 'blur(14px)',
+          WebkitBackdropFilter: 'blur(14px)',
+          border: '1px solid rgba(255,255,255,0.6)',
+          boxShadow: '0 4px 16px rgba(99,102,241,0.08)',
+        }}
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.3, delay: 0.2 }}
       >
         <div className="flex items-center justify-between mb-4">
-          <h3 className="text-sm font-semibold text-gray-900">Activité — 14 derniers jours</h3>
+          <h3 className="text-sm font-bold text-gray-900">Activité — 14 derniers jours</h3>
           <div className="flex items-center gap-4">
-            <span className="flex items-center gap-1.5 text-[11px] text-gray-500">
-              <span className="w-3 h-0.5 bg-gray-900 rounded-full inline-block" />
+            <span className="flex items-center gap-1.5 text-[11px] text-gray-600 font-medium">
+              <span className="w-3 h-0.5 rounded-full inline-block" style={{ background: '#6366f1' }} />
               Recherches
             </span>
-            <span className="flex items-center gap-1.5 text-[11px] text-gray-500">
-              <span className="w-3 h-0.5 bg-blue-400 rounded-full inline-block" />
+            <span className="flex items-center gap-1.5 text-[11px] text-gray-600 font-medium">
+              <span className="w-3 h-0.5 rounded-full inline-block" style={{ background: '#8b5cf6' }} />
               Prospects
             </span>
           </div>
         </div>
-        <ResponsiveContainer width="100%" height={200}>
+        <ResponsiveContainer width="100%" height={220}>
           <AreaChart data={CHART_DATA} margin={{ top: 4, right: 8, left: -20, bottom: 0 }}>
             <defs>
               <linearGradient id="colorRecherches" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="5%" stopColor="#111827" stopOpacity={0.15} />
-                <stop offset="95%" stopColor="#111827" stopOpacity={0} />
+                <stop offset="5%" stopColor="#6366f1" stopOpacity={0.35} />
+                <stop offset="95%" stopColor="#6366f1" stopOpacity={0} />
               </linearGradient>
               <linearGradient id="colorProspects" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="5%" stopColor="#60a5fa" stopOpacity={0.2} />
-                <stop offset="95%" stopColor="#60a5fa" stopOpacity={0} />
+                <stop offset="5%" stopColor="#8b5cf6" stopOpacity={0.30} />
+                <stop offset="95%" stopColor="#8b5cf6" stopOpacity={0} />
               </linearGradient>
             </defs>
-            <CartesianGrid strokeDasharray="3 3" stroke="#f3f4f6" />
+            <CartesianGrid strokeDasharray="3 3" stroke="rgba(99,102,241,0.10)" />
             <XAxis dataKey="day" tick={{ fontSize: 10, fill: '#9ca3af' }} axisLine={false} tickLine={false} />
             <YAxis tick={{ fontSize: 10, fill: '#9ca3af' }} axisLine={false} tickLine={false} />
             <Tooltip
               contentStyle={{
-                border: '1px solid #e5e7eb',
-                borderRadius: '10px',
+                background: 'rgba(255,255,255,0.95)',
+                border: '1px solid rgba(99,102,241,0.18)',
+                borderRadius: '12px',
                 fontSize: '12px',
-                boxShadow: '0 4px 12px rgba(0,0,0,0.08)',
-                padding: '8px 12px',
+                boxShadow: '0 8px 24px rgba(99,102,241,0.15)',
+                padding: '10px 14px',
+                backdropFilter: 'blur(10px)',
               }}
-              labelStyle={{ color: '#111827', fontWeight: 700, marginBottom: 4 }}
+              labelStyle={{ color: '#0a0a0a', fontWeight: 700, marginBottom: 4 }}
               itemStyle={{ color: '#6b7280', padding: '1px 0' }}
-              cursor={{ stroke: '#e5e7eb', strokeWidth: 1 }}
+              cursor={{ stroke: 'rgba(99,102,241,0.25)', strokeWidth: 1 }}
             />
             <Area
               type="monotone"
               dataKey="recherches"
               name="Recherches"
-              stroke="#111827"
-              strokeWidth={2}
+              stroke="#6366f1"
+              strokeWidth={2.5}
               fill="url(#colorRecherches)"
-              dot={{ fill: '#111827', r: 2.5 }}
-              activeDot={{ r: 5, fill: '#111827' }}
+              dot={{ fill: '#6366f1', r: 2.5 }}
+              activeDot={{ r: 6, fill: '#6366f1', stroke: '#fff', strokeWidth: 2 }}
             />
             <Area
               type="monotone"
               dataKey="prospects"
               name="Prospects"
-              stroke="#60a5fa"
-              strokeWidth={2}
+              stroke="#8b5cf6"
+              strokeWidth={2.5}
               fill="url(#colorProspects)"
-              dot={{ fill: '#60a5fa', r: 2.5 }}
-              activeDot={{ r: 5, fill: '#60a5fa' }}
+              dot={{ fill: '#8b5cf6', r: 2.5 }}
+              activeDot={{ r: 6, fill: '#8b5cf6', stroke: '#fff', strokeWidth: 2 }}
             />
           </AreaChart>
         </ResponsiveContainer>

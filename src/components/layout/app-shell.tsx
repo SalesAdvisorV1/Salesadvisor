@@ -8,25 +8,31 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen relative">
       {/* Mobile overlay */}
       {sidebarOpen && (
         <div
-          className="fixed inset-0 z-40 bg-black/60 md:hidden"
+          className="fixed inset-0 z-40 bg-black/40 backdrop-blur-sm md:hidden"
           onClick={() => setSidebarOpen(false)}
         />
       )}
 
       {/* Mobile sidebar */}
       <div
-        className={`fixed inset-0 z-50 w-full bg-black/95 flex flex-col transition-transform duration-300 md:hidden ${
+        className={`fixed inset-0 z-50 w-[280px] flex flex-col transition-transform duration-300 md:hidden ${
           sidebarOpen ? 'translate-x-0' : '-translate-x-full'
         }`}
+        style={{
+          background: 'rgba(255,255,255,0.95)',
+          backdropFilter: 'blur(20px)',
+          WebkitBackdropFilter: 'blur(20px)',
+          borderRight: '1px solid rgba(99,102,241,0.15)',
+        }}
       >
-        <div className="flex items-center justify-end p-4">
+        <div className="flex items-center justify-end p-3">
           <button
             onClick={() => setSidebarOpen(false)}
-            className="text-white/60 hover:text-white p-2 rounded-xl hover:bg-white/10 transition-colors"
+            className="text-gray-500 hover:text-indigo-600 p-2 rounded-xl hover:bg-indigo-50 transition-colors"
             aria-label="Fermer le menu"
           >
             <svg width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -47,10 +53,18 @@ export function AppShell({ children }: { children: React.ReactNode }) {
       {/* Main content */}
       <div className="md:pl-64">
         {/* Mobile header with hamburger */}
-        <div className="flex items-center gap-3 px-4 py-3 bg-white border-b border-gray-200 md:hidden">
+        <div
+          className="flex items-center gap-3 px-4 py-3 md:hidden"
+          style={{
+            background: 'rgba(255,255,255,0.78)',
+            backdropFilter: 'blur(14px)',
+            WebkitBackdropFilter: 'blur(14px)',
+            borderBottom: '1px solid rgba(99,102,241,0.10)',
+          }}
+        >
           <button
             onClick={() => setSidebarOpen(true)}
-            className="text-gray-600 hover:text-gray-900 p-1.5 rounded-lg hover:bg-gray-100 transition-colors"
+            className="text-gray-600 hover:text-indigo-600 p-1.5 rounded-lg hover:bg-indigo-50 transition-colors"
             aria-label="Ouvrir le menu"
           >
             <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -58,15 +72,32 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             </svg>
           </button>
           <div className="flex items-center gap-2">
-            <div className="w-6 h-6 bg-gray-900 rounded-lg flex items-center justify-center">
-              <span className="text-white text-[9px] font-black tracking-tight">SA</span>
+            <div
+              className="w-7 h-7 rounded-lg flex items-center justify-center"
+              style={{
+                background: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)',
+                boxShadow: '0 3px 8px rgba(99,102,241,0.35)',
+              }}
+            >
+              <span className="text-white text-[10px] font-black tracking-tight">SA</span>
             </div>
-            <span className="text-sm font-bold text-gray-900">Sales Advisor</span>
+            <span
+              className="text-sm font-bold"
+              style={{
+                background: 'linear-gradient(135deg, #0a0a0a 0%, #4f46e5 100%)',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+                backgroundClip: 'text',
+                color: 'transparent',
+              }}
+            >
+              Sales Advisor
+            </span>
           </div>
         </div>
 
         <Header />
-        <main className="min-h-screen pt-24 p-4 md:p-8 bg-gray-50">
+        <main className="min-h-screen pt-32 px-4 pb-8 md:px-8">
           {children}
         </main>
       </div>
