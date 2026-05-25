@@ -4,7 +4,7 @@ import Link from 'next/link'
 import dynamic from 'next/dynamic'
 import { motion } from 'framer-motion'
 
-const ParallaxHero = dynamic(() => import('@/components/landing/parallax-hero'), { ssr: false })
+const HeroCanvas = dynamic(() => import('@/components/landing/hero-canvas'), { ssr: false })
 
 /* ─── Data ─────────────────────────────────────────────────────── */
 
@@ -299,19 +299,15 @@ export default function LandingPage() {
         </div>
       </nav>
 
-      {/* ── HERO PARALLAX ─────────────────────────────────────────── */}
-      <ParallaxHero />
-
-      {/* HIDDEN_LEGACY_HERO -- kept for reference, never rendered */}
-      {false && (
-        <section
-          style={{
-            paddingTop: 64,
-            minHeight: '100vh',
-            display: 'flex',
-            overflow: 'hidden',
-          }}
-        >
+      {/* ── HERO ─────────────────────────────────────────────────── */}
+      <section
+        style={{
+          paddingTop: 64,
+          minHeight: '100vh',
+          display: 'flex',
+          overflow: 'hidden',
+        }}
+      >
           {/* Left — text */}
           <motion.div
             initial="hidden"
@@ -544,10 +540,9 @@ export default function LandingPage() {
               overflow: 'hidden',
             }}
           >
-            <div />
+            <HeroCanvas />
           </motion.div>
-        </section>
-      )}
+      </section>
 
       {/* ── SOCIAL PROOF ─────────────────────────────────────────── */}
       <section
