@@ -311,12 +311,12 @@ export default function LandingPage() {
       >
         <div
           style={{
-            maxWidth: 1400,
+            maxWidth: 1200,
             margin: '0 auto',
-            padding: '0 40px',
+            padding: '0 32px',
             display: 'grid',
-            gridTemplateColumns: '1fr 1.45fr',
-            gap: 40,
+            gridTemplateColumns: '1fr 1fr',
+            gap: 48,
             alignItems: 'center',
             width: '100%',
           }}
@@ -537,7 +537,7 @@ export default function LandingPage() {
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.9, delay: 0.2, ease: 'easeOut' }}
             style={{
-              height: 'calc(100vh - 80px)',
+              height: 600,
               position: 'relative',
               overflow: 'visible',
             }}
@@ -551,8 +551,8 @@ export default function LandingPage() {
               transition={{ delay: 1.0, duration: 0.5 }}
               style={{
                 position: 'absolute',
-                top: '18%',
-                left: '-20px',
+                top: '12%',
+                left: '-10px',
                 background: 'rgba(255,255,255,0.92)',
                 backdropFilter: 'blur(12px)',
                 border: '1px solid rgba(99,102,241,0.15)',
@@ -580,8 +580,8 @@ export default function LandingPage() {
               transition={{ delay: 1.2, duration: 0.5 }}
               style={{
                 position: 'absolute',
-                top: '35%',
-                right: '4%',
+                top: '38%',
+                right: '-10px',
                 background: 'rgba(255,255,255,0.92)',
                 backdropFilter: 'blur(12px)',
                 border: '1px solid rgba(99,102,241,0.15)',
@@ -609,8 +609,8 @@ export default function LandingPage() {
               transition={{ delay: 1.4, duration: 0.5 }}
               style={{
                 position: 'absolute',
-                bottom: '28%',
-                left: '6%',
+                bottom: '14%',
+                left: '4%',
                 background: 'rgba(255,255,255,0.92)',
                 backdropFilter: 'blur(12px)',
                 border: '1px solid rgba(16,185,129,0.2)',
@@ -638,8 +638,8 @@ export default function LandingPage() {
               transition={{ delay: 1.6, duration: 0.5 }}
               style={{
                 position: 'absolute',
-                top: '10%',
-                right: '12%',
+                top: '6%',
+                right: '8%',
                 background: 'rgba(255,255,255,0.92)',
                 backdropFilter: 'blur(12px)',
                 border: '1px solid rgba(99,102,241,0.15)',
