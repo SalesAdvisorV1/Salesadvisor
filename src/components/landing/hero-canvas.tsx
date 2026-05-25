@@ -1,223 +1,268 @@
 'use client'
 
-import { useEffect, useRef } from 'react'
-import * as THREE from 'three'
+import { useEffect, useRef, useState } from 'react'
+import * as d3 from 'd3'
+
+interface DotData {
+  lng: number
+  lat: number
+}
 
 export default function HeroCanvas() {
   const containerRef = useRef<HTMLDivElement>(null)
+  const canvasRef = useRef<HTMLCanvasElement>(null)
+  const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
     const el = containerRef.current
-    if (!el) return
+    const canvas = canvasRef.current
+    if (!el || !canvas) return
+
+    const context = canvas.getContext('2d')
+    if (!context) return
 
     const W = el.clientWidth
     const H = el.clientHeight
+    const radius = Math.min(W, H) / 2.15
 
-    /* ── Renderer ── */
-    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true })
-    renderer.setSize(W, H)
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
-    renderer.setClearColor(0x000000, 0)
-    el.appendChild(renderer.domElement)
+    const dpr = window.devicePixelRatio || 1
+    canvas.width = W * dpr
+    canvas.height = H * dpr
+    canvas.style.width = `${W}px`
+    canvas.style.height = `${H}px`
+    context.scale(dpr, dpr)
 
-    /* ── Scene / Camera ── */
-    const scene = new THREE.Scene()
-    const camera = new THREE.PerspectiveCamera(45, W / H, 0.1, 1000)
-    camera.position.z = 2.8
+    /* ── Projection D3 ── */
+    const projection = d3
+      .geoOrthographic()
+      .scale(radius)
+      .translate([W / 2, H / 2])
+      .clipAngle(90)
 
-    /* ── Globe pivot (tout tourne avec) ── */
-    const pivot = new THREE.Group()
-    scene.add(pivot)
+    const path = d3.geoPath().projection(projection).context(context)
 
-    /* ── Points distribués sur la sphère (algorithme Fibonacci) ── */
-    const POINT_COUNT = 220
-    const RADIUS = 1.0
-    const CONNECT_DIST = 0.42   // seuil de connexion (distance 3D)
-
-    const positions: THREE.Vector3[] = []
-    const goldenRatio = (1 + Math.sqrt(5)) / 2
-
-    for (let i = 0; i < POINT_COUNT; i++) {
-      const theta = (2 * Math.PI * i) / goldenRatio
-      const phi = Math.acos(1 - (2 * (i + 0.5)) / POINT_COUNT)
-      positions.push(new THREE.Vector3(
-        RADIUS * Math.sin(phi) * Math.cos(theta),
-        RADIUS * Math.cos(phi),
-        RADIUS * Math.sin(phi) * Math.sin(theta)
-      ))
+    /* ── Helpers ── */
+    const pointInPolygon = (point: [number, number], polygon: number[][]): boolean => {
+      const [x, y] = point
+      let inside = false
+      for (let i = 0, j = polygon.length - 1; i < polygon.length; j = i++) {
+        const [xi, yi] = polygon[i]
+        const [xj, yj] = polygon[j]
+        if (yi > y !== yj > y && x < ((xj - xi) * (y - yi)) / (yj - yi) + xi) {
+          inside = !inside
+        }
+      }
+      return inside
     }
 
-    /* ── Dots ── */
-    const dotGeo = new THREE.SphereGeometry(0.009, 6, 6)
-
-    positions.forEach((p) => {
-      const dot = new THREE.Mesh(
-        dotGeo,
-        new THREE.MeshBasicMaterial({ color: 0x6366f1, transparent: true, opacity: 0.75 })
-      )
-      dot.position.copy(p)
-      pivot.add(dot)
-    })
-
-    /* ── Connexions entre points proches ── */
-    for (let i = 0; i < positions.length; i++) {
-      for (let j = i + 1; j < positions.length; j++) {
-        const d = positions[i].distanceTo(positions[j])
-        if (d < CONNECT_DIST) {
-          const opacity = (1 - d / CONNECT_DIST) * 0.32
-          const geo = new THREE.BufferGeometry().setFromPoints([positions[i], positions[j]])
-          const mat = new THREE.LineBasicMaterial({
-            color: 0x818cf8,
-            transparent: true,
-            opacity,
-          })
-          pivot.add(new THREE.Line(geo, mat))
+    const pointInFeature = (point: [number, number], feature: any): boolean => {
+      const { type, coordinates } = feature.geometry
+      if (type === 'Polygon') {
+        if (!pointInPolygon(point, coordinates[0])) return false
+        for (let i = 1; i < coordinates.length; i++) {
+          if (pointInPolygon(point, coordinates[i])) return false
         }
+        return true
+      } else if (type === 'MultiPolygon') {
+        for (const polygon of coordinates) {
+          if (pointInPolygon(point, polygon[0])) {
+            let inHole = false
+            for (let i = 1; i < polygon.length; i++) {
+              if (pointInPolygon(point, polygon[i])) { inHole = true; break }
+            }
+            if (!inHole) return true
+          }
+        }
+      }
+      return false
+    }
+
+    const generateDots = (feature: any, spacing = 16): [number, number][] => {
+      const dots: [number, number][] = []
+      const [[minLng, minLat], [maxLng, maxLat]] = d3.geoBounds(feature)
+      const step = spacing * 0.08
+      for (let lng = minLng; lng <= maxLng; lng += step) {
+        for (let lat = minLat; lat <= maxLat; lat += step) {
+          const p: [number, number] = [lng, lat]
+          if (pointInFeature(p, feature)) dots.push(p)
+        }
+      }
+      return dots
+    }
+
+    /* ── State ── */
+    const allDots: DotData[] = []
+    let landFeatures: any = null
+    const rotation = { x: -20, y: 0 }
+    let autoRotate = true
+    let mouseX = 0
+    let mouseY = 0
+    let targetRotY = 0
+    let targetRotX = 0
+
+    /* ── Render ── */
+    const render = () => {
+      context.clearRect(0, 0, W, H)
+
+      const scale = projection.scale()
+      const sf = scale / radius
+
+      /* Globe border subtil */
+      context.beginPath()
+      context.arc(W / 2, H / 2, scale, 0, 2 * Math.PI)
+      context.fillStyle = 'rgba(238,242,255,0.06)'
+      context.fill()
+      context.strokeStyle = 'rgba(99,102,241,0.18)'
+      context.lineWidth = 1.2 * sf
+      context.stroke()
+
+      if (!landFeatures) return
+
+      /* Graticule */
+      const graticule = d3.geoGraticule()
+      context.beginPath()
+      path(graticule())
+      context.strokeStyle = '#818cf8'
+      context.lineWidth = 0.6 * sf
+      context.globalAlpha = 0.10
+      context.stroke()
+      context.globalAlpha = 1
+
+      /* Contours des terres */
+      context.beginPath()
+      landFeatures.features.forEach((f: any) => path(f))
+      context.strokeStyle = '#6366f1'
+      context.lineWidth = 0.8 * sf
+      context.globalAlpha = 0.35
+      context.stroke()
+      context.globalAlpha = 1
+
+      /* Dots halftone sur les terres */
+      allDots.forEach(({ lng, lat }) => {
+        const proj = projection([lng, lat])
+        if (!proj) return
+        const [px, py] = proj
+        if (px < 0 || px > W || py < 0 || py > H) return
+        context.beginPath()
+        context.arc(px, py, 1.6 * sf, 0, 2 * Math.PI)
+        context.fillStyle = '#6366f1'
+        context.globalAlpha = 0.72
+        context.fill()
+        context.globalAlpha = 1
+      })
+    }
+
+    /* ── Chargement GeoJSON ── */
+    const loadData = async () => {
+      try {
+        const res = await fetch(
+          'https://raw.githubusercontent.com/martynafford/natural-earth-geojson/refs/heads/master/110m/physical/ne_110m_land.json'
+        )
+        if (!res.ok) throw new Error('fetch failed')
+        landFeatures = await res.json()
+
+        landFeatures.features.forEach((feature: any) => {
+          generateDots(feature, 16).forEach(([lng, lat]) => allDots.push({ lng, lat }))
+        })
+
+        render()
+        setIsLoading(false)
+      } catch {
+        setIsLoading(false)
       }
     }
 
-    /* ── Sphère de fond légère (glow subtil) ── */
-    const glowMesh = new THREE.Mesh(
-      new THREE.SphereGeometry(RADIUS * 1.08, 32, 32),
-      new THREE.MeshBasicMaterial({
-        color: 0x6366f1,
-        transparent: true,
-        opacity: 0.04,
-        side: THREE.BackSide,
-      })
-    )
-    pivot.add(glowMesh)
-
-    /* ── Particules flottantes autour ── */
-    const PARTICLE_COUNT = 320
-    const particlePositions = new Float32Array(PARTICLE_COUNT * 3)
-    const particleVels: { theta: number; phi: number; r: number; dTheta: number; dPhi: number }[] = []
-
-    for (let i = 0; i < PARTICLE_COUNT; i++) {
-      // 3 couches à des distances différentes
-      const layer = i % 3
-      const r = RADIUS * (layer === 0 ? 1.12 + Math.random() * 0.18
-                        : layer === 1 ? 1.35 + Math.random() * 0.25
-                        :               1.65 + Math.random() * 0.35)
-      const theta = Math.random() * Math.PI * 2
-      const phi = Math.random() * Math.PI
-      particlePositions[i * 3]     = r * Math.sin(phi) * Math.cos(theta)
-      particlePositions[i * 3 + 1] = r * Math.cos(phi)
-      particlePositions[i * 3 + 2] = r * Math.sin(phi) * Math.sin(theta)
-      particleVels.push({
-        theta, phi, r,
-        dTheta: (Math.random() - 0.5) * (layer === 2 ? 0.002 : 0.004),
-        dPhi:   (Math.random() - 0.5) * (layer === 2 ? 0.0015 : 0.003),
-      })
-    }
-
-    const particleGeo = new THREE.BufferGeometry()
-    particleGeo.setAttribute('position', new THREE.BufferAttribute(particlePositions, 3))
-    const particleMat = new THREE.PointsMaterial({
-      color: 0x818cf8,
-      size: 0.018,
-      transparent: true,
-      opacity: 0.65,
-      sizeAttenuation: true,
-    })
-    const particles = new THREE.Points(particleGeo, particleMat)
-    scene.add(particles)
-
-    /* ── Grandes particules brillantes (accent) ── */
-    const BRIGHT_COUNT = 40
-    const brightPositions = new Float32Array(BRIGHT_COUNT * 3)
-    for (let i = 0; i < BRIGHT_COUNT; i++) {
-      const r = RADIUS * (1.2 + Math.random() * 0.8)
-      const theta = Math.random() * Math.PI * 2
-      const phi = Math.random() * Math.PI
-      brightPositions[i * 3]     = r * Math.sin(phi) * Math.cos(theta)
-      brightPositions[i * 3 + 1] = r * Math.cos(phi)
-      brightPositions[i * 3 + 2] = r * Math.sin(phi) * Math.sin(theta)
-    }
-    const brightGeo = new THREE.BufferGeometry()
-    brightGeo.setAttribute('position', new THREE.BufferAttribute(brightPositions, 3))
-    const brightMat = new THREE.PointsMaterial({
-      color: 0xc7d2fe,
-      size: 0.032,
-      transparent: true,
-      opacity: 0.9,
-      sizeAttenuation: true,
-    })
-    scene.add(new THREE.Points(brightGeo, brightMat))
-
-    /* ── Mouse parallax ── */
-    let targetRotX = 0
-    let targetRotY = 0
-    let currentRotX = 0
-    let currentRotY = 0
-
+    /* ── Rotation auto + mouse parallax ── */
     const onMouseMove = (e: MouseEvent) => {
       const rect = el.getBoundingClientRect()
-      const mx = (e.clientX - rect.left) / W
-      const my = (e.clientY - rect.top) / H
-      targetRotY = (mx - 0.5) * Math.PI * 0.5
-      targetRotX = (my - 0.5) * Math.PI * 0.25
+      mouseX = (e.clientX - rect.left) / W
+      mouseY = (e.clientY - rect.top) / H
+      targetRotY = (mouseX - 0.5) * 30
+      targetRotX = -(mouseY - 0.5) * 15
     }
     window.addEventListener('mousemove', onMouseMove)
 
-    /* ── Animation ── */
-    let animId: number
-    const clock = new THREE.Clock()
+    /* ── Drag ── */
+    const onMouseDown = (e: MouseEvent) => {
+      autoRotate = false
+      const startX = e.clientX
+      const startY = e.clientY
+      const startRot = { ...rotation }
 
-    const animate = () => {
-      animId = requestAnimationFrame(animate)
-      const t = clock.getElapsedTime()
-
-      /* Lerp mouse */
-      currentRotX += (targetRotX - currentRotX) * 0.05
-      currentRotY += (targetRotY - currentRotY) * 0.05
-
-      /* Rotation globe */
-      pivot.rotation.y = currentRotY + t * 0.09
-      pivot.rotation.x = currentRotX * 0.4
-
-      /* Parallax particules (inverse léger) */
-      particles.rotation.y = -currentRotY * 0.3 + t * 0.04
-      particles.rotation.x = -currentRotX * 0.15
-
-      /* Mise à jour position particules */
-      const posArr = particleGeo.attributes.position.array as Float32Array
-      for (let i = 0; i < PARTICLE_COUNT; i++) {
-        const v = particleVels[i]
-        v.theta += v.dTheta
-        v.phi += v.dPhi
-        if (v.phi < 0.05 || v.phi > Math.PI - 0.05) v.dPhi *= -1
-        posArr[i * 3] = v.r * Math.sin(v.phi) * Math.cos(v.theta)
-        posArr[i * 3 + 1] = v.r * Math.cos(v.phi)
-        posArr[i * 3 + 2] = v.r * Math.sin(v.phi) * Math.sin(v.theta)
+      const onMove = (me: MouseEvent) => {
+        rotation.x = startRot.x + (me.clientX - startX) * 0.4
+        rotation.y = Math.max(-80, Math.min(80, startRot.y - (me.clientY - startY) * 0.4))
+        projection.rotate([rotation.x, rotation.y])
+        render()
       }
-      particleGeo.attributes.position.needsUpdate = true
-
-      /* Pulsation opacité particules */
-      particleMat.opacity = 0.35 + 0.15 * Math.sin(t * 0.8)
-
-      renderer.render(scene, camera)
+      const onUp = () => {
+        document.removeEventListener('mousemove', onMove)
+        document.removeEventListener('mouseup', onUp)
+        setTimeout(() => { autoRotate = true }, 200)
+      }
+      document.addEventListener('mousemove', onMove)
+      document.addEventListener('mouseup', onUp)
     }
-    animate()
+    canvas.addEventListener('mousedown', onMouseDown)
+
+    /* ── Timer animation ── */
+    let currentRotX = 0
+    let currentRotY = 0
+    const timer = d3.timer(() => {
+      if (autoRotate) {
+        rotation.x += 0.18
+        currentRotX += (targetRotX - currentRotX) * 0.04
+        currentRotY += (targetRotY - currentRotY) * 0.04
+        projection.rotate([rotation.x, rotation.y + currentRotX, currentRotY])
+      }
+      render()
+    })
 
     /* ── Resize ── */
     const onResize = () => {
       const nW = el.clientWidth
       const nH = el.clientHeight
-      camera.aspect = nW / nH
-      camera.updateProjectionMatrix()
-      renderer.setSize(nW, nH)
+      canvas.width = nW * dpr
+      canvas.height = nH * dpr
+      canvas.style.width = `${nW}px`
+      canvas.style.height = `${nH}px`
+      context.scale(dpr, dpr)
+      projection.translate([nW / 2, nH / 2])
+      render()
     }
     window.addEventListener('resize', onResize)
 
+    loadData()
+
     return () => {
-      cancelAnimationFrame(animId)
+      timer.stop()
+      canvas.removeEventListener('mousedown', onMouseDown)
       window.removeEventListener('mousemove', onMouseMove)
       window.removeEventListener('resize', onResize)
-      renderer.dispose()
-      if (el.contains(renderer.domElement)) el.removeChild(renderer.domElement)
     }
   }, [])
 
-  return <div ref={containerRef} style={{ width: '100%', height: '100%' }} />
+  return (
+    <div ref={containerRef} style={{ width: '100%', height: '100%', position: 'relative' }}>
+      {isLoading && (
+        <div style={{
+          position: 'absolute', inset: 0,
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+        }}>
+          <div style={{
+            width: 44, height: 44,
+            border: '3px solid #e0e7ff',
+            borderTopColor: '#6366f1',
+            borderRadius: '50%',
+            animation: 'spin 0.8s linear infinite',
+          }} />
+          <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
+        </div>
+      )}
+      <canvas
+        ref={canvasRef}
+        style={{ width: '100%', height: '100%', display: 'block', cursor: 'grab' }}
+      />
+    </div>
+  )
 }
