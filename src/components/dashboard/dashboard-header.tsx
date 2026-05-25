@@ -37,17 +37,16 @@ export function DashboardHeader({ userName }: DashboardHeaderProps) {
           <h1
             className="text-3xl md:text-4xl font-extrabold leading-tight tracking-tight"
             style={{
-              background: 'linear-gradient(135deg, #0a0a0a 0%, #4f46e5 60%, #8b5cf6 100%)',
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-              backgroundClip: 'text',
-              color: 'transparent',
+              color: '#0f172a',
               letterSpacing: '-0.025em',
             }}
           >
             Bonjour, {userName} 👋
           </h1>
-          <p className="text-sm text-gray-500 mt-2 max-w-lg leading-relaxed">
+          <p
+            className="text-sm mt-2 max-w-lg leading-relaxed"
+            style={{ color: '#475569' }}
+          >
             Aperçu de ton activité, tes crédits et tes dernières recherches de prospects.
           </p>
         </div>
