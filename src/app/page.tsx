@@ -167,12 +167,11 @@ export default function LandingPage() {
   return (
     <div
       style={{
-        background: '#ffffff',
+        background: 'transparent',
         color: '#0a0a0a',
         fontFamily: "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
         overflowX: 'hidden',
-        backgroundImage: 'radial-gradient(circle, #e0e7ff 1px, transparent 1px)',
-        backgroundSize: '28px 28px',
+        position: 'relative',
       }}
     >
       {/* ── NAVBAR ───────────────────────────────────────────────── */}
@@ -548,9 +547,9 @@ export default function LandingPage() {
       <section
         style={{
           padding: '44px 24px',
-          borderTop: '1px solid #f3f4f6',
-          borderBottom: '1px solid #f3f4f6',
-          background: '#fafafa',
+          borderTop: '1px solid rgba(243,244,246,0.6)',
+          borderBottom: '1px solid rgba(243,244,246,0.6)',
+          background: 'transparent',
         }}
       >
         <div style={{ padding: '0 clamp(32px, 6vw, 120px)', textAlign: 'center' }}>
@@ -680,11 +679,13 @@ export default function LandingPage() {
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.1, duration: 0.45 }}
                 style={{
-                  background: '#fff',
-                  border: '1px solid #f3f4f6',
+                  background: 'rgba(255,255,255,0.78)',
+                  backdropFilter: 'blur(10px)',
+                  WebkitBackdropFilter: 'blur(10px)',
+                  border: '1px solid rgba(255,255,255,0.6)',
                   borderRadius: 18,
                   padding: '22px 20px',
-                  boxShadow: '0 1px 4px rgba(0,0,0,0.04)',
+                  boxShadow: '0 4px 16px rgba(99,102,241,0.08)',
                   transition: 'box-shadow 0.2s, transform 0.2s',
                 }}
                 whileHover={{ y: -4, boxShadow: '0 8px 24px rgba(99,102,241,0.1)' }}
@@ -720,7 +721,7 @@ export default function LandingPage() {
       {/* ── FEATURES ─────────────────────────────────────────────── */}
       <section
         id="fonctionnalités"
-        style={{ padding: '96px 24px', background: '#fafafa' }}
+        style={{ padding: '96px 24px', background: 'transparent' }}
       >
         <div style={{ padding: '0 clamp(32px, 6vw, 120px)' }}>
           <motion.div
@@ -771,11 +772,13 @@ export default function LandingPage() {
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.1 }}
                 style={{
-                  background: '#fff',
-                  border: '1px solid #f3f4f6',
+                  background: 'rgba(255,255,255,0.78)',
+                  backdropFilter: 'blur(10px)',
+                  WebkitBackdropFilter: 'blur(10px)',
+                  border: '1px solid rgba(255,255,255,0.6)',
                   borderRadius: 20,
                   padding: '28px 24px',
-                  boxShadow: '0 1px 4px rgba(0,0,0,0.04)',
+                  boxShadow: '0 4px 16px rgba(99,102,241,0.08)',
                 }}
                 whileHover={{ y: -4, boxShadow: '0 8px 24px rgba(99,102,241,0.1)' }}
               >
@@ -844,11 +847,13 @@ export default function LandingPage() {
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.1 }}
                 style={{
-                  background: '#fff',
-                  border: '1px solid #f3f4f6',
+                  background: 'rgba(255,255,255,0.78)',
+                  backdropFilter: 'blur(10px)',
+                  WebkitBackdropFilter: 'blur(10px)',
+                  border: '1px solid rgba(255,255,255,0.6)',
                   borderRadius: 20,
                   padding: '28px',
-                  boxShadow: '0 1px 4px rgba(0,0,0,0.04)',
+                  boxShadow: '0 4px 16px rgba(99,102,241,0.08)',
                 }}
               >
                 {/* Stars */}
@@ -900,7 +905,7 @@ export default function LandingPage() {
       </section>
 
       {/* ── PRICING ──────────────────────────────────────────────── */}
-      <section id="tarifs" style={{ padding: '96px 24px', background: '#fafafa' }}>
+      <section id="tarifs" style={{ padding: '96px 24px', background: 'transparent' }}>
         <div style={{ padding: '0 clamp(32px, 6vw, 120px)' }}>
           <motion.div
             initial={{ opacity: 0, y: 24 }}
@@ -951,8 +956,10 @@ export default function LandingPage() {
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.1 }}
                 style={{
-                  background: plan.highlighted ? '#0a0a0a' : '#fff',
-                  border: `1px solid ${plan.highlighted ? 'transparent' : '#e5e7eb'}`,
+                  background: plan.highlighted ? '#0a0a0a' : 'rgba(255,255,255,0.82)',
+                  backdropFilter: plan.highlighted ? 'none' : 'blur(12px)',
+                  WebkitBackdropFilter: plan.highlighted ? 'none' : 'blur(12px)',
+                  border: `1px solid ${plan.highlighted ? 'transparent' : 'rgba(255,255,255,0.6)'}`,
                   borderRadius: 22,
                   padding: '36px 32px',
                   position: 'relative',
@@ -1184,8 +1191,10 @@ export default function LandingPage() {
       <footer
         style={{
           padding: '28px 24px',
-          borderTop: '1px solid #f3f4f6',
-          background: '#fff',
+          borderTop: '1px solid rgba(243,244,246,0.6)',
+          background: 'rgba(255,255,255,0.78)',
+          backdropFilter: 'blur(10px)',
+          WebkitBackdropFilter: 'blur(10px)',
         }}
       >
         <div
