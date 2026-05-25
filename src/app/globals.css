@@ -184,17 +184,6 @@ button, a, [role="button"] {
   background: #ffffff;
 }
 
-/* Subtle dot grid sitting above the blobs, below content */
-.sa-mesh-bg::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background-image: radial-gradient(circle, #c7d2fe 1px, transparent 1px);
-  background-size: 28px 28px;
-  opacity: 0.35;
-  pointer-events: none;
-}
-
 /* Soft top-to-bottom tint to anchor the page */
 .sa-mesh-bg::before {
   content: '';
