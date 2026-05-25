@@ -1,190 +1,302 @@
-'use client';
+'use client'
 
-import { useEffect, useRef } from 'react';
-import * as THREE from 'three';
+import { useEffect, useRef } from 'react'
+import * as THREE from 'three'
+
+/* ── Helpers ─────────────────────────────────────────────────────── */
+
+function latLonToVec3(lat: number, lon: number, r: number): THREE.Vector3 {
+  const phi = (90 - lat) * (Math.PI / 180)
+  const theta = (lon + 180) * (Math.PI / 180)
+  return new THREE.Vector3(
+    -r * Math.sin(phi) * Math.cos(theta),
+    r * Math.cos(phi),
+    r * Math.sin(phi) * Math.sin(theta)
+  )
+}
+
+/* ── Data ────────────────────────────────────────────────────────── */
+
+const CITIES: [number, number][] = [
+  [48.85, 2.35],    // Paris
+  [51.51, -0.13],   // London
+  [40.71, -74.01],  // New York
+  [37.77, -122.42], // San Francisco
+  [35.68, 139.69],  // Tokyo
+  [22.31, 114.17],  // Hong Kong
+  [1.35, 103.82],   // Singapore
+  [-33.87, 151.21], // Sydney
+  [55.75, 37.62],   // Moscow
+  [25.20, 55.27],   // Dubai
+  [52.52, 13.40],   // Berlin
+  [-23.55, -46.63], // São Paulo
+  [19.43, -99.13],  // Mexico City
+  [-26.20, 28.04],  // Johannesburg
+]
+
+const CONNECTIONS: [number, number][] = [
+  [0, 1],   // Paris - London
+  [0, 2],   // Paris - New York
+  [0, 10],  // Paris - Berlin
+  [2, 3],   // NY - SF
+  [4, 5],   // Tokyo - Hong Kong
+  [5, 6],   // HK - Singapore
+  [6, 7],   // Singapore - Sydney
+  [8, 9],   // Moscow - Dubai
+  [9, 5],   // Dubai - HK
+  [2, 11],  // NY - São Paulo
+  [2, 12],  // NY - Mexico
+  [1, 13],  // London - Johannesburg
+]
+
+/* ── Component ───────────────────────────────────────────────────── */
 
 export default function HeroCanvas() {
-  const mountRef = useRef<HTMLDivElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    const el = mountRef.current;
-    if (!el) return;
+    const el = containerRef.current
+    if (!el) return
 
-    const W = el.clientWidth;
-    const H = el.clientHeight;
+    const W = el.clientWidth
+    const H = el.clientHeight
 
-    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-    renderer.setSize(W, H);
-    renderer.setClearColor(0x000000, 0);
-    el.appendChild(renderer.domElement);
+    /* Scene */
+    const scene = new THREE.Scene()
+    const camera = new THREE.PerspectiveCamera(42, W / H, 0.1, 1000)
+    camera.position.z = 3.2
 
-    const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(45, W / H, 0.1, 1000);
-    camera.position.set(0, 0, 3.5);
+    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true })
+    renderer.setSize(W, H)
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
+    renderer.setClearColor(0x000000, 0)
+    el.appendChild(renderer.domElement)
 
-    // ── Globe wireframe ──────────────────────────────────────────────────
-    const gridGroup = new THREE.Group();
-    const latSteps = 14;
-    const lonSteps = 20;
-    const lineMat = new THREE.LineBasicMaterial({ color: 0xffffff, opacity: 0.18, transparent: true });
-
-    for (let i = 0; i <= latSteps; i++) {
-      const lat = (Math.PI / latSteps) * i - Math.PI / 2;
-      const r = Math.cos(lat);
-      const y = Math.sin(lat);
-      const pts: THREE.Vector3[] = [];
-      for (let j = 0; j <= 80; j++) {
-        const theta = (2 * Math.PI * j) / 80;
-        pts.push(new THREE.Vector3(r * Math.cos(theta), y, r * Math.sin(theta)));
-      }
-      gridGroup.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints(pts), lineMat));
-    }
-
-    for (let i = 0; i < lonSteps; i++) {
-      const lon = (2 * Math.PI * i) / lonSteps;
-      const pts: THREE.Vector3[] = [];
-      for (let j = 0; j <= 80; j++) {
-        const lat = (Math.PI * j) / 80 - Math.PI / 2;
-        pts.push(new THREE.Vector3(
-          Math.cos(lat) * Math.cos(lon),
-          Math.sin(lat),
-          Math.cos(lat) * Math.sin(lon)
-        ));
-      }
-      gridGroup.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints(pts), lineMat));
-    }
-
-    scene.add(gridGroup);
-
-    // Outer glow
-    const glowMat = new THREE.MeshBasicMaterial({
-      color: 0x4488ff,
+    /* ── Globe base sphere ── */
+    const globeGeo = new THREE.SphereGeometry(1, 64, 64)
+    const globeMat = new THREE.MeshPhongMaterial({
+      color: 0x080619,
+      emissive: 0x0d0b2e,
+      emissiveIntensity: 0.4,
       transparent: true,
-      opacity: 0.05,
-      side: THREE.FrontSide,
-    });
-    scene.add(new THREE.Mesh(new THREE.SphereGeometry(1.1, 32, 32), glowMat));
+      opacity: 1,
+      shininess: 20,
+    })
+    const globe = new THREE.Mesh(globeGeo, globeMat)
+    scene.add(globe)
 
-    // ── 200 Floating particles ────────────────────────────────────────────
-    const PARTICLE_COUNT = 200;
-    const positions = new Float32Array(PARTICLE_COUNT * 3);
-    const velocities = new Float32Array(PARTICLE_COUNT * 3);
-    const sizes = new Float32Array(PARTICLE_COUNT);
-    const opacities = new Float32Array(PARTICLE_COUNT);
-
-    for (let i = 0; i < PARTICLE_COUNT; i++) {
-      // Distribute in a shell between r=1.4 and r=3.2
-      const r = 1.4 + Math.random() * 1.8;
-      const phi = Math.acos(2 * Math.random() - 1);
-      const theta = 2 * Math.PI * Math.random();
-      positions[i * 3]     = r * Math.sin(phi) * Math.cos(theta);
-      positions[i * 3 + 1] = r * Math.cos(phi);
-      positions[i * 3 + 2] = r * Math.sin(phi) * Math.sin(theta);
-
-      velocities[i * 3]     = (Math.random() - 0.5) * 0.002;
-      velocities[i * 3 + 1] = (Math.random() - 0.5) * 0.002;
-      velocities[i * 3 + 2] = (Math.random() - 0.5) * 0.002;
-
-      sizes[i] = 0.02 + Math.random() * 0.04;
-      opacities[i] = 0.3 + Math.random() * 0.7;
+    /* ── Grid lines ── */
+    const addLine = (points: THREE.Vector3[], opacity: number, color = 0x6366f1) => {
+      const geo = new THREE.BufferGeometry().setFromPoints(points)
+      const mat = new THREE.LineBasicMaterial({ color, transparent: true, opacity })
+      globe.add(new THREE.Line(geo, mat))
     }
 
-    const particleGeo = new THREE.BufferGeometry();
-    particleGeo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+    // Latitude lines
+    for (let lat = -80; lat <= 80; lat += 20) {
+      const pts: THREE.Vector3[] = []
+      for (let lon = 0; lon <= 361; lon += 3) pts.push(latLonToVec3(lat, lon - 180, 1.002))
+      addLine(pts, lat === 0 ? 0.25 : 0.12)
+    }
 
-    const particleMat = new THREE.PointsMaterial({
-      color: 0xffffff,
-      size: 0.035,
+    // Longitude lines
+    for (let lon = 0; lon < 360; lon += 20) {
+      const pts: THREE.Vector3[] = []
+      for (let lat = -90; lat <= 90; lat += 3) pts.push(latLonToVec3(lat, lon - 180, 1.002))
+      addLine(pts, 0.10)
+    }
+
+    /* ── Tropic & polar circles ── */
+    for (const lat of [-66.5, -23.5, 23.5, 66.5]) {
+      const pts: THREE.Vector3[] = []
+      for (let lon = 0; lon <= 361; lon += 3) pts.push(latLonToVec3(lat, lon - 180, 1.002))
+      addLine(pts, 0.08, 0x818cf8)
+    }
+
+    /* ── City dots ── */
+    const cityMeshes: THREE.Mesh[] = []
+    CITIES.forEach(([lat, lon]) => {
+      const pos = latLonToVec3(lat, lon, 1.015)
+
+      // Main dot
+      const dotGeo = new THREE.SphereGeometry(0.018, 10, 10)
+      const dotMat = new THREE.MeshBasicMaterial({ color: 0xc7d2fe })
+      const dot = new THREE.Mesh(dotGeo, dotMat)
+      dot.position.copy(pos)
+      globe.add(dot)
+      cityMeshes.push(dot)
+
+      // Halo ring
+      const haloGeo = new THREE.RingGeometry(0.025, 0.038, 20)
+      const haloMat = new THREE.MeshBasicMaterial({
+        color: 0x6366f1,
+        transparent: true,
+        opacity: 0.55,
+        side: THREE.DoubleSide,
+      })
+      const halo = new THREE.Mesh(haloGeo, haloMat)
+      halo.position.copy(pos)
+      halo.lookAt(new THREE.Vector3(0, 0, 0))
+      globe.add(halo)
+    })
+
+    /* ── Connection arcs ── */
+    const arcLines: { line: THREE.Line; mat: THREE.LineBasicMaterial; speed: number; offset: number }[] = []
+
+    CONNECTIONS.forEach(([i, j], idx) => {
+      const start = latLonToVec3(CITIES[i][0], CITIES[i][1], 1.0)
+      const end = latLonToVec3(CITIES[j][0], CITIES[j][1], 1.0)
+      const mid = start.clone().add(end).normalize().multiplyScalar(1.55)
+      const curve = new THREE.QuadraticBezierCurve3(start, mid, end)
+      const pts = curve.getPoints(60)
+
+      const geo = new THREE.BufferGeometry().setFromPoints(pts)
+      const mat = new THREE.LineBasicMaterial({
+        color: 0x818cf8,
+        transparent: true,
+        opacity: 0.0,
+      })
+      const line = new THREE.Line(geo, mat)
+      globe.add(line)
+      arcLines.push({ line, mat, speed: 0.4 + Math.random() * 0.4, offset: idx * 0.7 })
+    })
+
+    /* ── Atmosphere glow (inner) ── */
+    const atmos1 = new THREE.Mesh(
+      new THREE.SphereGeometry(1.08, 32, 32),
+      new THREE.MeshBasicMaterial({ color: 0x4f46e5, transparent: true, opacity: 0.06, side: THREE.BackSide })
+    )
+    scene.add(atmos1)
+
+    /* ── Atmosphere glow (outer ring) ── */
+    const atmos2 = new THREE.Mesh(
+      new THREE.SphereGeometry(1.22, 32, 32),
+      new THREE.MeshBasicMaterial({ color: 0x6366f1, transparent: true, opacity: 0.025, side: THREE.BackSide })
+    )
+    scene.add(atmos2)
+
+    /* ── Atmospheric edge highlight (rim) ── */
+    const rimGeo = new THREE.SphereGeometry(1.04, 64, 64)
+    const rimMat = new THREE.ShaderMaterial({
+      uniforms: {},
+      vertexShader: `
+        varying vec3 vNormal;
+        void main() {
+          vNormal = normalize(normalMatrix * normal);
+          gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+        }
+      `,
+      fragmentShader: `
+        varying vec3 vNormal;
+        void main() {
+          float intensity = pow(0.65 - dot(vNormal, vec3(0.0, 0.0, 1.0)), 3.0);
+          gl_FragColor = vec4(0.388, 0.400, 0.945, 1.0) * intensity * 0.8;
+        }
+      `,
+      blending: THREE.AdditiveBlending,
+      side: THREE.BackSide,
       transparent: true,
-      opacity: 0.6,
-      sizeAttenuation: true,
-    });
+    })
+    const rim = new THREE.Mesh(rimGeo, rimMat)
+    scene.add(rim)
 
-    const particles = new THREE.Points(particleGeo, particleMat);
-    scene.add(particles);
+    /* ── Lights ── */
+    scene.add(new THREE.AmbientLight(0x818cf8, 0.6))
 
-    // ── Mouse reaction ────────────────────────────────────────────────────
-    const mouse = { x: 0, y: 0 };
-    const tilt  = { x: 0, y: 0 };
+    const keyLight = new THREE.PointLight(0xa5b4fc, 2.5, 15)
+    keyLight.position.set(4, 3, 4)
+    scene.add(keyLight)
+
+    const fillLight = new THREE.PointLight(0x4f46e5, 1.0, 15)
+    fillLight.position.set(-4, -2, -3)
+    scene.add(fillLight)
+
+    /* ── Particle field ── */
+    const starCount = 180
+    const starPositions = new Float32Array(starCount * 3)
+    for (let i = 0; i < starCount; i++) {
+      const r = 2.5 + Math.random() * 1.5
+      const theta = Math.random() * Math.PI * 2
+      const phi = Math.random() * Math.PI
+      starPositions[i * 3] = r * Math.sin(phi) * Math.cos(theta)
+      starPositions[i * 3 + 1] = r * Math.sin(phi) * Math.sin(theta)
+      starPositions[i * 3 + 2] = r * Math.cos(phi)
+    }
+    const starGeo = new THREE.BufferGeometry()
+    starGeo.setAttribute('position', new THREE.BufferAttribute(starPositions, 3))
+    const starMat = new THREE.PointsMaterial({ color: 0xc7d2fe, size: 0.012, transparent: true, opacity: 0.6 })
+    scene.add(new THREE.Points(starGeo, starMat))
+
+    /* ── Mouse ── */
+    let targetRotX = 0.2
+    let targetRotY = 0
+    let currentRotX = 0.2
+    let currentRotY = 0
 
     const onMouseMove = (e: MouseEvent) => {
-      mouse.x = (e.clientX / window.innerWidth  - 0.5) * 2;
-      mouse.y = (e.clientY / window.innerHeight - 0.5) * 2;
-    };
-    window.addEventListener('mousemove', onMouseMove);
+      const rect = el.getBoundingClientRect()
+      const mx = (e.clientX - rect.left) / W
+      const my = (e.clientY - rect.top) / H
+      targetRotY = (mx - 0.5) * Math.PI * 0.5
+      targetRotX = (my - 0.5) * Math.PI * 0.25
+    }
+    window.addEventListener('mousemove', onMouseMove)
 
-    const onResize = () => {
-      const w = el.clientWidth;
-      const h = el.clientHeight;
-      camera.aspect = w / h;
-      camera.updateProjectionMatrix();
-      renderer.setSize(w, h);
-    };
-    window.addEventListener('resize', onResize);
-
-    // ── Animation loop ────────────────────────────────────────────────────
-    let animId: number;
-    const clock = new THREE.Clock();
+    /* ── Animation ── */
+    const clock = new THREE.Clock()
+    let animId: number
 
     const animate = () => {
-      animId = requestAnimationFrame(animate);
-      const t = clock.getElapsedTime();
+      animId = requestAnimationFrame(animate)
+      const t = clock.getElapsedTime()
 
-      // Globe slow rotation
-      gridGroup.rotation.y = t * 0.07;
+      // Smooth mouse follow
+      currentRotX += (targetRotX - currentRotX) * 0.04
+      currentRotY += (targetRotY - currentRotY) * 0.04
 
-      // Smooth mouse tilt applied to everything
-      tilt.x += (mouse.y * 0.25 - tilt.x) * 0.04;
-      tilt.y += (mouse.x * 0.25 - tilt.y) * 0.04;
-      gridGroup.rotation.x = tilt.x;
+      globe.rotation.y = currentRotY + t * 0.07
+      globe.rotation.x = currentRotX * 0.5
+      rim.rotation.copy(globe.rotation)
 
-      // Floating particles drift + mouse parallax
-      const posAttr = particleGeo.getAttribute('position') as THREE.BufferAttribute;
-      for (let i = 0; i < PARTICLE_COUNT; i++) {
-        posAttr.array[i * 3]     += velocities[i * 3];
-        posAttr.array[i * 3 + 1] += velocities[i * 3 + 1];
-        posAttr.array[i * 3 + 2] += velocities[i * 3 + 2];
+      // Animate arc opacity (pulsing arcs)
+      arcLines.forEach(({ mat, speed, offset }) => {
+        const pulse = Math.sin(t * speed + offset)
+        mat.opacity = Math.max(0, pulse) * 0.55
+      })
 
-        // Soft boundary: reflect if too far
-        const dx = posAttr.array[i * 3];
-        const dy = posAttr.array[i * 3 + 1];
-        const dz = posAttr.array[i * 3 + 2];
-        const dist = Math.sqrt(dx * dx + dy * dy + dz * dz);
-        if (dist > 3.4 || dist < 1.2) {
-          velocities[i * 3]     *= -1;
-          velocities[i * 3 + 1] *= -1;
-          velocities[i * 3 + 2] *= -1;
-        }
-      }
-      posAttr.needsUpdate = true;
+      // Pulse city dots
+      cityMeshes.forEach((dot, i) => {
+        const s = 1 + 0.15 * Math.sin(t * 1.2 + i * 0.8)
+        dot.scale.setScalar(s)
+      })
 
-      // Particles global tilt follows mouse (stronger parallax than globe)
-      particles.rotation.x = tilt.x * 1.4;
-      particles.rotation.y = tilt.y * 1.4 + t * 0.03;
+      renderer.render(scene, camera)
+    }
+    animate()
 
-      // Pulsing opacity
-      particleMat.opacity = 0.45 + 0.2 * Math.sin(t * 1.2);
-
-      renderer.render(scene, camera);
-    };
-
-    animate();
+    /* ── Resize ── */
+    const onResize = () => {
+      const nW = el.clientWidth
+      const nH = el.clientHeight
+      camera.aspect = nW / nH
+      camera.updateProjectionMatrix()
+      renderer.setSize(nW, nH)
+    }
+    window.addEventListener('resize', onResize)
 
     return () => {
-      cancelAnimationFrame(animId);
-      window.removeEventListener('mousemove', onMouseMove);
-      window.removeEventListener('resize', onResize);
-      renderer.dispose();
-      if (el.contains(renderer.domElement)) el.removeChild(renderer.domElement);
-    };
-  }, []);
+      cancelAnimationFrame(animId)
+      window.removeEventListener('mousemove', onMouseMove)
+      window.removeEventListener('resize', onResize)
+      renderer.dispose()
+      if (el.contains(renderer.domElement)) el.removeChild(renderer.domElement)
+    }
+  }, [])
 
   return (
     <div
-      ref={mountRef}
-      className="absolute inset-0 w-full h-full pointer-events-none"
-      aria-hidden="true"
+      ref={containerRef}
+      style={{ width: '100%', height: '100%' }}
     />
-  );
+  )
 }
