@@ -80,7 +80,7 @@ export default function HeroCanvas() {
     const generateDots = (feature: any, spacing = 16): [number, number][] => {
       const dots: [number, number][] = []
       const [[minLng, minLat], [maxLng, maxLat]] = d3.geoBounds(feature)
-      const step = spacing * 0.08
+      const step = spacing * 0.28
       for (let lng = minLng; lng <= maxLng; lng += step) {
         for (let lat = minLat; lat <= maxLat; lat += step) {
           const p: [number, number] = [lng, lat]
@@ -144,9 +144,9 @@ export default function HeroCanvas() {
         const [px, py] = proj
         if (px < 0 || px > W || py < 0 || py > H) return
         context.beginPath()
-        context.arc(px, py, 1.6 * sf, 0, 2 * Math.PI)
+        context.arc(px, py, 2.4 * sf, 0, 2 * Math.PI)
         context.fillStyle = '#6366f1'
-        context.globalAlpha = 0.72
+        context.globalAlpha = 0.75
         context.fill()
         context.globalAlpha = 1
       })
@@ -210,7 +210,7 @@ export default function HeroCanvas() {
     let currentRotY = 0
     const timer = d3.timer(() => {
       if (autoRotate) {
-        rotation.x += 0.18
+        rotation.x += 0.06
         currentRotX += (targetRotX - currentRotX) * 0.04
         currentRotY += (targetRotY - currentRotY) * 0.04
         projection.rotate([rotation.x, rotation.y + currentRotX, currentRotY])
