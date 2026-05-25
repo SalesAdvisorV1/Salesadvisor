@@ -157,7 +157,7 @@ const fadeUp = {
   visible: (i: number = 0) => ({
     opacity: 1,
     y: 0,
-    transition: { delay: i * 0.08, duration: 0.55, ease: [0.16, 1, 0.3, 1] },
+    transition: { delay: i * 0.08, duration: 0.55, ease: 'easeOut' as const },
   }),
 }
 
@@ -533,7 +533,7 @@ export default function LandingPage() {
           <motion.div
             initial={{ opacity: 0, scale: 0.96 }}
             animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.9, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
+            transition={{ duration: 0.9, delay: 0.2, ease: 'easeOut' }}
             style={{
               height: 540,
               position: 'relative',
