@@ -89,21 +89,25 @@ export default function HeroCanvas() {
     pivot.add(glowMesh)
 
     /* ── Particules flottantes autour ── */
-    const PARTICLE_COUNT = 120
+    const PARTICLE_COUNT = 320
     const particlePositions = new Float32Array(PARTICLE_COUNT * 3)
     const particleVels: { theta: number; phi: number; r: number; dTheta: number; dPhi: number }[] = []
 
     for (let i = 0; i < PARTICLE_COUNT; i++) {
-      const r = RADIUS * (1.15 + Math.random() * 0.6)
+      // 3 couches à des distances différentes
+      const layer = i % 3
+      const r = RADIUS * (layer === 0 ? 1.12 + Math.random() * 0.18
+                        : layer === 1 ? 1.35 + Math.random() * 0.25
+                        :               1.65 + Math.random() * 0.35)
       const theta = Math.random() * Math.PI * 2
       const phi = Math.random() * Math.PI
-      particlePositions[i * 3] = r * Math.sin(phi) * Math.cos(theta)
+      particlePositions[i * 3]     = r * Math.sin(phi) * Math.cos(theta)
       particlePositions[i * 3 + 1] = r * Math.cos(phi)
       particlePositions[i * 3 + 2] = r * Math.sin(phi) * Math.sin(theta)
       particleVels.push({
         theta, phi, r,
-        dTheta: (Math.random() - 0.5) * 0.003,
-        dPhi: (Math.random() - 0.5) * 0.002,
+        dTheta: (Math.random() - 0.5) * (layer === 2 ? 0.002 : 0.004),
+        dPhi:   (Math.random() - 0.5) * (layer === 2 ? 0.0015 : 0.003),
       })
     }
 
@@ -111,12 +115,35 @@ export default function HeroCanvas() {
     particleGeo.setAttribute('position', new THREE.BufferAttribute(particlePositions, 3))
     const particleMat = new THREE.PointsMaterial({
       color: 0x818cf8,
-      size: 0.014,
+      size: 0.018,
       transparent: true,
-      opacity: 0.5,
+      opacity: 0.65,
+      sizeAttenuation: true,
     })
     const particles = new THREE.Points(particleGeo, particleMat)
     scene.add(particles)
+
+    /* ── Grandes particules brillantes (accent) ── */
+    const BRIGHT_COUNT = 40
+    const brightPositions = new Float32Array(BRIGHT_COUNT * 3)
+    for (let i = 0; i < BRIGHT_COUNT; i++) {
+      const r = RADIUS * (1.2 + Math.random() * 0.8)
+      const theta = Math.random() * Math.PI * 2
+      const phi = Math.random() * Math.PI
+      brightPositions[i * 3]     = r * Math.sin(phi) * Math.cos(theta)
+      brightPositions[i * 3 + 1] = r * Math.cos(phi)
+      brightPositions[i * 3 + 2] = r * Math.sin(phi) * Math.sin(theta)
+    }
+    const brightGeo = new THREE.BufferGeometry()
+    brightGeo.setAttribute('position', new THREE.BufferAttribute(brightPositions, 3))
+    const brightMat = new THREE.PointsMaterial({
+      color: 0xc7d2fe,
+      size: 0.032,
+      transparent: true,
+      opacity: 0.9,
+      sizeAttenuation: true,
+    })
+    scene.add(new THREE.Points(brightGeo, brightMat))
 
     /* ── Mouse parallax ── */
     let targetRotX = 0
