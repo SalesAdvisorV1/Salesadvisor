@@ -171,6 +171,8 @@ export default function LandingPage() {
         color: '#0a0a0a',
         fontFamily: "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
         overflowX: 'hidden',
+        backgroundImage: 'radial-gradient(circle, #e0e7ff 1px, transparent 1px)',
+        backgroundSize: '28px 28px',
       }}
     >
       {/* ── NAVBAR ───────────────────────────────────────────────── */}
@@ -300,8 +302,8 @@ export default function LandingPage() {
       {/* ── HERO ─────────────────────────────────────────────────── */}
       <section
         style={{
-          paddingTop: 100,
-          paddingBottom: 80,
+          paddingTop: 64,
+          paddingBottom: 0,
           minHeight: '100vh',
           display: 'flex',
           alignItems: 'center',
@@ -309,12 +311,12 @@ export default function LandingPage() {
       >
         <div
           style={{
-            maxWidth: 1200,
+            maxWidth: 1400,
             margin: '0 auto',
-            padding: '0 24px',
+            padding: '0 40px',
             display: 'grid',
-            gridTemplateColumns: '1fr 1fr',
-            gap: 60,
+            gridTemplateColumns: '1fr 1.45fr',
+            gap: 40,
             alignItems: 'center',
             width: '100%',
           }}
@@ -529,21 +531,133 @@ export default function LandingPage() {
             </motion.div>
           </motion.div>
 
-          {/* Right — Globe */}
+          {/* Right — Globe GÉANT + badges flottants */}
           <motion.div
             initial={{ opacity: 0, scale: 0.96 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.9, delay: 0.2, ease: 'easeOut' }}
             style={{
-              height: 540,
+              height: 'calc(100vh - 80px)',
               position: 'relative',
-              borderRadius: 28,
-              overflow: 'hidden',
-              background: 'transparent',
-              boxShadow: 'none',
+              overflow: 'visible',
             }}
           >
             <HeroCanvas />
+
+            {/* Badge 1 — Prospects qualifiés */}
+            <motion.div
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 1.0, duration: 0.5 }}
+              style={{
+                position: 'absolute',
+                top: '18%',
+                left: '-20px',
+                background: 'rgba(255,255,255,0.92)',
+                backdropFilter: 'blur(12px)',
+                border: '1px solid rgba(99,102,241,0.15)',
+                borderRadius: 16,
+                padding: '12px 16px',
+                boxShadow: '0 8px 32px rgba(99,102,241,0.12)',
+                display: 'flex',
+                alignItems: 'center',
+                gap: 10,
+                zIndex: 10,
+                whiteSpace: 'nowrap',
+              }}
+            >
+              <div style={{ width: 34, height: 34, background: '#eef2ff', borderRadius: 10, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 16 }}>📈</div>
+              <div>
+                <div style={{ fontSize: 13, fontWeight: 700, color: '#0a0a0a' }}>+47 prospects</div>
+                <div style={{ fontSize: 11, color: '#9ca3af' }}>qualifiés aujourd&apos;hui</div>
+              </div>
+            </motion.div>
+
+            {/* Badge 2 — Score IA */}
+            <motion.div
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 1.2, duration: 0.5 }}
+              style={{
+                position: 'absolute',
+                top: '35%',
+                right: '4%',
+                background: 'rgba(255,255,255,0.92)',
+                backdropFilter: 'blur(12px)',
+                border: '1px solid rgba(99,102,241,0.15)',
+                borderRadius: 16,
+                padding: '12px 16px',
+                boxShadow: '0 8px 32px rgba(99,102,241,0.12)',
+                display: 'flex',
+                alignItems: 'center',
+                gap: 10,
+                zIndex: 10,
+                whiteSpace: 'nowrap',
+              }}
+            >
+              <div style={{ width: 34, height: 34, background: '#fef3c7', borderRadius: 10, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 16 }}>⭐</div>
+              <div>
+                <div style={{ fontSize: 13, fontWeight: 700, color: '#0a0a0a' }}>Score IA 94/100</div>
+                <div style={{ fontSize: 11, color: '#9ca3af' }}>Pertinence prospect</div>
+              </div>
+            </motion.div>
+
+            {/* Badge 3 — Email prêt */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 1.4, duration: 0.5 }}
+              style={{
+                position: 'absolute',
+                bottom: '28%',
+                left: '6%',
+                background: 'rgba(255,255,255,0.92)',
+                backdropFilter: 'blur(12px)',
+                border: '1px solid rgba(16,185,129,0.2)',
+                borderRadius: 16,
+                padding: '12px 16px',
+                boxShadow: '0 8px 32px rgba(16,185,129,0.10)',
+                display: 'flex',
+                alignItems: 'center',
+                gap: 10,
+                zIndex: 10,
+                whiteSpace: 'nowrap',
+              }}
+            >
+              <div style={{ width: 34, height: 34, background: '#d1fae5', borderRadius: 10, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 16 }}>✉️</div>
+              <div>
+                <div style={{ fontSize: 13, fontWeight: 700, color: '#0a0a0a' }}>Email IA prêt</div>
+                <div style={{ fontSize: 11, color: '#10b981' }}>✓ Prêt à envoyer</div>
+              </div>
+            </motion.div>
+
+            {/* Badge 4 — Vitesse */}
+            <motion.div
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 1.6, duration: 0.5 }}
+              style={{
+                position: 'absolute',
+                top: '10%',
+                right: '12%',
+                background: 'rgba(255,255,255,0.92)',
+                backdropFilter: 'blur(12px)',
+                border: '1px solid rgba(99,102,241,0.15)',
+                borderRadius: 16,
+                padding: '10px 14px',
+                boxShadow: '0 8px 32px rgba(99,102,241,0.12)',
+                display: 'flex',
+                alignItems: 'center',
+                gap: 8,
+                zIndex: 10,
+                whiteSpace: 'nowrap',
+              }}
+            >
+              <div style={{ width: 30, height: 30, background: '#eef2ff', borderRadius: 8, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 14 }}>⚡</div>
+              <div>
+                <div style={{ fontSize: 12, fontWeight: 700, color: '#0a0a0a' }}>Analyse en 30s</div>
+              </div>
+            </motion.div>
           </motion.div>
         </div>
       </section>
