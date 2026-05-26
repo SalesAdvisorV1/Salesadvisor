@@ -1,17 +1,20 @@
 import Link from "next/link";
 import type { PriorityProspect } from "@/types/dashboard";
 
-const AVATAR_COLORS = [
-  'bg-blue-500', 'bg-indigo-500', 'bg-violet-500', 'bg-purple-500',
-  'bg-pink-500', 'bg-teal-500', 'bg-cyan-500', 'bg-amber-500',
+// Monochrome indigo avatars — same hue family, subtle variation
+const AVATAR_TONES: { bg: string; color: string }[] = [
+  { bg: 'rgba(99,102,241,0.12)',  color: '#4f46e5' },
+  { bg: 'rgba(99,102,241,0.18)',  color: '#4338ca' },
+  { bg: 'rgba(139,92,246,0.12)',  color: '#7c3aed' },
+  { bg: 'rgba(139,92,246,0.18)',  color: '#6d28d9' },
 ];
 
-function avatarColor(name: string): string {
+function avatarTone(name: string) {
   let hash = 0;
   for (let i = 0; i < name.length; i++) {
     hash = name.charCodeAt(i) + ((hash << 5) - hash);
   }
-  return AVATAR_COLORS[Math.abs(hash) % AVATAR_COLORS.length];
+  return AVATAR_TONES[Math.abs(hash) % AVATAR_TONES.length];
 }
 
 function prospectHref(prospect: PriorityProspect) {
@@ -23,10 +26,11 @@ function prospectHref(prospect: PriorityProspect) {
   return `/ai-assistant?${params.toString()}`;
 }
 
-function scoreBadge(score: number): string {
-  if (score > 85) return 'bg-green-50 text-green-700';
-  if (score > 70) return 'bg-orange-50 text-orange-700';
-  return 'bg-red-50 text-red-700';
+// Muted semantic scoring colors (red/green reserved for scores only)
+function scoreBadgeStyle(score: number): { background: string; color: string } {
+  if (score > 85) return { background: 'rgba(16,185,129,0.10)', color: '#059669' };
+  if (score > 70) return { background: 'rgba(245,158,11,0.10)', color: '#b45309' };
+  return { background: 'rgba(239,68,68,0.10)', color: '#dc2626' };
 }
 
 interface PriorityProspectsProps {
@@ -44,44 +48,62 @@ export function PriorityProspects({ items, prospects }: PriorityProspectsProps) 
         background: 'rgba(255,255,255,0.78)',
         backdropFilter: 'blur(14px)',
         WebkitBackdropFilter: 'blur(14px)',
-        border: '1px solid rgba(255,255,255,0.6)',
-        boxShadow: '0 4px 16px rgba(99,102,241,0.08)',
+        border: '1px solid rgba(99,102,241,0.10)',
+        boxShadow: '0 1px 2px rgba(15,23,42,0.04)',
       }}
     >
-      <div className="flex items-center justify-between mb-5">
-        <h3 className="text-sm font-semibold text-gray-900">Prospects prioritaires</h3>
-        <Link href="/prospect-finder" className="text-xs text-gray-400 hover:text-gray-700 transition-colors">
+      <div className="flex items-center justify-between mb-4">
+        <h3 className="text-sm font-semibold" style={{ color: '#0f172a' }}>Prospects prioritaires</h3>
+        <Link
+          href="/prospect-finder"
+          className="text-xs font-medium transition-colors"
+          style={{ color: '#94a3b8' }}
+          onMouseEnter={(e) => { (e.currentTarget as HTMLAnchorElement).style.color = '#4f46e5'; }}
+          onMouseLeave={(e) => { (e.currentTarget as HTMLAnchorElement).style.color = '#94a3b8'; }}
+        >
           Explorer →
         </Link>
       </div>
 
       {list.length === 0 ? (
-        <p className="text-xs text-gray-400 py-4 text-center">Aucun prospect pour le moment.</p>
+        <p className="text-xs py-4 text-center" style={{ color: '#94a3b8' }}>Aucun prospect pour le moment.</p>
       ) : (
-        <div className="space-y-1">
-          {list.map((prospect) => (
-            <Link
-              key={prospect.id}
-              href={prospectHref(prospect)}
-              className="flex items-center justify-between px-3 py-2.5 rounded-xl hover:bg-gray-50 transition-colors"
-            >
-              <div className="flex items-center gap-3 min-w-0">
-                <div className={`w-8 h-8 rounded-lg ${avatarColor(prospect.name)} flex items-center justify-center shrink-0`}>
-                  <span className="text-[11px] font-bold text-white">
-                    {prospect.name.charAt(0).toUpperCase()}
-                  </span>
+        <div className="space-y-0.5">
+          {list.map((prospect) => {
+            const tone = avatarTone(prospect.name);
+            const badge = scoreBadgeStyle(prospect.score);
+            return (
+              <Link
+                key={prospect.id}
+                href={prospectHref(prospect)}
+                className="flex items-center justify-between px-2.5 py-2.5 rounded-xl transition-colors"
+                onMouseEnter={(e) => { (e.currentTarget as HTMLAnchorElement).style.background = 'rgba(99,102,241,0.05)'; }}
+                onMouseLeave={(e) => { (e.currentTarget as HTMLAnchorElement).style.background = 'transparent'; }}
+              >
+                <div className="flex items-center gap-3 min-w-0">
+                  <div
+                    className="w-9 h-9 rounded-lg flex items-center justify-center shrink-0"
+                    style={{ background: tone.bg, border: '1px solid rgba(99,102,241,0.10)' }}
+                  >
+                    <span className="text-[12px] font-semibold" style={{ color: tone.color }}>
+                      {prospect.name.charAt(0).toUpperCase()}
+                    </span>
+                  </div>
+                  <div className="min-w-0">
+                    <p className="text-[13px] font-semibold truncate" style={{ color: '#0f172a' }}>{prospect.name}</p>
+                    <p className="text-xs truncate" style={{ color: '#94a3b8' }}>{prospect.sector} · {prospect.city}</p>
+                  </div>
                 </div>
-                <div className="min-w-0">
-                  <p className="text-[13px] font-semibold text-gray-900 truncate">{prospect.name}</p>
-                  <p className="text-xs text-gray-400 truncate">{prospect.sector} · {prospect.city}</p>
-                </div>
-              </div>
 
-              <span className={`text-xs font-bold px-2 py-0.5 rounded-full tabular-nums shrink-0 ml-3 ${scoreBadge(prospect.score)}`}>
-                {prospect.score}
-              </span>
-            </Link>
-          ))}
+                <span
+                  className="text-xs font-semibold px-2 py-0.5 rounded-full tabular-nums shrink-0 ml-3"
+                  style={badge}
+                >
+                  {prospect.score}
+                </span>
+              </Link>
+            );
+          })}
         </div>
       )}
     </div>

@@ -91,22 +91,22 @@ export function DashboardView() {
           background: 'rgba(255,255,255,0.78)',
           backdropFilter: 'blur(14px)',
           WebkitBackdropFilter: 'blur(14px)',
-          border: '1px solid rgba(255,255,255,0.6)',
-          boxShadow: '0 4px 16px rgba(99,102,241,0.08)',
+          border: '1px solid rgba(99,102,241,0.10)',
+          boxShadow: '0 1px 2px rgba(15,23,42,0.04)',
         }}
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.3, delay: 0.2 }}
       >
         <div className="flex items-center justify-between mb-4">
-          <h3 className="text-sm font-bold text-gray-900">Activité — 14 derniers jours</h3>
+          <h3 className="text-sm font-semibold" style={{ color: '#0f172a' }}>Activité — 14 derniers jours</h3>
           <div className="flex items-center gap-4">
-            <span className="flex items-center gap-1.5 text-[11px] text-gray-600 font-medium">
-              <span className="w-3 h-0.5 rounded-full inline-block" style={{ background: '#6366f1' }} />
+            <span className="flex items-center gap-1.5 text-[11px] font-medium" style={{ color: '#64748b' }}>
+              <span className="w-2.5 h-2.5 rounded-full inline-block" style={{ background: '#6366f1' }} />
               Recherches
             </span>
-            <span className="flex items-center gap-1.5 text-[11px] text-gray-600 font-medium">
-              <span className="w-3 h-0.5 rounded-full inline-block" style={{ background: '#8b5cf6' }} />
+            <span className="flex items-center gap-1.5 text-[11px] font-medium" style={{ color: '#64748b' }}>
+              <span className="w-2.5 h-2.5 rounded-full inline-block" style={{ background: '#8b5cf6' }} />
               Prospects
             </span>
           </div>
@@ -165,7 +165,7 @@ export function DashboardView() {
       </motion.div>
 
       <motion.div
-        className="mt-6 grid gap-6 lg:grid-cols-[1.2fr_.8fr]"
+        className="mt-6 grid gap-6 lg:grid-cols-[1.2fr_.8fr] items-start"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.3, delay: 0.25 }}

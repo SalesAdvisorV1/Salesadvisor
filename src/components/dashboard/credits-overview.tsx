@@ -29,54 +29,28 @@ export function CreditsOverview({ credits, totalCredits, creditsRemaining, credi
 
   return (
     <div
-      className="rounded-2xl p-6 flex flex-col gap-5 relative overflow-hidden"
+      className="rounded-2xl p-5 flex flex-col gap-4"
       style={{
-        background: 'linear-gradient(135deg, #4f46e5 0%, #6366f1 45%, #8b5cf6 100%)',
-        boxShadow: '0 12px 32px rgba(99,102,241,0.30), 0 1px 0 rgba(255,255,255,0.18) inset',
-        color: '#ffffff',
+        background: 'rgba(255,255,255,0.78)',
+        backdropFilter: 'blur(14px)',
+        WebkitBackdropFilter: 'blur(14px)',
+        border: '1px solid rgba(99,102,241,0.10)',
+        boxShadow: '0 1px 2px rgba(15,23,42,0.04)',
       }}
     >
-      {/* Decorative blur circles */}
-      <div
-        style={{
-          position: 'absolute',
-          top: -40,
-          right: -40,
-          width: 180,
-          height: 180,
-          borderRadius: '50%',
-          background: 'rgba(255,255,255,0.12)',
-          filter: 'blur(30px)',
-          pointerEvents: 'none',
-        }}
-      />
-      <div
-        style={{
-          position: 'absolute',
-          bottom: -60,
-          left: -30,
-          width: 160,
-          height: 160,
-          borderRadius: '50%',
-          background: 'rgba(192,132,252,0.20)',
-          filter: 'blur(40px)',
-          pointerEvents: 'none',
-        }}
-      />
-
       {/* Header */}
-      <div className="flex items-start justify-between gap-3 relative">
+      <div className="flex items-start justify-between gap-3">
         <div>
-          <h3 className="text-sm font-bold text-white mb-1">Crédits IA</h3>
-          <p className="text-xs text-white/70">Enrichissement, pitch et résumés</p>
+          <h3 className="text-sm font-semibold" style={{ color: '#0f172a' }}>Crédits IA</h3>
+          <p className="text-xs mt-0.5" style={{ color: '#64748b' }}>Enrichissement, pitch et résumés</p>
         </div>
         <span
-          className="text-[10px] font-bold px-3 py-1 rounded-full tracking-wide shrink-0"
+          className="text-[10px] font-semibold px-2.5 py-1 rounded-full tracking-wide shrink-0 uppercase"
           style={{
-            background: 'rgba(255,255,255,0.18)',
-            color: '#ffffff',
-            border: '1px solid rgba(255,255,255,0.25)',
-            backdropFilter: 'blur(8px)',
+            background: 'rgba(99,102,241,0.10)',
+            color: '#4f46e5',
+            border: '1px solid rgba(99,102,241,0.20)',
+            letterSpacing: '0.04em',
           }}
         >
           Plan {planLabel}
@@ -84,48 +58,51 @@ export function CreditsOverview({ credits, totalCredits, creditsRemaining, credi
       </div>
 
       {/* Counter + bar */}
-      <div className="relative">
+      <div>
         <div className="flex items-baseline gap-2 mb-3">
-          <span className="text-5xl font-extrabold text-white tabular-nums leading-none tracking-tight">
+          <span
+            className="tabular-nums leading-none"
+            style={{ color: '#0f172a', fontSize: '40px', fontWeight: 700, letterSpacing: '-0.025em' }}
+          >
             {remaining !== null ? remaining : '—'}
           </span>
-          <span className="text-white/60 text-sm">/ {total} restants</span>
+          <span className="text-sm" style={{ color: '#94a3b8' }}>/ {total} restants</span>
         </div>
 
         <div
-          className="w-full rounded-full h-2 mb-2"
-          style={{ background: 'rgba(255,255,255,0.15)' }}
+          className="w-full rounded-full h-1.5 mb-2 overflow-hidden"
+          style={{ background: 'rgba(99,102,241,0.10)' }}
         >
           <div
-            className="h-2 rounded-full transition-all duration-500"
+            className="h-1.5 rounded-full transition-all duration-500"
             style={{
               width: `${percent}%`,
-              background: 'linear-gradient(90deg, #ffffff 0%, #e0e7ff 100%)',
-              boxShadow: '0 0 12px rgba(255,255,255,0.6)',
+              background: 'linear-gradient(90deg, #6366f1 0%, #8b5cf6 100%)',
             }}
           />
         </div>
 
-        <div className="flex justify-between text-[10px] text-white/60 font-medium">
+        <div className="flex justify-between text-[11px] font-medium" style={{ color: '#94a3b8' }}>
           <span>{used !== null ? `${used} utilisés ce mois` : 'Chargement…'}</span>
-          <span>{remaining !== null ? `${percent}% disponible` : ''}</span>
+          <span className="tabular-nums">{remaining !== null ? `${percent}% disponible` : ''}</span>
         </div>
       </div>
 
-      {/* Cost grid */}
-      <div className="grid grid-cols-2 gap-2 relative">
+      {/* Cost list — compact, no rainbow */}
+      <div className="grid grid-cols-2 gap-1.5">
         {CREDIT_COSTS.map(({ label, cost }) => (
           <div
             key={label}
-            className="rounded-xl p-3"
+            className="flex items-center justify-between px-2.5 py-2 rounded-lg"
             style={{
-              background: 'rgba(255,255,255,0.12)',
-              border: '1px solid rgba(255,255,255,0.18)',
-              backdropFilter: 'blur(8px)',
+              background: 'rgba(99,102,241,0.04)',
+              border: '1px solid rgba(99,102,241,0.08)',
             }}
           >
-            <p className="text-[10px] text-white/70 mb-1 leading-snug font-medium">{label}</p>
-            <p className="text-[14px] font-bold text-white">{cost} cr.</p>
+            <span className="text-[11px] leading-tight" style={{ color: '#64748b' }}>{label}</span>
+            <span className="text-[11px] font-semibold tabular-nums shrink-0 ml-2" style={{ color: '#4f46e5' }}>
+              {cost} cr.
+            </span>
           </div>
         ))}
       </div>
@@ -133,19 +110,20 @@ export function CreditsOverview({ credits, totalCredits, creditsRemaining, credi
       {/* CTA */}
       <Link
         href="/billing"
-        className="flex w-full items-center justify-center rounded-full py-3 text-[13px] font-semibold transition-all duration-150 relative"
+        className="flex w-full items-center justify-center rounded-full py-2.5 text-[13px] font-semibold transition-all duration-150 text-white"
         style={{
-          background: 'rgba(255,255,255,0.95)',
-          color: '#4f46e5',
-          boxShadow: '0 4px 12px rgba(0,0,0,0.10)',
+          background: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)',
+          boxShadow: '0 4px 14px rgba(99,102,241,0.28), 0 1px 0 rgba(255,255,255,0.25) inset',
         }}
         onMouseEnter={(e) => {
-          (e.currentTarget as HTMLAnchorElement).style.transform = 'translateY(-1px)';
-          (e.currentTarget as HTMLAnchorElement).style.background = '#ffffff';
+          const t = e.currentTarget as HTMLAnchorElement;
+          t.style.transform = 'translateY(-1px)';
+          t.style.boxShadow = '0 8px 20px rgba(99,102,241,0.38), 0 1px 0 rgba(255,255,255,0.25) inset';
         }}
         onMouseLeave={(e) => {
-          (e.currentTarget as HTMLAnchorElement).style.transform = 'translateY(0)';
-          (e.currentTarget as HTMLAnchorElement).style.background = 'rgba(255,255,255,0.95)';
+          const t = e.currentTarget as HTMLAnchorElement;
+          t.style.transform = 'translateY(0)';
+          t.style.boxShadow = '0 4px 14px rgba(99,102,241,0.28), 0 1px 0 rgba(255,255,255,0.25) inset';
         }}
       >
         Gérer mes crédits
