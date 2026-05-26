@@ -15,7 +15,14 @@ const stats = [
   { value: '+47', label: "Prospects qualifiés aujourd'hui" },
 ]
 
-const partners = ['lemlist', 'HubSpot', 'Pipedrive', 'Brevo', 'aircall', 'Salesforce']
+const partners = [
+  { name: 'lemlist',    color: '#FD7C4A', bg: 'rgba(253,124,74,0.10)' },
+  { name: 'HubSpot',   color: '#FF7A59', bg: 'rgba(255,122,89,0.10)' },
+  { name: 'Pipedrive', color: '#26A96C', bg: 'rgba(38,169,108,0.10)' },
+  { name: 'Brevo',     color: '#0B996E', bg: 'rgba(11,153,110,0.10)' },
+  { name: 'aircall',   color: '#1573D4', bg: 'rgba(21,115,212,0.10)' },
+  { name: 'Salesforce',color: '#00A1E0', bg: 'rgba(0,161,224,0.10)'  },
+]
 
 const processSteps = [
   {
@@ -611,49 +618,131 @@ export default function LandingPage() {
       {/* ── SOCIAL PROOF ─────────────────────────────────────────── */}
       <section
         style={{
-          padding: '44px 24px',
-          borderTop: '1px solid rgba(243,244,246,0.6)',
-          borderBottom: '1px solid rgba(243,244,246,0.6)',
+          padding: '56px 24px',
+          borderTop: '1px solid rgba(99,102,241,0.08)',
+          borderBottom: '1px solid rgba(99,102,241,0.08)',
           background: 'transparent',
+          overflow: 'hidden',
         }}
       >
         <div style={{ padding: '0 clamp(32px, 6vw, 120px)', textAlign: 'center' }}>
-          <p
+          {/* Section label with decorative lines */}
+          <div
             style={{
-              fontSize: 11,
-              fontWeight: 700,
-              letterSpacing: '0.12em',
-              color: '#d1d5db',
-              textTransform: 'uppercase',
-              marginBottom: 28,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: 14,
+              marginBottom: 36,
             }}
           >
-            ILS NOUS FONT CONFIANCE
-          </p>
+            <span
+              style={{
+                display: 'inline-block',
+                width: 32,
+                height: 1,
+                background: 'linear-gradient(90deg, transparent, rgba(99,102,241,0.3))',
+              }}
+            />
+            <p
+              style={{
+                fontSize: 11,
+                fontWeight: 700,
+                letterSpacing: '0.12em',
+                color: '#94a3b8',
+                textTransform: 'uppercase',
+                margin: 0,
+              }}
+            >
+              ILS NOUS FONT CONFIANCE
+            </p>
+            <span
+              style={{
+                display: 'inline-block',
+                width: 32,
+                height: 1,
+                background: 'linear-gradient(90deg, rgba(99,102,241,0.3), transparent)',
+              }}
+            />
+          </div>
+
+          {/* Partner chips */}
           <div
             style={{
               display: 'flex',
               justifyContent: 'center',
               alignItems: 'center',
-              gap: 56,
+              gap: 10,
               flexWrap: 'wrap',
             }}
           >
-            {partners.map((name) => (
-              <span
-                key={name}
+            {partners.map((partner, i) => (
+              <motion.div
+                key={partner.name}
+                initial={{ opacity: 0, y: 14 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.07, duration: 0.4, ease: 'easeOut' }}
+                whileHover={{
+                  y: -3,
+                  boxShadow: `0 8px 22px ${partner.bg.replace('0.10', '0.22')}`,
+                  transition: { duration: 0.18 },
+                }}
                 style={{
-                  fontSize: 17,
-                  fontWeight: 700,
-                  color: '#d1d5db',
-                  letterSpacing: '-0.02em',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: 9,
+                  padding: '9px 18px',
+                  borderRadius: 12,
+                  background: 'rgba(255,255,255,0.88)',
+                  backdropFilter: 'blur(12px)',
+                  WebkitBackdropFilter: 'blur(12px)',
+                  border: '1px solid rgba(99,102,241,0.11)',
+                  boxShadow: '0 2px 10px rgba(0,0,0,0.05), 0 1px 0 rgba(255,255,255,0.9) inset',
+                  cursor: 'default',
                   userSelect: 'none',
                 }}
               >
-                {name}
-              </span>
+                {/* Brand color dot */}
+                <span
+                  style={{
+                    width: 8,
+                    height: 8,
+                    borderRadius: '50%',
+                    background: partner.color,
+                    flexShrink: 0,
+                    boxShadow: `0 0 0 2px ${partner.bg}`,
+                  }}
+                />
+                <span
+                  style={{
+                    fontSize: 14,
+                    fontWeight: 700,
+                    color: '#1e293b',
+                    letterSpacing: '-0.02em',
+                  }}
+                >
+                  {partner.name}
+                </span>
+              </motion.div>
             ))}
           </div>
+
+          {/* Sub-caption */}
+          <motion.p
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.5, duration: 0.5 }}
+            style={{
+              marginTop: 24,
+              fontSize: 12,
+              color: '#cbd5e1',
+              letterSpacing: '-0.01em',
+            }}
+          >
+            +500 équipes commerciales font confiance à Sales Advisor chaque jour
+          </motion.p>
         </div>
       </section>
 
