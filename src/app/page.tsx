@@ -743,15 +743,22 @@ export default function LandingPage() {
       </section>
 
       {/* ── SOCIAL PROOF ─────────────────────────────────────────── */}
-      <section style={{ padding: '64px 0', background: 'transparent' }}>
+      <section style={{ padding: '80px 0', background: 'transparent' }}>
         <div style={{ padding: '0 clamp(32px, 6vw, 120px)' }}>
 
-          {/* Eyebrow */}
+          {/* Eyebrow — même style que les labels de section (PROCESSUS, etc.) */}
           <motion.p
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
-            style={{ fontSize: 13, color: '#9ca3af', fontWeight: 500, marginBottom: 44, letterSpacing: '-0.01em' }}
+            style={{
+              fontSize: 12,
+              fontWeight: 700,
+              letterSpacing: '0.1em',
+              color: '#6366f1',
+              textTransform: 'uppercase',
+              marginBottom: 40,
+            }}
           >
             Adopté par +500 équipes commerciales B2B
           </motion.p>
@@ -760,10 +767,10 @@ export default function LandingPage() {
             <div
               key={rowIdx}
               style={{
-                display: 'flex',
+                display: 'grid',
+                gridTemplateColumns: 'repeat(6, 1fr)',
                 alignItems: 'center',
-                justifyContent: 'space-between',
-                marginBottom: rowIdx === 0 ? 40 : 0,
+                marginBottom: rowIdx === 0 ? 32 : 0,
               }}
             >
               {row.map((c, i) => (
@@ -776,27 +783,26 @@ export default function LandingPage() {
                   onMouseEnter={(e) => {
                     const el = e.currentTarget as HTMLDivElement
                     el.style.opacity = '1'
-                    el.style.transform = 'translateY(-3px)'
+                    el.style.transform = 'translateY(-2px)'
                   }}
                   onMouseLeave={(e) => {
                     const el = e.currentTarget as HTMLDivElement
-                    el.style.opacity = '0.6'
+                    el.style.opacity = '0.55'
                     el.style.transform = 'translateY(0)'
                   }}
                   style={{
                     display: 'flex',
                     alignItems: 'center',
-                    gap: 9,
-                    opacity: 0.6,
+                    gap: 8,
+                    opacity: 0.55,
                     transition: 'opacity 0.2s ease, transform 0.18s ease',
                     cursor: 'default',
                     userSelect: 'none',
                   }}
                 >
-                  {/* Real brand logo — inline SVG, no CDN */}
                   <svg
-                    width="26"
-                    height="26"
+                    width="22"
+                    height="22"
                     viewBox="0 0 24 24"
                     fill={c.color}
                     aria-hidden="true"
@@ -805,10 +811,10 @@ export default function LandingPage() {
                     <path d={c.path} />
                   </svg>
                   <span style={{
-                    fontSize: 15,
+                    fontSize: 14,
                     fontWeight: 700,
-                    color: c.color,
-                    letterSpacing: '-0.025em',
+                    letterSpacing: '-0.02em',
+                    color: '#0f172a',
                     whiteSpace: 'nowrap',
                     fontFamily: 'inherit',
                   }}>
