@@ -15,22 +15,59 @@ const stats = [
   { value: '+47', label: "Prospects qualifiés aujourd'hui" },
 ]
 
+/* ── Social proof clients — SVG paths from simple-icons ── */
 const clients = [
-  { name: 'Notion',     slug: 'notion',     color: '#000000' },
-  { name: 'Stripe',     slug: 'stripe',     color: '#635BFF' },
-  { name: 'Figma',      slug: 'figma',      color: '#F24E1E' },
-  { name: 'Slack',      slug: 'slack',      color: '#4A154B' },
-  { name: 'Asana',      slug: 'asana',      color: '#F06A6A' },
-  { name: 'Zendesk',    slug: 'zendesk',    color: '#03363D' },
-  { name: 'Intercom',   slug: 'intercom',   color: '#1F8DED' },
-  { name: 'HubSpot',    slug: 'hubspot',    color: '#FF7A59' },
-  { name: 'Salesforce', slug: 'salesforce', color: '#00A1E0' },
-  { name: 'Pipedrive',  slug: 'pipedrive',  color: '#017737' },
-  { name: 'aircall',    slug: 'aircall',    color: '#00B388' },
-  { name: 'monday.com', slug: 'monday',     color: '#F62B54' },
+  {
+    name: 'Notion', color: '#000000',
+    path: 'M4.459 4.208c.746.606 1.026.56 2.428.466l13.215-.793c.28 0 .047-.28-.046-.326L17.86 1.968c-.42-.326-.981-.7-2.055-.607L3.01 2.295c-.466.046-.56.28-.374.466zm.793 3.08v13.904c0 .747.373 1.027 1.214.98l14.523-.84c.841-.046.935-.56.935-1.167V6.354c0-.606-.233-.933-.748-.887l-15.177.887c-.56.047-.747.327-.747.933zm14.337.745c.093.42 0 .84-.42.888l-.7.14v10.264c-.608.327-1.168.514-1.635.514-.748 0-.935-.234-1.495-.933l-4.577-7.186v6.952L12.21 19s0 .84-1.168.84l-3.222.186c-.093-.186 0-.653.327-.746l.84-.233V9.854L7.822 9.76c-.094-.42.14-1.026.793-1.073l3.456-.233 4.764 7.279v-6.44l-1.215-.139c-.093-.514.28-.887.747-.933zM1.936 1.035l13.31-.98c1.634-.14 2.055-.047 3.082.7l4.249 2.986c.7.513.934.653.934 1.213v16.378c0 1.026-.373 1.634-1.68 1.726l-15.458.934c-.98.047-1.448-.093-1.962-.747l-3.129-4.06c-.56-.747-.793-1.306-.793-1.96V2.667c0-.839.374-1.54 1.447-1.632z',
+  },
+  {
+    name: 'Stripe', color: '#635BFF',
+    path: 'M13.976 9.15c-2.172-.806-3.356-1.426-3.356-2.409 0-.831.683-1.305 1.901-1.305 2.227 0 4.515.858 6.09 1.631l.89-5.494C18.252.975 15.697 0 12.165 0 9.667 0 7.589.654 6.104 1.872 4.56 3.147 3.757 4.992 3.757 7.218c0 4.039 2.467 5.76 6.476 7.219 2.585.92 3.445 1.574 3.445 2.583 0 .98-.84 1.545-2.354 1.545-1.875 0-4.965-.921-6.99-2.109l-.9 5.555C5.175 22.99 8.385 24 11.714 24c2.641 0 4.843-.624 6.328-1.813 1.664-1.305 2.525-3.236 2.525-5.732 0-4.128-2.524-5.851-6.594-7.305h.003z',
+  },
+  {
+    name: 'Figma', color: '#F24E1E',
+    path: 'M15.852 8.981h-4.588V0h4.588c2.476 0 4.49 2.014 4.49 4.49s-2.014 4.491-4.49 4.491zM12.735 7.51h3.117c1.665 0 3.019-1.355 3.019-3.019s-1.355-3.019-3.019-3.019h-3.117V7.51zm0 1.471H8.148c-2.476 0-4.49-2.014-4.49-4.49S5.672 0 8.148 0h4.588v8.981zm-4.587-7.51c-1.665 0-3.019 1.355-3.019 3.019s1.354 3.02 3.019 3.02h3.117V1.471H8.148zm4.587 15.019H8.148c-2.476 0-4.49-2.014-4.49-4.49s2.014-4.49 4.49-4.49h4.588v8.98zM8.148 8.981c-1.665 0-3.019 1.355-3.019 3.019s1.355 3.019 3.019 3.019h3.117V8.981H8.148zM8.172 24c-2.489 0-4.515-2.014-4.515-4.49s2.014-4.49 4.49-4.49h4.588v4.441c0 2.503-2.047 4.539-4.563 4.539zm-.024-7.51a3.023 3.023 0 0 0-3.019 3.019c0 1.665 1.365 3.019 3.044 3.019 1.705 0 3.093-1.376 3.093-3.068v-2.97H8.148zm7.704 0h-.098c-2.476 0-4.49-2.014-4.49-4.49s2.014-4.49 4.49-4.49h.098c2.476 0 4.49 2.014 4.49 4.49s-2.014 4.49-4.49 4.49zm-.097-7.509c-1.665 0-3.019 1.355-3.019 3.019s1.355 3.019 3.019 3.019h.098c1.665 0 3.019-1.355 3.019-3.019s-1.355-3.019-3.019-3.019h-.098z',
+  },
+  {
+    name: 'Asana', color: '#F06A6A',
+    path: 'M18.78 12.653c-2.882 0-5.22 2.336-5.22 5.22s2.338 5.22 5.22 5.22 5.22-2.34 5.22-5.22-2.336-5.22-5.22-5.22zm-13.56 0c-2.88 0-5.22 2.337-5.22 5.22s2.338 5.22 5.22 5.22 5.22-2.338 5.22-5.22-2.336-5.22-5.22-5.22zm12-6.525c0 2.883-2.337 5.22-5.22 5.22-2.882 0-5.22-2.337-5.22-5.22 0-2.88 2.338-5.22 5.22-5.22 2.883 0 5.22 2.34 5.22 5.22z',
+  },
+  {
+    name: 'HubSpot', color: '#FF7A59',
+    path: 'M18.164 7.93V5.084a2.198 2.198 0 001.267-1.978v-.067A2.2 2.2 0 0017.238.845h-.067a2.2 2.2 0 00-2.193 2.193v.067a2.196 2.196 0 001.252 1.973l.013.006v2.852a6.22 6.22 0 00-2.969 1.31l.012-.01-7.828-6.095A2.497 2.497 0 104.3 4.656l-.012.006 7.697 5.991a6.176 6.176 0 00-1.038 3.446c0 1.343.425 2.588 1.147 3.607l-.013-.02-2.342 2.343a1.968 1.968 0 00-.58-.095h-.002a2.033 2.033 0 102.033 2.033 1.978 1.978 0 00-.1-.595l.005.014 2.317-2.317a6.247 6.247 0 104.782-11.134l-.036-.005zm-.964 9.378a3.206 3.206 0 113.215-3.207v.002a3.206 3.206 0 01-3.207 3.207z',
+  },
+  {
+    name: 'aircall', color: '#00B388',
+    path: 'M23.451 5.906a6.978 6.978 0 0 0-5.375-5.39C16.727.204 14.508 0 12 0S7.273.204 5.924.516a6.978 6.978 0 0 0-5.375 5.39C.237 7.26.034 9.485.034 12s.203 4.74.515 6.094a6.978 6.978 0 0 0 5.375 5.39C7.273 23.796 9.492 24 12 24s4.727-.204 6.076-.516a6.978 6.978 0 0 0 5.375-5.39c.311-1.354.515-3.578.515-6.094 0-2.515-.203-4.74-.515-6.094zm-5.873 12.396l-.003.001c-.428.152-1.165.283-2.102.377l-.147.014a.444.444 0 0 1-.45-.271 1.816 1.816 0 0 0-1.296-1.074c-.351-.081-.928-.134-1.58-.134s-1.229.053-1.58.134a1.817 1.817 0 0 0-1.291 1.062.466.466 0 0 1-.471.281 8 8 0 0 0-.129-.012c-.938-.094-1.676-.224-2.105-.377l-.003-.001a.76.76 0 0 1-.492-.713c0-.032.003-.066.005-.098.073-.979.666-3.272 1.552-5.89C8.5 8.609 9.559 6.187 10.037 5.714a1.029 1.029 0 0 1 .404-.26l.004-.002c.314-.106.892-.178 1.554-.178.663 0 1.241.071 1.554.178l.005.002a1.025 1.025 0 0 1 .405.26c.478.472 1.537 2.895 2.549 5.887.886 2.617 1.479 4.91 1.552 5.89.002.032.005.066.005.098a.76.76 0 0 1-.491.713z',
+  },
+  {
+    name: 'Zendesk', color: '#03363D',
+    path: 'M12.914 2.904V16.29L24 2.905H12.914zM0 2.906C0 5.966 2.483 8.45 5.543 8.45s5.542-2.484 5.543-5.544H0zm11.086 4.807L0 21.096h11.086V7.713zm7.37 7.84c-3.063 0-5.542 2.48-5.542 5.543H24c0-3.06-2.48-5.543-5.543-5.543z',
+  },
+  {
+    name: 'Intercom', color: '#1281CB',
+    path: 'M21 0H3C1.343 0 0 1.343 0 3v18c0 1.658 1.343 3 3 3h18c1.658 0 3-1.342 3-3V3c0-1.657-1.342-3-3-3zm-5.801 4.399c0-.44.36-.8.802-.8.44 0 .8.36.8.8v10.688c0 .442-.36.801-.8.801-.443 0-.802-.359-.802-.801V4.399zM11.2 3.994c0-.44.357-.799.8-.799s.8.359.8.799v11.602c0 .44-.357.8-.8.8s-.8-.36-.8-.8V3.994zm-4 .405c0-.44.359-.8.799-.8.443 0 .802.36.802.8v10.688c0 .442-.36.801-.802.801-.44 0-.799-.359-.799-.801V4.399zM3.199 6c0-.442.36-.8.802-.8.44 0 .799.358.799.8v7.195c0 .441-.359.8-.799.8-.443 0-.802-.36-.802-.8V6zM20.52 18.202c-.123.105-3.086 2.593-8.52 2.593-5.433 0-8.397-2.486-8.521-2.593-.335-.288-.375-.792-.086-1.128.285-.334.79-.375 1.125-.09.047.041 2.693 2.211 7.481 2.211 4.848 0 7.456-2.186 7.479-2.207.334-.289.839-.25 1.128.086.289.336.25.84-.086 1.128zm.281-5.007c0 .441-.36.8-.801.8-.441 0-.801-.36-.801-.8V6c0-.442.361-.8.801-.8.441 0 .801.357.801.8v7.195z',
+  },
+  {
+    name: 'Atlassian', color: '#0052CC',
+    path: 'M7.12 11.084a.683.683 0 00-1.16.126L.075 22.974a.703.703 0 00.63 1.018h8.19a.678.678 0 00.63-.39c1.767-3.65.696-9.203-2.406-12.52zM11.434.386a15.515 15.515 0 00-.906 15.317l3.95 7.9a.703.703 0 00.628.388h8.19a.703.703 0 00.63-1.017L12.63.38a.664.664 0 00-1.196.006z',
+  },
+  {
+    name: 'Dropbox', color: '#0061FF',
+    path: 'M6 1.807L0 5.629l6 3.822 6.001-3.822L6 1.807zM18 1.807l-6 3.822 6 3.822 6-3.822-6-3.822zM0 13.274l6 3.822 6.001-3.822L6 9.452l-6 3.822zM18 9.452l-6 3.822 6 3.822 6-3.822-6-3.822zM6 18.371l6.001 3.822 6-3.822-6-3.822L6 18.371z',
+  },
+  {
+    name: 'Linear', color: '#5E6AD2',
+    path: 'M2.886 4.18A11.982 11.982 0 0 1 11.99 0C18.624 0 24 5.376 24 12.009c0 3.64-1.62 6.903-4.18 9.105L2.887 4.18ZM1.817 5.626l16.556 16.556c-.524.33-1.075.62-1.65.866L.951 7.277c.247-.575.537-1.126.866-1.65ZM.322 9.163l14.515 14.515c-.71.172-1.443.282-2.195.322L0 11.358a12 12 0 0 1 .322-2.195Zm-.17 4.862 9.823 9.824a12.02 12.02 0 0 1-9.824-9.824Z',
+  },
+  {
+    name: 'Airtable', color: '#18BFFF',
+    path: 'M11.992 1.966c-.434 0-.87.086-1.28.257L1.779 5.917c-.503.208-.49.908.012 1.116l8.982 3.558a3.266 3.266 0 0 0 2.454 0l8.982-3.558c.503-.196.503-.908.012-1.116l-8.957-3.694a3.255 3.255 0 0 0-1.272-.257zM23.4 8.056a.589.589 0 0 0-.222.045l-10.012 3.877a.612.612 0 0 0-.38.564v8.896a.6.6 0 0 0 .821.552L23.62 18.1a.583.583 0 0 0 .38-.551V8.653a.6.6 0 0 0-.6-.596zM.676 8.095a.644.644 0 0 0-.48.19C.086 8.396 0 8.53 0 8.69v8.355c0 .442.515.737.908.54l6.27-3.006.307-.147 2.969-1.436c.466-.22.43-.908-.061-1.092L.883 8.138a.57.57 0 0 0-.207-.044z',
+  },
 ]
 
-/* ── keep old partners array for integrations section if needed ── */
+/* ── integrations section data ── */
 const partners = [
   {
     name: 'lemlist',
@@ -706,15 +743,7 @@ export default function LandingPage() {
       </section>
 
       {/* ── SOCIAL PROOF ─────────────────────────────────────────── */}
-      <section
-        style={{
-          padding: '60px 0 64px',
-          borderTop: '1px solid rgba(0,0,0,0.06)',
-          borderBottom: '1px solid rgba(0,0,0,0.06)',
-          background: 'transparent',
-          overflow: 'hidden',
-        }}
-      >
+      <section style={{ padding: '64px 0', background: 'transparent' }}>
         <div style={{ padding: '0 clamp(32px, 6vw, 120px)' }}>
 
           {/* Eyebrow */}
@@ -722,152 +751,73 @@ export default function LandingPage() {
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.5 }}
-            style={{
-              fontSize: 13,
-              fontWeight: 500,
-              color: '#9ca3af',
-              marginBottom: 44,
-              letterSpacing: '-0.01em',
-            }}
+            style={{ fontSize: 13, color: '#9ca3af', fontWeight: 500, marginBottom: 44, letterSpacing: '-0.01em' }}
           >
             Adopté par +500 équipes commerciales B2B
           </motion.p>
 
-          {/* Row 1 — logos 1→6 */}
-          <div
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-              paddingBottom: 36,
-              marginBottom: 36,
-              borderBottom: '1px solid rgba(0,0,0,0.05)',
-            }}
-          >
-            {clients.slice(0, 6).map((c, i) => (
-              <motion.div
-                key={c.name}
-                initial={{ opacity: 0, y: 8 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.08, duration: 0.38 }}
-                onMouseEnter={(e) => {
-                  (e.currentTarget as HTMLDivElement).style.opacity = '1'
-                  ;(e.currentTarget as HTMLDivElement).style.transform = 'translateY(-2px)'
-                }}
-                onMouseLeave={(e) => {
-                  (e.currentTarget as HTMLDivElement).style.opacity = '0.62'
-                  ;(e.currentTarget as HTMLDivElement).style.transform = 'translateY(0)'
-                }}
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: 9,
-                  opacity: 0.62,
-                  transition: 'opacity 0.22s ease, transform 0.18s ease',
-                  cursor: 'default',
-                  userSelect: 'none',
-                }}
-              >
-                <img
-                  src={`https://cdn.simpleicons.org/${c.slug}`}
-                  width="26"
-                  height="26"
-                  alt=""
+          {[clients.slice(0, 6), clients.slice(6, 12)].map((row, rowIdx) => (
+            <div
+              key={rowIdx}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                marginBottom: rowIdx === 0 ? 40 : 0,
+              }}
+            >
+              {row.map((c, i) => (
+                <motion.div
+                  key={c.name}
+                  initial={{ opacity: 0, y: 8 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: (rowIdx * 6 + i) * 0.07, duration: 0.36 }}
+                  onMouseEnter={(e) => {
+                    const el = e.currentTarget as HTMLDivElement
+                    el.style.opacity = '1'
+                    el.style.transform = 'translateY(-3px)'
+                  }}
+                  onMouseLeave={(e) => {
+                    const el = e.currentTarget as HTMLDivElement
+                    el.style.opacity = '0.6'
+                    el.style.transform = 'translateY(0)'
+                  }}
                   style={{
-                    display: 'block',
-                    flexShrink: 0,
-                    opacity: 0,
-                    transition: 'opacity 0.3s ease',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: 9,
+                    opacity: 0.6,
+                    transition: 'opacity 0.2s ease, transform 0.18s ease',
+                    cursor: 'default',
+                    userSelect: 'none',
                   }}
-                  onLoad={(e) => {
-                    ;(e.currentTarget as HTMLImageElement).style.opacity = '1'
-                  }}
-                  onError={(e) => {
-                    ;(e.currentTarget as HTMLImageElement).style.display = 'none'
-                  }}
-                />
-                <span
-                  style={{
+                >
+                  {/* Real brand logo — inline SVG, no CDN */}
+                  <svg
+                    width="26"
+                    height="26"
+                    viewBox="0 0 24 24"
+                    fill={c.color}
+                    aria-hidden="true"
+                    style={{ flexShrink: 0 }}
+                  >
+                    <path d={c.path} />
+                  </svg>
+                  <span style={{
                     fontSize: 15,
                     fontWeight: 700,
                     color: c.color,
                     letterSpacing: '-0.025em',
                     whiteSpace: 'nowrap',
-                  }}
-                >
-                  {c.name}
-                </span>
-              </motion.div>
-            ))}
-          </div>
-
-          {/* Row 2 — logos 7→12 */}
-          <div
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-            }}
-          >
-            {clients.slice(6, 12).map((c, i) => (
-              <motion.div
-                key={c.name}
-                initial={{ opacity: 0, y: 8 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: (i + 6) * 0.08, duration: 0.38 }}
-                onMouseEnter={(e) => {
-                  (e.currentTarget as HTMLDivElement).style.opacity = '1'
-                  ;(e.currentTarget as HTMLDivElement).style.transform = 'translateY(-2px)'
-                }}
-                onMouseLeave={(e) => {
-                  (e.currentTarget as HTMLDivElement).style.opacity = '0.62'
-                  ;(e.currentTarget as HTMLDivElement).style.transform = 'translateY(0)'
-                }}
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: 9,
-                  opacity: 0.62,
-                  transition: 'opacity 0.22s ease, transform 0.18s ease',
-                  cursor: 'default',
-                  userSelect: 'none',
-                }}
-              >
-                <img
-                  src={`https://cdn.simpleicons.org/${c.slug}`}
-                  width="26"
-                  height="26"
-                  alt=""
-                  style={{
-                    display: 'block',
-                    flexShrink: 0,
-                    opacity: 0,
-                    transition: 'opacity 0.3s ease',
-                  }}
-                  onLoad={(e) => {
-                    ;(e.currentTarget as HTMLImageElement).style.opacity = '1'
-                  }}
-                  onError={(e) => {
-                    ;(e.currentTarget as HTMLImageElement).style.display = 'none'
-                  }}
-                />
-                <span
-                  style={{
-                    fontSize: 15,
-                    fontWeight: 700,
-                    color: c.color,
-                    letterSpacing: '-0.025em',
-                    whiteSpace: 'nowrap',
-                  }}
-                >
-                  {c.name}
-                </span>
-              </motion.div>
-            ))}
-          </div>
+                    fontFamily: 'inherit',
+                  }}>
+                    {c.name}
+                  </span>
+                </motion.div>
+              ))}
+            </div>
+          ))}
 
         </div>
       </section>
