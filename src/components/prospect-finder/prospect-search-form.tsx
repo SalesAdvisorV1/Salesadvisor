@@ -22,6 +22,36 @@ interface GeoCommune {
 const SIZE_OPTIONS = ["TPE", "PME", "ETI", "GE"] as const;
 type CompanySize = typeof SIZE_OPTIONS[number];
 
+// Estimated prospect count (pure heuristic, no API call)
+function estimateCount(sector: string, radius: string, sizes: string): number {
+  if (!sector.trim()) return 0;
+  const SECTOR_BASE: Record<string, number> = {
+    btp: 280000, construction: 280000, travaux: 280000,
+    commerce: 450000, distribution: 350000,
+    transport: 160000, logistique: 110000,
+    restauration: 240000,
+    santé: 200000, médical: 140000,
+    tech: 95000, saas: 35000, informatique: 115000, logiciel: 60000,
+    industrie: 170000,
+    conseil: 130000, consulting: 85000,
+    immobilier: 100000,
+    finance: 80000,
+    marketing: 50000, publicité: 38000,
+    éducation: 70000, formation: 55000,
+  };
+  const s = sector.toLowerCase();
+  let base = 100000;
+  for (const [key, val] of Object.entries(SECTOR_BASE)) {
+    if (s.includes(key)) { base = val; break; }
+  }
+  const r = parseInt(radius || "50");
+  const rf = r <= 10 ? 0.015 : r <= 20 ? 0.05 : r <= 50 ? 0.12 : 0.28;
+  const n = Math.max(1, (sizes || "").split(",").filter((x) => x.trim()).length);
+  const sf = Math.min(1.0, 0.2 + n * 0.2);
+  const result = Math.round(base * rf * sf);
+  return Math.max(10, Math.min(99999, Math.round(result / 5) * 5));
+}
+
 const QUICK_PRESETS: { label: string; sector: string; city: string; sizes: CompanySize[] }[] = [
   { label: "BTP · Paris",         sector: "BTP",       city: "Paris",     sizes: ["PME"] },
   { label: "Transport · Lyon",    sector: "Transport",  city: "Lyon",      sizes: ["PME", "ETI"] },
@@ -129,7 +159,10 @@ export function ProspectSearchForm({ onSubmit, isLoading }: ProspectSearchFormPr
 
   const cityRegister = register("city");
   const sector = watch("sector") ?? "";
+  const radius = watch("radius") ?? "50 km";
+  const companySize = watch("companySize") ?? "";
   const roleSuggestions = getRoleSuggestions(sector);
+  const estimate = estimateCount(sector, radius, companySize);
 
   const toggleSize = (size: CompanySize) => {
     const next = selectedSizes.includes(size)
@@ -278,10 +311,35 @@ export function ProspectSearchForm({ onSubmit, isLoading }: ProspectSearchFormPr
           </datalist>
         </Field>
 
+        {/* Estimated count badge */}
+        {estimate > 0 && (
+          <div
+            style={{
+              marginTop: "14px",
+              display: "flex",
+              alignItems: "center",
+              gap: "8px",
+              padding: "9px 14px",
+              borderRadius: "10px",
+              background: "linear-gradient(135deg, rgba(99,102,241,0.07) 0%, rgba(139,92,246,0.07) 100%)",
+              border: "1px solid rgba(99,102,241,0.16)",
+              animation: "sa-count-up 0.25s ease",
+            }}
+          >
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#6366f1" strokeWidth={2}>
+              <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+            <span style={{ fontSize: "13px", fontWeight: 700, color: "#4f46e5" }}>
+              ~{estimate.toLocaleString("fr-FR")} prospects
+            </span>
+            <span style={{ fontSize: "11px", color: "#94a3b8" }}>potentiels · estimation IA</span>
+          </div>
+        )}
+
         <button
           type="submit"
           disabled={isLoading}
-          className="btn-shimmer mt-2 text-white font-semibold py-3.5 rounded-full w-full transition-all duration-200 disabled:cursor-not-allowed disabled:opacity-60"
+          className="btn-shimmer mt-3 text-white font-semibold py-3.5 rounded-full w-full transition-all duration-200 disabled:cursor-not-allowed disabled:opacity-60"
           style={{
             background: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)',
             boxShadow: '0 4px 14px rgba(99,102,241,0.28), 0 1px 0 rgba(255,255,255,0.25) inset',
