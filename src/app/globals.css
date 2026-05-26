@@ -370,6 +370,13 @@ button, a, [role="button"] {
   .sa-mesh-bg__blob--5 { width: 440px; height: 440px; }
 }
 
+/* ---- AI assistant task type button (inactive hover) ---- */
+.sa-task-btn-inactive:hover {
+  background: rgba(99,102,241,0.05) !important;
+  border-color: rgba(99,102,241,0.25) !important;
+  color: #4f46e5 !important;
+}
+
 /* =============================================================
    FLOATING NAVBAR — capsule + glassmorphism
    ============================================================= */

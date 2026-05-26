@@ -8,6 +8,29 @@ import type {
   AiCallPrepResult,
 } from "@/types/ai-assistant";
 
+const glassCard: React.CSSProperties = {
+  borderRadius: "12px",
+  border: "1px solid rgba(99,102,241,0.10)",
+  background: "rgba(255,255,255,0.72)",
+  backdropFilter: "blur(8px)",
+  WebkitBackdropFilter: "blur(8px)",
+  padding: "16px",
+};
+
+const gradientCard: React.CSSProperties = {
+  borderRadius: "12px",
+  background: "linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)",
+  padding: "16px",
+};
+
+const sectionLabel: React.CSSProperties = {
+  fontSize: "11px",
+  fontWeight: 600,
+  textTransform: "uppercase",
+  letterSpacing: "0.06em",
+  color: "#64748b",
+};
+
 export function AiResultCard({ response }: { response: AiAssistResponse }) {
   switch (response.task) {
     case "summary":
@@ -20,10 +43,10 @@ export function AiResultCard({ response }: { response: AiAssistResponse }) {
 }
 
 function TypewriterText({ text, speed = 25 }: { text: string; speed?: number }) {
-  const [displayed, setDisplayed] = useState('');
+  const [displayed, setDisplayed] = useState("");
 
   useEffect(() => {
-    setDisplayed('');
+    setDisplayed("");
     let i = 0;
     const interval = setInterval(() => {
       setDisplayed(text.slice(0, i + 1));
@@ -39,42 +62,56 @@ function TypewriterText({ text, speed = 25 }: { text: string; speed?: number }) 
 function SummaryResult({ result }: { result: AiSummaryResult }) {
   return (
     <div className="space-y-4">
-      <div className="rounded-xl border border-gray-200 bg-white p-4">
-        <h4 className="font-bold text-gray-900">
+      <div style={glassCard}>
+        <h4 className="font-bold" style={{ color: "#0f172a" }}>
           <TypewriterText text={result.headline} />
         </h4>
-        <p className="mt-2 text-sm leading-6 text-gray-600">{result.description}</p>
+        <p className="mt-2 text-sm leading-6" style={{ color: "#475569" }}>{result.description}</p>
       </div>
 
       <div className="grid gap-4 sm:grid-cols-2">
-        <div className="rounded-xl bg-green-50 border border-green-100 p-4 space-y-2">
+        <div
+          style={{
+            borderRadius: "12px",
+            background: "rgba(22,163,74,0.05)",
+            border: "1px solid rgba(22,163,74,0.15)",
+            padding: "16px",
+          }}
+        >
           <div className="flex items-center gap-2">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#15803d" strokeWidth={2.5} className="shrink-0">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#16a34a" strokeWidth={2.5} className="shrink-0">
               <polyline points="20 6 9 17 4 12" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
-            <p className="text-sm font-semibold text-green-700">Points forts</p>
+            <p className="text-sm font-semibold" style={{ color: "#15803d" }}>Points forts</p>
           </div>
-          <ul className="mt-1 space-y-2">
+          <ul className="mt-2 space-y-2">
             {result.strengths.map((s, i) => (
-              <li key={i} className="flex items-start text-sm text-gray-700">
-                <span className="text-green-600 mr-2 shrink-0 font-medium">✓</span>
+              <li key={i} className="flex items-start text-sm" style={{ color: "#374151" }}>
+                <span className="mr-2 shrink-0 font-medium" style={{ color: "#16a34a" }}>✓</span>
                 {s}
               </li>
             ))}
           </ul>
         </div>
 
-        <div className="rounded-xl bg-blue-50 border border-blue-100 p-4 space-y-2">
+        <div
+          style={{
+            borderRadius: "12px",
+            background: "rgba(99,102,241,0.05)",
+            border: "1px solid rgba(99,102,241,0.14)",
+            padding: "16px",
+          }}
+        >
           <div className="flex items-center gap-2">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1d4ed8" strokeWidth={2.5} className="shrink-0">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#4f46e5" strokeWidth={2.5} className="shrink-0">
               <path d="M5 12h14M12 5l7 7-7 7" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
-            <p className="text-sm font-semibold text-blue-700">Opportunités</p>
+            <p className="text-sm font-semibold" style={{ color: "#4f46e5" }}>Opportunités</p>
           </div>
-          <ul className="mt-1 space-y-2">
+          <ul className="mt-2 space-y-2">
             {result.opportunities.map((o, i) => (
-              <li key={i} className="flex items-start text-sm text-gray-700">
-                <span className="text-blue-500 mr-2 shrink-0 font-medium">→</span>
+              <li key={i} className="flex items-start text-sm" style={{ color: "#374151" }}>
+                <span className="mr-2 shrink-0 font-medium" style={{ color: "#6366f1" }}>→</span>
                 {o}
               </li>
             ))}
@@ -88,21 +125,23 @@ function SummaryResult({ result }: { result: AiSummaryResult }) {
 function PitchResult({ result }: { result: AiPitchResult }) {
   return (
     <div className="space-y-4">
-      <div className="rounded-xl border border-gray-200 bg-white p-4">
-        <p className="text-xs font-medium uppercase tracking-wider text-gray-400">Objet</p>
-        <p className="mt-1 font-medium text-gray-900">{result.subject}</p>
+      <div style={glassCard}>
+        <p style={sectionLabel}>Objet</p>
+        <p className="mt-1 font-medium" style={{ color: "#0f172a" }}>{result.subject}</p>
       </div>
 
-      <div className="rounded-xl border border-gray-200 bg-white p-4">
-        <p className="text-xs font-medium uppercase tracking-wider text-gray-400">Corps du message</p>
-        <pre className="mt-3 whitespace-pre-wrap font-sans text-sm leading-7 text-gray-700">
+      <div style={glassCard}>
+        <p style={sectionLabel}>Corps du message</p>
+        <pre className="mt-3 whitespace-pre-wrap font-sans text-sm leading-7" style={{ color: "#475569" }}>
           {result.body}
         </pre>
       </div>
 
-      <div className="rounded-xl border border-gray-900 bg-gray-900 p-4">
-        <p className="text-xs font-medium uppercase tracking-wider text-white/60">Call-to-action</p>
-        <p className="mt-1 font-semibold text-white">{result.cta}</p>
+      <div style={gradientCard}>
+        <p style={{ fontSize: "11px", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.06em", color: "rgba(255,255,255,0.65)" }}>
+          Call-to-action
+        </p>
+        <p className="mt-1 font-semibold" style={{ color: "#ffffff" }}>{result.cta}</p>
       </div>
 
       <CopyButton text={`Objet : ${result.subject}\n\n${result.body}\n\n${result.cta}`} />
@@ -113,17 +152,39 @@ function PitchResult({ result }: { result: AiPitchResult }) {
 function CallPrepResult({ result }: { result: AiCallPrepResult }) {
   return (
     <div className="space-y-4">
-      <div className="rounded-xl border border-amber-200 bg-amber-50 p-4">
-        <p className="text-xs font-medium uppercase tracking-wider text-amber-600">Accroche d'ouverture</p>
-        <p className="mt-2 text-sm leading-6 text-gray-700">{result.openingLine}</p>
+      <div
+        style={{
+          borderRadius: "12px",
+          background: "rgba(245,158,11,0.06)",
+          border: "1px solid rgba(245,158,11,0.20)",
+          padding: "16px",
+        }}
+      >
+        <p style={{ fontSize: "11px", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.06em", color: "#b45309" }}>
+          Accroche d'ouverture
+        </p>
+        <p className="mt-2 text-sm leading-6" style={{ color: "#374151" }}>{result.openingLine}</p>
       </div>
 
-      <div className="rounded-xl border border-gray-200 bg-white p-4">
-        <p className="text-xs font-medium uppercase tracking-wider text-gray-400">Points clés</p>
+      <div style={glassCard}>
+        <p style={sectionLabel}>Points clés</p>
         <ul className="mt-3 space-y-2">
           {result.keyPoints.map((p, i) => (
-            <li key={i} className="flex items-start gap-2 text-sm text-gray-700">
-              <span className="shrink-0 rounded-full bg-gray-100 px-1.5 text-xs text-gray-500 min-w-[22px] text-center">
+            <li key={i} className="flex items-start gap-2 text-sm" style={{ color: "#374151" }}>
+              <span
+                style={{
+                  flexShrink: 0,
+                  borderRadius: "999px",
+                  background: "rgba(99,102,241,0.10)",
+                  color: "#4f46e5",
+                  fontSize: "11px",
+                  fontWeight: 700,
+                  padding: "0 6px",
+                  minWidth: "22px",
+                  textAlign: "center",
+                  lineHeight: "20px",
+                }}
+              >
                 {i + 1}
               </span>
               {p}
@@ -132,15 +193,23 @@ function CallPrepResult({ result }: { result: AiCallPrepResult }) {
         </ul>
       </div>
 
-      <div className="rounded-xl border border-gray-200 bg-white p-4">
-        <p className="text-xs font-medium uppercase tracking-wider text-gray-400">Gestion des objections</p>
+      <div style={glassCard}>
+        <p style={sectionLabel}>Gestion des objections</p>
         <div className="mt-3 space-y-3">
           {result.objections.map((obj, i) => (
-            <div key={i} className="rounded-lg border border-gray-100 bg-gray-50 p-3">
-              <p className="text-sm font-medium text-red-600">
+            <div
+              key={i}
+              style={{
+                borderRadius: "10px",
+                background: "rgba(99,102,241,0.04)",
+                border: "1px solid rgba(99,102,241,0.10)",
+                padding: "12px",
+              }}
+            >
+              <p className="text-sm font-medium" style={{ color: "#dc2626" }}>
                 — {obj.objection}
               </p>
-              <p className="mt-1 text-sm leading-6 text-gray-600">
+              <p className="mt-1 text-sm leading-6" style={{ color: "#475569" }}>
                 {obj.response}
               </p>
             </div>
@@ -148,9 +217,11 @@ function CallPrepResult({ result }: { result: AiCallPrepResult }) {
         </div>
       </div>
 
-      <div className="rounded-xl border border-gray-900 bg-gray-900 p-4">
-        <p className="text-xs font-medium uppercase tracking-wider text-white/60">Closing</p>
-        <p className="mt-2 text-sm leading-6 text-white">{result.closingLine}</p>
+      <div style={gradientCard}>
+        <p style={{ fontSize: "11px", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.06em", color: "rgba(255,255,255,0.65)" }}>
+          Closing
+        </p>
+        <p className="mt-2 text-sm leading-6" style={{ color: "#ffffff" }}>{result.closingLine}</p>
       </div>
     </div>
   );
@@ -158,6 +229,7 @@ function CallPrepResult({ result }: { result: AiCallPrepResult }) {
 
 function CopyButton({ text }: { text: string }) {
   const [copied, setCopied] = useState(false);
+  const [hover, setHover] = useState(false);
 
   async function handleCopy() {
     await navigator.clipboard.writeText(text);
@@ -169,13 +241,31 @@ function CopyButton({ text }: { text: string }) {
     <button
       type="button"
       onClick={handleCopy}
-      className={`w-full rounded-xl border px-4 py-2.5 text-sm font-medium transition-all duration-200 hover:scale-[1.01] active:scale-[0.99] min-h-[44px] ${
-        copied
-          ? 'bg-green-50 border-green-200 text-green-700'
-          : 'bg-white border-gray-200 text-gray-600 hover:border-gray-300 hover:bg-gray-50'
-      }`}
+      onMouseEnter={() => setHover(true)}
+      onMouseLeave={() => setHover(false)}
+      style={{
+        width: "100%",
+        borderRadius: "12px",
+        padding: "10px 16px",
+        fontSize: "14px",
+        fontWeight: 500,
+        minHeight: "44px",
+        transition: "all 0.2s ease",
+        cursor: "pointer",
+        ...(copied
+          ? {
+              background: "rgba(22,163,74,0.06)",
+              border: "1px solid rgba(22,163,74,0.20)",
+              color: "#15803d",
+            }
+          : {
+              background: hover ? "rgba(99,102,241,0.06)" : "rgba(255,255,255,0.70)",
+              border: "1px solid rgba(99,102,241,0.18)",
+              color: hover ? "#4f46e5" : "#64748b",
+            }),
+      }}
     >
-      {copied ? '✓ Copié dans le presse-papiers' : 'Copier le message'}
+      {copied ? "✓ Copié dans le presse-papiers" : "Copier le message"}
     </button>
   );
 }

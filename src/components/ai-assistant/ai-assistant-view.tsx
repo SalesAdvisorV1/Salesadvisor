@@ -42,6 +42,16 @@ async function runAiAssist(task: AiTaskType, prospect: AiProspectFormValues, use
   return data;
 }
 
+const resultCardStyle: React.CSSProperties = {
+  background: "rgba(255,255,255,0.78)",
+  backdropFilter: "blur(14px)",
+  WebkitBackdropFilter: "blur(14px)",
+  border: "1px solid rgba(99,102,241,0.12)",
+  borderRadius: "16px",
+  boxShadow: "0 4px 24px rgba(15,23,42,0.06)",
+  padding: "24px",
+};
+
 export function AiAssistantView() {
   const [selectedTask, setSelectedTask] = useState<AiTaskType>("summary");
   const [userId, setUserId] = useState<string | null>(null);
@@ -83,20 +93,26 @@ export function AiAssistantView() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.3 }}
       >
-        <h1 className="text-2xl font-bold text-gray-900">Assistance IA</h1>
-        <p className="mt-1 text-sm text-gray-500 max-w-2xl">
+        <h1 className="text-2xl font-bold" style={{ color: "#0f172a" }}>Assistance IA</h1>
+        <p className="mt-1 text-sm max-w-2xl" style={{ color: "#64748b" }}>
           Génère un résumé prospect, un pitch personnalisé ou une préparation d'appel en quelques secondes.
         </p>
       </motion.header>
 
       {insufficientCredits ? (
-        <div className="mb-5 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-700">
+        <div
+          className="mb-5 rounded-xl px-4 py-3 text-sm"
+          style={{ background: "rgba(245,158,11,0.06)", border: "1px solid rgba(245,158,11,0.22)", color: "#b45309" }}
+        >
           Crédits insuffisants ({remaining} restants) pour cette analyse ({taskCosts[selectedTask]} cr. requis).
         </div>
       ) : null}
 
       {mutation.isError ? (
-        <div className="mb-5 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-600">
+        <div
+          className="mb-5 rounded-xl px-4 py-3 text-sm"
+          style={{ background: "rgba(239,68,68,0.06)", border: "1px solid rgba(239,68,68,0.22)", color: "#dc2626" }}
+        >
           {(mutation.error as Error).message}
         </div>
       ) : null}
@@ -110,14 +126,22 @@ export function AiAssistantView() {
           defaultValues={prefill}
         />
 
-        <div className="bg-white border border-gray-200 rounded-xl shadow-sm p-6">
+        <div style={resultCardStyle}>
           <div className="flex items-center justify-between mb-5">
-            <h2 className="text-base font-semibold text-gray-900">Résultat IA</h2>
+            <h2 className="text-base font-semibold" style={{ color: "#0f172a" }}>Résultat IA</h2>
             {mutation.data ? (
               <motion.span
                 initial={{ opacity: 0, scale: 0.8 }}
                 animate={{ opacity: 1, scale: 1 }}
-                className="rounded-full border border-green-200 bg-green-50 px-3 py-1 text-xs font-medium text-green-700"
+                style={{
+                  background: "rgba(99,102,241,0.08)",
+                  border: "1px solid rgba(99,102,241,0.18)",
+                  borderRadius: "999px",
+                  padding: "3px 10px",
+                  fontSize: "12px",
+                  fontWeight: 600,
+                  color: "#4f46e5",
+                }}
               >
                 ✓ Généré
               </motion.span>
@@ -147,14 +171,27 @@ export function AiAssistantView() {
 
 function AiEmptyState() {
   return (
-    <div className="flex flex-col items-center justify-center py-16 text-center">
-      <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-gray-100 text-2xl text-gray-400">
-        ✦
+    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "64px 0", textAlign: "center" }}>
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          width: "64px",
+          height: "64px",
+          borderRadius: "18px",
+          background: "rgba(99,102,241,0.08)",
+          border: "1px solid rgba(99,102,241,0.12)",
+        }}
+      >
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none">
+          <path d="M12 2l2.4 7.4H22l-6.5 4.7 2.5 7.6L12 17.2l-6 4.5 2.5-7.6L2 9.4h7.6L12 2z" fill="#6366f1" />
+        </svg>
       </div>
-      <p className="mt-4 font-medium text-gray-700">
+      <p className="mt-4 font-medium" style={{ color: "#0f172a" }}>
         Lance une analyse pour voir les résultats
       </p>
-      <p className="mt-2 text-sm text-gray-400">
+      <p className="mt-2 text-sm" style={{ color: "#64748b" }}>
         Remplis le formulaire à gauche et choisis un type d'analyse.
       </p>
     </div>
@@ -164,29 +201,34 @@ function AiEmptyState() {
 function AiLoadingState() {
   return (
     <div className="space-y-3">
-      {/* Headline skeleton */}
-      <div className="rounded-xl border border-gray-100 p-4 space-y-2 animate-pulse">
-        <div className="h-5 w-3/4 bg-gray-200 rounded" />
-        <div className="h-4 w-full bg-gray-100 rounded" />
-        <div className="h-4 w-5/6 bg-gray-100 rounded" />
+      <div
+        className="animate-pulse"
+        style={{ borderRadius: "12px", border: "1px solid rgba(99,102,241,0.08)", padding: "16px", display: "flex", flexDirection: "column", gap: "8px" }}
+      >
+        <div style={{ height: "18px", width: "70%", background: "rgba(99,102,241,0.12)", borderRadius: "6px" }} />
+        <div style={{ height: "13px", width: "100%", background: "rgba(99,102,241,0.07)", borderRadius: "6px" }} />
+        <div style={{ height: "13px", width: "85%", background: "rgba(99,102,241,0.07)", borderRadius: "6px" }} />
       </div>
-      {/* Cards skeleton */}
       <div className="grid grid-cols-2 gap-3">
-        <div className="rounded-xl bg-green-50 border border-green-100 p-4 space-y-2 animate-pulse">
-          <div className="h-4 w-24 bg-green-200 rounded" />
-          <div className="h-3 w-full bg-green-100 rounded" />
-          <div className="h-3 w-5/6 bg-green-100 rounded" />
-          <div className="h-3 w-4/6 bg-green-100 rounded" />
+        <div
+          className="animate-pulse"
+          style={{ borderRadius: "12px", background: "rgba(99,102,241,0.05)", border: "1px solid rgba(99,102,241,0.10)", padding: "16px", display: "flex", flexDirection: "column", gap: "8px" }}
+        >
+          <div style={{ height: "13px", width: "80px", background: "rgba(99,102,241,0.15)", borderRadius: "6px" }} />
+          <div style={{ height: "12px", width: "100%", background: "rgba(99,102,241,0.08)", borderRadius: "6px" }} />
+          <div style={{ height: "12px", width: "85%", background: "rgba(99,102,241,0.08)", borderRadius: "6px" }} />
         </div>
-        <div className="rounded-xl bg-blue-50 border border-blue-100 p-4 space-y-2 animate-pulse">
-          <div className="h-4 w-24 bg-blue-200 rounded" />
-          <div className="h-3 w-full bg-blue-100 rounded" />
-          <div className="h-3 w-5/6 bg-blue-100 rounded" />
-          <div className="h-3 w-4/6 bg-blue-100 rounded" />
+        <div
+          className="animate-pulse"
+          style={{ borderRadius: "12px", background: "rgba(139,92,246,0.05)", border: "1px solid rgba(139,92,246,0.10)", padding: "16px", display: "flex", flexDirection: "column", gap: "8px" }}
+        >
+          <div style={{ height: "13px", width: "80px", background: "rgba(139,92,246,0.15)", borderRadius: "6px" }} />
+          <div style={{ height: "12px", width: "100%", background: "rgba(139,92,246,0.08)", borderRadius: "6px" }} />
+          <div style={{ height: "12px", width: "85%", background: "rgba(139,92,246,0.08)", borderRadius: "6px" }} />
         </div>
       </div>
-      <div className="rounded-xl bg-gray-100 p-4 h-12 animate-pulse" />
-      <p className="text-center text-sm text-gray-400">Analyse IA en cours…</p>
+      <div className="animate-pulse" style={{ borderRadius: "12px", background: "rgba(99,102,241,0.06)", height: "48px" }} />
+      <p style={{ textAlign: "center", fontSize: "13px", color: "#64748b" }}>Analyse IA en cours…</p>
     </div>
   );
 }

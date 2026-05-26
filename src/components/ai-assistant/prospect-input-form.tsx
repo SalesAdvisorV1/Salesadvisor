@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import {
@@ -14,18 +15,40 @@ const taskOptions: { value: AiTaskType; label: string; cost: number; description
   { value: "call-prep", label: "Préparation appel", cost: 2, description: "Script + réponses aux objections" },
 ];
 
-const inputClass =
-  "w-full bg-white border border-gray-300 rounded-xl px-4 py-3 text-gray-900 text-sm focus:ring-2 focus:ring-gray-900/10 focus:border-gray-400 focus:outline-none transition-all placeholder:text-gray-400";
+const cardStyle: React.CSSProperties = {
+  background: "rgba(255,255,255,0.78)",
+  backdropFilter: "blur(14px)",
+  WebkitBackdropFilter: "blur(14px)",
+  border: "1px solid rgba(99,102,241,0.12)",
+  borderRadius: "16px",
+  boxShadow: "0 4px 24px rgba(15,23,42,0.06)",
+  padding: "24px",
+};
+
+const inputStyle: React.CSSProperties = {
+  width: "100%",
+  background: "rgba(255,255,255,0.70)",
+  border: "1px solid rgba(99,102,241,0.18)",
+  borderRadius: "10px",
+  padding: "10px 14px",
+  fontSize: "14px",
+  color: "#0f172a",
+  outline: "none",
+  transition: "border-color 0.15s, box-shadow 0.15s",
+  display: "block",
+};
 
 interface ProspectInputFormProps {
   onSubmit: (values: AiProspectFormValues, task: AiTaskType) => void;
   isLoading: boolean;
   selectedTask: AiTaskType;
   onTaskChange: (task: AiTaskType) => void;
-  defaultValues?: { companyName?: string; sector?: string; city?: string; targetRole?: string; context?: string; };
+  defaultValues?: { companyName?: string; sector?: string; city?: string; targetRole?: string; context?: string };
 }
 
 export function ProspectInputForm({ onSubmit, isLoading, selectedTask, onTaskChange, defaultValues }: ProspectInputFormProps) {
+  const [btnHover, setBtnHover] = useState(false);
+
   const {
     register,
     handleSubmit,
@@ -42,58 +65,91 @@ export function ProspectInputForm({ onSubmit, isLoading, selectedTask, onTaskCha
   });
 
   return (
-    <div className="bg-white border border-gray-200 rounded-xl shadow-sm p-6">
-      <h2 className="text-base font-semibold text-gray-900 mb-5">Informations prospect</h2>
+    <div style={cardStyle}>
+      <h2 style={{ fontSize: "15px", fontWeight: 600, color: "#0f172a", marginBottom: "20px", letterSpacing: "-0.01em" }}>
+        Informations prospect
+      </h2>
 
-      <div className="space-y-2 mb-5">
-        <p className="text-xs font-medium text-gray-700 uppercase tracking-wider mb-2">Type d'analyse</p>
-        {taskOptions.map((opt) => (
-          <button
-            key={opt.value}
-            type="button"
-            onClick={() => onTaskChange(opt.value)}
-            className={`flex w-full items-center justify-between rounded-xl border px-4 py-3 text-left transition-colors ${
-              selectedTask === opt.value
-                ? "border-gray-900 bg-gray-900 text-white"
-                : "border-gray-200 bg-white text-gray-700 hover:border-gray-300 hover:bg-gray-50"
-            }`}
-          >
-            <div>
-              <span className="text-sm font-medium">{opt.label}</span>
-              <span className={`ml-2 text-xs ${selectedTask === opt.value ? 'text-white/60' : 'text-gray-400'}`}>
-                {opt.description}
-              </span>
-            </div>
-            <span className={`shrink-0 rounded-full px-2 py-0.5 text-xs ${
-              selectedTask === opt.value ? 'bg-white/20 text-white' : 'bg-gray-100 text-gray-500'
-            }`}>
-              {opt.cost} cr.
-            </span>
-          </button>
-        ))}
+      {/* Task type selector */}
+      <div style={{ marginBottom: "20px" }}>
+        <p style={{ fontSize: "11px", fontWeight: 600, color: "#64748b", textTransform: "uppercase", letterSpacing: "0.06em", marginBottom: "8px" }}>
+          Type d'analyse
+        </p>
+        <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
+          {taskOptions.map((opt) => {
+            const isActive = selectedTask === opt.value;
+            return (
+              <button
+                key={opt.value}
+                type="button"
+                onClick={() => onTaskChange(opt.value)}
+                className={isActive ? undefined : "sa-task-btn-inactive"}
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                  width: "100%",
+                  padding: "10px 14px",
+                  borderRadius: "12px",
+                  border: isActive ? "1px solid transparent" : "1px solid rgba(99,102,241,0.14)",
+                  background: isActive
+                    ? "linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)"
+                    : "rgba(255,255,255,0.70)",
+                  color: isActive ? "#ffffff" : "#475569",
+                  cursor: "pointer",
+                  textAlign: "left",
+                  transition: "all 0.18s ease",
+                  boxShadow: isActive ? "0 4px 12px rgba(99,102,241,0.30)" : "none",
+                }}
+              >
+                <div>
+                  <span style={{ fontSize: "13px", fontWeight: 600 }}>{opt.label}</span>
+                  <span style={{ marginLeft: "8px", fontSize: "11px", color: isActive ? "rgba(255,255,255,0.65)" : "#94a3b8" }}>
+                    {opt.description}
+                  </span>
+                </div>
+                <span
+                  style={{
+                    flexShrink: 0,
+                    borderRadius: "999px",
+                    padding: "1px 8px",
+                    fontSize: "11px",
+                    fontWeight: 600,
+                    background: isActive ? "rgba(255,255,255,0.18)" : "rgba(99,102,241,0.08)",
+                    color: isActive ? "#ffffff" : "#4f46e5",
+                    marginLeft: "8px",
+                  }}
+                >
+                  {opt.cost} cr.
+                </span>
+              </button>
+            );
+          })}
+        </div>
       </div>
 
-      <form onSubmit={handleSubmit((values) => onSubmit(values, selectedTask))} className="space-y-4" noValidate>
+      {/* Fields */}
+      <form onSubmit={handleSubmit((values) => onSubmit(values, selectedTask))} style={{ display: "flex", flexDirection: "column", gap: "14px" }} noValidate>
         <Field label="Nom de l'entreprise" error={errors.companyName?.message}>
-          <input {...register("companyName")} className={inputClass} placeholder="Translog France" />
+          <input {...register("companyName")} style={inputStyle} placeholder="Translog France" />
         </Field>
 
         <Field label="Secteur" error={errors.sector?.message}>
-          <input {...register("sector")} className={inputClass} placeholder="Logistique" />
+          <input {...register("sector")} style={inputStyle} placeholder="Logistique" />
         </Field>
 
         <Field label="Ville" error={errors.city?.message}>
-          <input {...register("city")} className={inputClass} placeholder="Paris" />
+          <input {...register("city")} style={inputStyle} placeholder="Paris" />
         </Field>
 
         <Field label="Poste ciblé (optionnel)" error={errors.targetRole?.message}>
-          <input {...register("targetRole")} className={inputClass} placeholder="Directeur logistique" />
+          <input {...register("targetRole")} style={inputStyle} placeholder="Directeur logistique" />
         </Field>
 
         <Field label="Contexte / notes (optionnel)" error={errors.context?.message}>
           <textarea
             {...register("context")}
-            className={`${inputClass} min-h-[80px] resize-none`}
+            style={{ ...inputStyle, minHeight: "80px", resize: "none" }}
             placeholder="Signaux détectés, notes de prospection…"
           />
         </Field>
@@ -101,9 +157,49 @@ export function ProspectInputForm({ onSubmit, isLoading, selectedTask, onTaskCha
         <button
           type="submit"
           disabled={isLoading}
-          className="mt-2 w-full rounded-xl bg-gray-900 px-4 py-3 font-semibold text-white text-sm hover:bg-gray-800 disabled:cursor-not-allowed disabled:opacity-60 transition-all"
+          onMouseEnter={() => setBtnHover(true)}
+          onMouseLeave={() => setBtnHover(false)}
+          className="btn-shimmer"
+          style={{
+            marginTop: "4px",
+            width: "100%",
+            borderRadius: "12px",
+            border: "none",
+            padding: "12px 16px",
+            fontWeight: 700,
+            fontSize: "14px",
+            color: "#ffffff",
+            cursor: isLoading ? "not-allowed" : "pointer",
+            opacity: isLoading ? 0.65 : 1,
+            transition: "transform 0.15s, box-shadow 0.15s",
+            transform: btnHover && !isLoading ? "translateY(-1px)" : "none",
+            background: "linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)",
+            boxShadow: btnHover && !isLoading
+              ? "0 8px 20px rgba(99,102,241,0.42)"
+              : "0 4px 14px rgba(99,102,241,0.35)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            gap: "8px",
+            letterSpacing: "-0.01em",
+          }}
         >
-          {isLoading ? "Analyse IA en cours…" : "Lancer l'analyse IA"}
+          {isLoading ? (
+            <>
+              <svg className="animate-spin" width="15" height="15" viewBox="0 0 24 24" fill="none" style={{ flexShrink: 0 }}>
+                <circle cx="12" cy="12" r="10" stroke="rgba(255,255,255,0.3)" strokeWidth="3" />
+                <path d="M22 12a10 10 0 0 0-10-10" stroke="white" strokeWidth="3" strokeLinecap="round" />
+              </svg>
+              Analyse IA en cours…
+            </>
+          ) : (
+            <>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" style={{ flexShrink: 0 }}>
+                <path d="M12 2l2.4 7.4H22l-6.5 4.7 2.5 7.6L12 17.2l-6 4.5 2.5-7.6L2 9.4h7.6L12 2z" fill="rgba(255,255,255,0.92)" />
+              </svg>
+              Lancer l'analyse IA
+            </>
+          )}
         </button>
       </form>
     </div>
@@ -113,9 +209,11 @@ export function ProspectInputForm({ onSubmit, isLoading, selectedTask, onTaskCha
 function Field({ label, error, children }: { label: string; error?: string; children: React.ReactNode }) {
   return (
     <div>
-      <label className="mb-1.5 block text-xs font-medium text-gray-700 uppercase tracking-wider">{label}</label>
+      <label style={{ display: "block", marginBottom: "6px", fontSize: "11px", fontWeight: 600, color: "#64748b", textTransform: "uppercase", letterSpacing: "0.06em" }}>
+        {label}
+      </label>
       {children}
-      {error ? <p className="mt-1 text-xs text-red-500">{error}</p> : null}
+      {error ? <p style={{ marginTop: "4px", fontSize: "12px", color: "#ef4444" }}>{error}</p> : null}
     </div>
   );
 }
