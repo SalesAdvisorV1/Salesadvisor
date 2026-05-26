@@ -15,6 +15,22 @@ const stats = [
   { value: '+47', label: "Prospects qualifiés aujourd'hui" },
 ]
 
+const clients = [
+  { name: 'Notion',     slug: 'notion',     color: '#000000' },
+  { name: 'Stripe',     slug: 'stripe',     color: '#635BFF' },
+  { name: 'Figma',      slug: 'figma',      color: '#F24E1E' },
+  { name: 'Slack',      slug: 'slack',      color: '#4A154B' },
+  { name: 'Asana',      slug: 'asana',      color: '#F06A6A' },
+  { name: 'Zendesk',    slug: 'zendesk',    color: '#03363D' },
+  { name: 'Intercom',   slug: 'intercom',   color: '#1F8DED' },
+  { name: 'HubSpot',    slug: 'hubspot',    color: '#FF7A59' },
+  { name: 'Salesforce', slug: 'salesforce', color: '#00A1E0' },
+  { name: 'Pipedrive',  slug: 'pipedrive',  color: '#017737' },
+  { name: 'aircall',    slug: 'aircall',    color: '#00B388' },
+  { name: 'monday.com', slug: 'monday',     color: '#F62B54' },
+]
+
+/* ── keep old partners array for integrations section if needed ── */
 const partners = [
   {
     name: 'lemlist',
@@ -690,120 +706,169 @@ export default function LandingPage() {
       </section>
 
       {/* ── SOCIAL PROOF ─────────────────────────────────────────── */}
-      <section style={{ padding: '80px 24px', background: 'transparent' }}>
+      <section
+        style={{
+          padding: '60px 0 64px',
+          borderTop: '1px solid rgba(0,0,0,0.06)',
+          borderBottom: '1px solid rgba(0,0,0,0.06)',
+          background: 'transparent',
+          overflow: 'hidden',
+        }}
+      >
         <div style={{ padding: '0 clamp(32px, 6vw, 120px)' }}>
 
-          {/* Header */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
+          {/* Eyebrow */}
+          <motion.p
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5 }}
-            style={{ textAlign: 'center', marginBottom: 48 }}
+            style={{
+              fontSize: 13,
+              fontWeight: 500,
+              color: '#9ca3af',
+              marginBottom: 44,
+              letterSpacing: '-0.01em',
+            }}
           >
-            <p style={{
-              fontSize: 12,
-              fontWeight: 700,
-              letterSpacing: '0.1em',
-              color: '#6366f1',
-              textTransform: 'uppercase',
-              marginBottom: 12,
-            }}>
-              Intégrations &amp; Partenaires
-            </p>
-            <h2 style={{
-              fontSize: 'clamp(22px, 2.4vw, 34px)',
-              fontWeight: 800,
-              letterSpacing: '-0.03em',
-              color: '#0a0a0a',
-              margin: '0 0 10px',
-              lineHeight: 1.15,
-            }}>
-              Connecté à votre stack commercial
-            </h2>
-            <p style={{ fontSize: 15, color: '#6b7280', maxWidth: 480, margin: '0 auto' }}>
-              +500 équipes qui travaillent déjà avec ces outils font confiance à Sales Advisor
-            </p>
-          </motion.div>
+            Adopté par +500 équipes commerciales B2B
+          </motion.p>
 
-          {/* Partner cards */}
-          <div style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(3, 1fr)',
-            gap: 16,
-          }}>
-            {partners.map((p, i) => (
+          {/* Row 1 — logos 1→6 */}
+          <div
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              paddingBottom: 36,
+              marginBottom: 36,
+              borderBottom: '1px solid rgba(0,0,0,0.05)',
+            }}
+          >
+            {clients.slice(0, 6).map((c, i) => (
               <motion.div
-                key={p.name}
-                initial={{ opacity: 0, y: 20 }}
+                key={c.name}
+                initial={{ opacity: 0, y: 8 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ delay: i * 0.08, duration: 0.4 }}
-                whileHover={{ y: -4, boxShadow: '0 12px 32px rgba(99,102,241,0.13)' }}
+                transition={{ delay: i * 0.08, duration: 0.38 }}
+                onMouseEnter={(e) => {
+                  (e.currentTarget as HTMLDivElement).style.opacity = '1'
+                  ;(e.currentTarget as HTMLDivElement).style.transform = 'translateY(-2px)'
+                }}
+                onMouseLeave={(e) => {
+                  (e.currentTarget as HTMLDivElement).style.opacity = '0.62'
+                  ;(e.currentTarget as HTMLDivElement).style.transform = 'translateY(0)'
+                }}
                 style={{
                   display: 'flex',
                   alignItems: 'center',
-                  gap: 16,
-                  padding: '20px 22px',
-                  borderRadius: 18,
-                  background: 'rgba(255,255,255,0.82)',
-                  backdropFilter: 'blur(12px)',
-                  WebkitBackdropFilter: 'blur(12px)',
-                  border: '1px solid rgba(255,255,255,0.65)',
-                  boxShadow: '0 4px 18px rgba(99,102,241,0.08), 0 1px 0 rgba(255,255,255,0.8) inset',
+                  gap: 9,
+                  opacity: 0.62,
+                  transition: 'opacity 0.22s ease, transform 0.18s ease',
                   cursor: 'default',
-                  transition: 'box-shadow 0.2s ease',
+                  userSelect: 'none',
                 }}
               >
-                {/* Icon box */}
-                <div style={{
-                  width: 44,
-                  height: 44,
-                  borderRadius: 12,
-                  background: p.bg,
-                  border: `1px solid ${p.color}22`,
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  flexShrink: 0,
-                }}>
-                  {p.icon}
-                </div>
-
-                {/* Text */}
-                <div>
-                  <p style={{
-                    fontSize: 14,
+                <img
+                  src={`https://cdn.simpleicons.org/${c.slug}`}
+                  width="26"
+                  height="26"
+                  alt=""
+                  style={{
+                    display: 'block',
+                    flexShrink: 0,
+                    opacity: 0,
+                    transition: 'opacity 0.3s ease',
+                  }}
+                  onLoad={(e) => {
+                    ;(e.currentTarget as HTMLImageElement).style.opacity = '1'
+                  }}
+                  onError={(e) => {
+                    ;(e.currentTarget as HTMLImageElement).style.display = 'none'
+                  }}
+                />
+                <span
+                  style={{
+                    fontSize: 15,
                     fontWeight: 700,
-                    color: '#0f172a',
-                    letterSpacing: '-0.02em',
-                    margin: '0 0 2px',
-                  }}>
-                    {p.name}
-                  </p>
-                  <p style={{
-                    fontSize: 12,
-                    color: '#94a3b8',
-                    margin: 0,
-                    letterSpacing: '-0.01em',
-                  }}>
-                    {p.desc}
-                  </p>
-                </div>
-
-                {/* Brand accent dot */}
-                <div style={{ marginLeft: 'auto', flexShrink: 0 }}>
-                  <div style={{
-                    width: 8,
-                    height: 8,
-                    borderRadius: '50%',
-                    background: p.color,
-                    boxShadow: `0 0 0 3px ${p.bg}`,
-                  }} />
-                </div>
+                    color: c.color,
+                    letterSpacing: '-0.025em',
+                    whiteSpace: 'nowrap',
+                  }}
+                >
+                  {c.name}
+                </span>
               </motion.div>
             ))}
           </div>
+
+          {/* Row 2 — logos 7→12 */}
+          <div
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+            }}
+          >
+            {clients.slice(6, 12).map((c, i) => (
+              <motion.div
+                key={c.name}
+                initial={{ opacity: 0, y: 8 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: (i + 6) * 0.08, duration: 0.38 }}
+                onMouseEnter={(e) => {
+                  (e.currentTarget as HTMLDivElement).style.opacity = '1'
+                  ;(e.currentTarget as HTMLDivElement).style.transform = 'translateY(-2px)'
+                }}
+                onMouseLeave={(e) => {
+                  (e.currentTarget as HTMLDivElement).style.opacity = '0.62'
+                  ;(e.currentTarget as HTMLDivElement).style.transform = 'translateY(0)'
+                }}
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 9,
+                  opacity: 0.62,
+                  transition: 'opacity 0.22s ease, transform 0.18s ease',
+                  cursor: 'default',
+                  userSelect: 'none',
+                }}
+              >
+                <img
+                  src={`https://cdn.simpleicons.org/${c.slug}`}
+                  width="26"
+                  height="26"
+                  alt=""
+                  style={{
+                    display: 'block',
+                    flexShrink: 0,
+                    opacity: 0,
+                    transition: 'opacity 0.3s ease',
+                  }}
+                  onLoad={(e) => {
+                    ;(e.currentTarget as HTMLImageElement).style.opacity = '1'
+                  }}
+                  onError={(e) => {
+                    ;(e.currentTarget as HTMLImageElement).style.display = 'none'
+                  }}
+                />
+                <span
+                  style={{
+                    fontSize: 15,
+                    fontWeight: 700,
+                    color: c.color,
+                    letterSpacing: '-0.025em',
+                    whiteSpace: 'nowrap',
+                  }}
+                >
+                  {c.name}
+                </span>
+              </motion.div>
+            ))}
+          </div>
+
         </div>
       </section>
 
