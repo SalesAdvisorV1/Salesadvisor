@@ -3,6 +3,7 @@
 import { useMutation } from "@tanstack/react-query";
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { ProspectionMap } from "@/components/prospect-finder/prospection-map";
 import { ProspectResultCard } from "@/components/prospect-finder/prospect-result-card";
 import { ProspectSearchForm } from "@/components/prospect-finder/prospect-search-form";
 import type { ProspectSearchFormValues } from "@/lib/schemas/prospect-search";
@@ -125,7 +126,7 @@ export function ProspectFinderView() {
             }}
           >
             <h2 className="text-sm font-semibold mb-4" style={{ color: '#0f172a' }}>Zone de prospection</h2>
-            <ProspectionZone filters={lastFilters} />
+            <ProspectionMap filters={lastFilters} prospects={mutation.data?.prospects ?? []} />
           </div>
 
           <div
@@ -251,100 +252,3 @@ export function ProspectFinderView() {
   );
 }
 
-function ProspectionZone({ filters }: { filters: ProspectSearchFormValues | null }) {
-  const dots = Array.from({ length: 130 });
-
-  return (
-    <div
-      className="relative h-72 overflow-hidden rounded-xl"
-      style={{
-        background: 'rgba(255,255,255,0.5)',
-        border: '1px solid rgba(99,102,241,0.10)',
-      }}
-    >
-      {/* dot grid */}
-      <div className="absolute inset-0 grid grid-cols-[repeat(13,1fr)] gap-y-5 p-5 pointer-events-none">
-        {dots.map((_, i) => (
-          <span
-            key={i}
-            className="mx-auto h-[3px] w-[3px] rounded-full"
-            style={{ background: 'rgba(99,102,241,0.18)' }}
-          />
-        ))}
-      </div>
-
-      {/* center pulse */}
-      <div className="absolute inset-0 flex items-center justify-center">
-        <div className="relative flex items-center justify-center">
-          <span
-            className="absolute h-24 w-24 rounded-full animate-ping"
-            style={{
-              border: '1px solid rgba(99,102,241,0.40)',
-              animationDuration: '3s',
-            }}
-          />
-          <span
-            className="absolute h-40 w-40 rounded-full"
-            style={{ border: '1px solid rgba(99,102,241,0.18)' }}
-          />
-          <span
-            className="h-3 w-3 rounded-full"
-            style={{
-              background: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)',
-              boxShadow: '0 0 0 4px rgba(99,102,241,0.18)',
-            }}
-          />
-        </div>
-      </div>
-
-      {/* filters overlay */}
-      <div
-        className="absolute bottom-0 left-0 right-0 p-4"
-        style={{ background: 'linear-gradient(to top, rgba(255,255,255,0.92) 0%, rgba(255,255,255,0.55) 60%, rgba(255,255,255,0) 100%)' }}
-      >
-        {filters ? (
-          <div className="flex flex-wrap gap-2">
-            {filters.sector && (
-              <span
-                className="rounded-full px-3 py-1 text-xs font-medium"
-                style={{
-                  background: 'rgba(99,102,241,0.10)',
-                  color: '#4f46e5',
-                  border: '1px solid rgba(99,102,241,0.20)',
-                }}
-              >
-                {filters.sector}
-              </span>
-            )}
-            {filters.city && (
-              <span
-                className="rounded-full px-3 py-1 text-xs font-medium"
-                style={{
-                  background: 'rgba(139,92,246,0.10)',
-                  color: '#7c3aed',
-                  border: '1px solid rgba(139,92,246,0.20)',
-                }}
-              >
-                {filters.city}
-              </span>
-            )}
-            {filters.radius && (
-              <span
-                className="rounded-full px-3 py-1 text-xs font-medium"
-                style={{
-                  background: 'rgba(255,255,255,0.7)',
-                  color: '#475569',
-                  border: '1px solid rgba(99,102,241,0.16)',
-                }}
-              >
-                {filters.radius}
-              </span>
-            )}
-          </div>
-        ) : (
-          <p className="text-xs" style={{ color: '#94a3b8' }}>Lance une recherche pour afficher la zone</p>
-        )}
-      </div>
-    </div>
-  );
-}
