@@ -6,9 +6,10 @@ import { motion, AnimatePresence } from "framer-motion";
 import { ProspectionMap } from "@/components/prospect-finder/prospection-map";
 import { ProspectResultCard } from "@/components/prospect-finder/prospect-result-card";
 import { ProspectSearchForm } from "@/components/prospect-finder/prospect-search-form";
+import { EnrichPanel } from "@/components/prospect-finder/enrich-panel";
 import type { ProspectSearchFormValues } from "@/lib/schemas/prospect-search";
 import { useCreditsStore } from "@/stores/use-credits-store";
-import type { ProspectSearchResponse } from "@/types/prospect";
+import type { ProspectResult, ProspectSearchResponse } from "@/types/prospect";
 import { createClient } from "@/lib/supabase/client";
 
 const SEARCH_CREDIT_COST = 2;
@@ -41,6 +42,7 @@ async function runProspectSearch(filters: ProspectSearchFormValues, userId: stri
 export function ProspectFinderView() {
   const [lastFilters, setLastFilters] = useState<ProspectSearchFormValues | null>(null);
   const [userId, setUserId] = useState<string | null>(null);
+  const [enrichTarget, setEnrichTarget] = useState<ProspectResult | null>(null);
   const { remaining, consume, initialized } = useCreditsStore();
 
   useEffect(() => {
@@ -233,7 +235,10 @@ export function ProspectFinderView() {
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: i * 0.05 }}
                     >
-                      <ProspectResultCard prospect={prospect} />
+                      <ProspectResultCard
+                        prospect={prospect}
+                        onEnrich={() => setEnrichTarget(prospect)}
+                      />
                     </motion.div>
                   ))}
                 </motion.div>
@@ -248,6 +253,16 @@ export function ProspectFinderView() {
           </div>
         </div>
       </div>
+      <AnimatePresence>
+        {enrichTarget && (
+          <EnrichPanel
+            prospect={enrichTarget}
+            onClose={() => setEnrichTarget(null)}
+            userId={userId}
+            onCreditsConsumed={consume}
+          />
+        )}
+      </AnimatePresence>
     </div>
   );
 }

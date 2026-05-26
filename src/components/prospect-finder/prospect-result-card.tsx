@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useState } from "react";
 import { ProspectResult } from "@/types/prospect";
 
-interface Props { prospect: ProspectResult; }
+interface Props { prospect: ProspectResult; onEnrich?: () => void; }
 
 // ---- Helpers ----
 
@@ -196,7 +196,7 @@ function InfoPill({ icon, label, value }: { icon: React.ReactNode; label: string
 
 // ---- Main card ----
 
-export function ProspectResultCard({ prospect }: Props) {
+export function ProspectResultCard({ prospect, onEnrich }: Props) {
   const score = prospect.score ?? 0;
   const initials = prospect.name
     .split(/\s+/)
@@ -433,6 +433,41 @@ export function ProspectResultCard({ prospect }: Props) {
             </ContactIconLink>
           )}
         </div>
+
+        {/* Enrichir button */}
+        {onEnrich && (
+          <button
+            type="button"
+            onClick={(e) => { e.stopPropagation(); e.preventDefault(); onEnrich(); }}
+            className="inline-flex items-center gap-1.5 text-[12px] font-semibold px-3.5 py-1.5 rounded-full transition-all duration-200 shrink-0"
+            style={{
+              background: 'rgba(139,92,246,0.08)',
+              color: '#7c3aed',
+              border: '1px solid rgba(139,92,246,0.22)',
+            }}
+            onMouseEnter={(e) => {
+              const t = e.currentTarget as HTMLButtonElement;
+              t.style.background = 'linear-gradient(135deg, #7c3aed 0%, #6366f1 100%)';
+              t.style.color = '#ffffff';
+              t.style.borderColor = 'transparent';
+              t.style.boxShadow = '0 4px 12px rgba(124,58,237,0.30)';
+              t.style.transform = 'translateY(-1px)';
+            }}
+            onMouseLeave={(e) => {
+              const t = e.currentTarget as HTMLButtonElement;
+              t.style.background = 'rgba(139,92,246,0.08)';
+              t.style.color = '#7c3aed';
+              t.style.borderColor = 'rgba(139,92,246,0.22)';
+              t.style.boxShadow = 'none';
+              t.style.transform = 'translateY(0)';
+            }}
+          >
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 2l2.4 7.4H22l-6.5 4.7 2.5 7.6L12 17.2l-6 4.5 2.5-7.6L2 9.4h7.6L12 2z" />
+            </svg>
+            Enrichir
+          </button>
+        )}
 
         {/* CTA — soft indigo with subtle gradient on hover */}
         <Link
