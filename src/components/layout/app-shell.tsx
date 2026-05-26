@@ -97,7 +97,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
         </div>
 
         <Header />
-        <main className="min-h-screen px-4 pb-10 md:px-8" style={{ paddingTop: '7.5rem' }}>
+        <main className="min-h-screen px-4 pb-10 md:px-8" style={{ paddingTop: '5.5rem' }}>
           {children}
         </main>
       </div>

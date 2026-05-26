@@ -33,27 +33,40 @@ export function Header() {
 
   return (
     <header
-      className="fixed top-0 left-64 right-0 h-16 z-40 flex items-center px-6 gap-4 hidden md:flex"
+      className="sa-navbar hidden md:flex items-center"
       style={{
-        background: 'rgba(255,255,255,0.72)',
+        position: 'fixed',
+        top: '12px',
+        left: 'calc(256px + 14px)',
+        right: '16px',
+        height: '56px',
+        zIndex: 40,
+        padding: '0 14px 0 20px',
+        gap: '12px',
+        /* Pill shape — matches landing page navbar */
+        borderRadius: '9999px',
+        background: 'rgba(255,255,255,0.78)',
         backdropFilter: 'saturate(180%) blur(22px)',
         WebkitBackdropFilter: 'saturate(180%) blur(22px)',
-        borderBottom: '1px solid rgba(99,102,241,0.10)',
+        border: '1px solid rgba(255,255,255,0.65)',
+        boxShadow: '0 6px 24px rgba(99,102,241,0.10), 0 1px 0 rgba(255,255,255,0.6) inset',
       }}
     >
       {/* Breadcrumb */}
       <div className="flex items-center gap-1.5 text-sm shrink-0">
         <Link
           href="/"
-          className="text-gray-400 hover:text-indigo-600 transition-colors font-medium"
+          style={{ color: '#94a3b8', fontWeight: 500, textDecoration: 'none', fontSize: '13px', transition: 'color 0.15s' }}
+          onMouseEnter={(e) => ((e.currentTarget as HTMLAnchorElement).style.color = '#4f46e5')}
+          onMouseLeave={(e) => ((e.currentTarget as HTMLAnchorElement).style.color = '#94a3b8')}
         >
           Sales Advisor
         </Link>
-        <span className="text-gray-300">/</span>
-        <Link
-          href={pathname}
-          className="font-semibold transition-colors"
+        <span style={{ color: '#e2e8f0', fontSize: '13px' }}>/</span>
+        <span
           style={{
+            fontSize: '13px',
+            fontWeight: 600,
             background: 'linear-gradient(135deg, #0a0a0a 0%, #4f46e5 100%)',
             WebkitBackgroundClip: 'text',
             WebkitTextFillColor: 'transparent',
@@ -62,14 +75,15 @@ export function Header() {
           }}
         >
           {pageName}
-        </Link>
+        </span>
       </div>
 
       {/* Search */}
-      <div className="flex-1 max-w-sm relative">
+      <div className="flex-1 max-w-xs relative">
         <svg
-          className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
-          width="14" height="14" fill="none" viewBox="0 0 24 24"
+          className="absolute left-3 top-1/2 -translate-y-1/2"
+          style={{ color: '#94a3b8' }}
+          width="13" height="13" fill="none" viewBox="0 0 24 24"
           stroke="currentColor" strokeWidth={2}
         >
           <circle cx="11" cy="11" r="7" />
@@ -78,11 +92,19 @@ export function Header() {
         <input
           type="text"
           placeholder="Recherche rapide…"
-          className="w-full rounded-full pl-9 pr-4 py-2 text-sm text-gray-700 placeholder-gray-400 transition-all"
           style={{
-            background: 'rgba(255,255,255,0.6)',
-            border: '1px solid rgba(99,102,241,0.15)',
+            width: '100%',
+            borderRadius: '9999px',
+            paddingLeft: '32px',
+            paddingRight: '14px',
+            paddingTop: '7px',
+            paddingBottom: '7px',
+            fontSize: '13px',
+            color: '#374151',
+            background: 'rgba(255,255,255,0.55)',
+            border: '1px solid rgba(99,102,241,0.14)',
             outline: 'none',
+            transition: 'border-color 0.15s, box-shadow 0.15s, background 0.15s',
           }}
           onFocus={(e) => {
             e.target.style.borderColor = '#6366f1';
@@ -90,9 +112,9 @@ export function Header() {
             e.target.style.background = '#ffffff';
           }}
           onBlur={(e) => {
-            e.target.style.borderColor = 'rgba(99,102,241,0.15)';
+            e.target.style.borderColor = 'rgba(99,102,241,0.14)';
             e.target.style.boxShadow = 'none';
-            e.target.style.background = 'rgba(255,255,255,0.6)';
+            e.target.style.background = 'rgba(255,255,255,0.55)';
           }}
         />
       </div>
@@ -102,8 +124,20 @@ export function Header() {
         {/* Notification bell */}
         <button
           type="button"
-          className="relative w-9 h-9 flex items-center justify-center rounded-full text-gray-500 transition-colors"
-          style={{ background: 'rgba(99,102,241,0.06)' }}
+          style={{
+            position: 'relative',
+            width: '34px',
+            height: '34px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            borderRadius: '9999px',
+            background: 'rgba(99,102,241,0.06)',
+            border: 'none',
+            color: '#6b7280',
+            cursor: 'pointer',
+            transition: 'background 0.15s, color 0.15s',
+          }}
           onMouseEnter={(e) => {
             const t = e.currentTarget as HTMLButtonElement;
             t.style.background = 'rgba(99,102,241,0.14)';
@@ -115,30 +149,42 @@ export function Header() {
             t.style.color = '#6b7280';
           }}
         >
-          <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
+          <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
             <path d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" strokeLinecap="round" strokeLinejoin="round" />
           </svg>
-          <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-red-500 rounded-full ring-2 ring-white" />
+          <span style={{ position: 'absolute', top: '6px', right: '6px', width: '7px', height: '7px', background: '#ef4444', borderRadius: '50%', border: '2px solid white' }} />
         </button>
 
-        {/* Logout button */}
+        {/* Avatar / logout */}
         <button
           type="button"
           onClick={handleSignOut}
           title="Se déconnecter"
-          className="w-9 h-9 rounded-full flex items-center justify-center transition-transform"
           style={{
+            width: '34px',
+            height: '34px',
+            borderRadius: '9999px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            border: 'none',
+            cursor: 'pointer',
             background: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)',
             boxShadow: '0 4px 12px rgba(99,102,241,0.35), 0 1px 0 rgba(255,255,255,0.3) inset',
+            transition: 'transform 0.15s, box-shadow 0.15s',
           }}
           onMouseEnter={(e) => {
-            (e.currentTarget as HTMLButtonElement).style.transform = 'scale(1.06)';
+            const t = e.currentTarget as HTMLButtonElement;
+            t.style.transform = 'scale(1.07)';
+            t.style.boxShadow = '0 6px 16px rgba(99,102,241,0.48), 0 1px 0 rgba(255,255,255,0.3) inset';
           }}
           onMouseLeave={(e) => {
-            (e.currentTarget as HTMLButtonElement).style.transform = 'scale(1)';
+            const t = e.currentTarget as HTMLButtonElement;
+            t.style.transform = 'scale(1)';
+            t.style.boxShadow = '0 4px 12px rgba(99,102,241,0.35), 0 1px 0 rgba(255,255,255,0.3) inset';
           }}
         >
-          <span className="text-white text-xs font-bold">V</span>
+          <span style={{ color: 'white', fontSize: '11px', fontWeight: 800, letterSpacing: '-0.02em' }}>V</span>
         </button>
       </div>
     </header>
