@@ -618,106 +618,98 @@ export default function LandingPage() {
       {/* ── SOCIAL PROOF ─────────────────────────────────────────── */}
       <section
         style={{
-          padding: '48px 24px',
+          padding: '52px 0',
           borderTop: '1px solid rgba(99,102,241,0.08)',
           borderBottom: '1px solid rgba(99,102,241,0.08)',
           background: 'transparent',
         }}
       >
-        <div style={{ padding: '0 clamp(32px, 6vw, 120px)', textAlign: 'center' }}>
+        {/* Eyebrow */}
+        <motion.p
+          initial={{ opacity: 0, y: 8 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.4 }}
+          style={{
+            fontSize: 12,
+            fontWeight: 600,
+            color: '#94a3b8',
+            letterSpacing: '0.08em',
+            textTransform: 'uppercase',
+            textAlign: 'center',
+            marginBottom: 40,
+          }}
+        >
+          Connecté à vos outils commerciaux
+        </motion.p>
 
-          {/* Eyebrow */}
-          <motion.p
-            initial={{ opacity: 0, y: 8 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.4 }}
-            style={{
-              fontSize: 13,
-              fontWeight: 500,
-              color: '#94a3b8',
-              letterSpacing: '-0.01em',
-              marginBottom: 36,
-            }}
-          >
-            Connecté aux outils de vos équipes commerciales
-          </motion.p>
-
-          {/* Logo strip */}
-          <div
-            style={{
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-              flexWrap: 'wrap',
-            }}
-          >
-            {partners.map((p, i) => (
-              <motion.div
-                key={p.name}
-                initial={{ opacity: 0, y: 10 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.08, duration: 0.38 }}
-                onMouseEnter={(e) => {
-                  const el = e.currentTarget as HTMLDivElement
-                  el.style.opacity = '1'
-                  el.style.filter = 'grayscale(0%)'
-                  el.style.transform = 'translateY(-2px)'
-                  const span = el.querySelector('span') as HTMLSpanElement | null
-                  if (span) span.style.color = `#${p.hex}`
+        {/* Full-width logo strip */}
+        <div
+          style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(6, 1fr)',
+            width: '100%',
+          }}
+        >
+          {partners.map((p, i) => (
+            <motion.div
+              key={p.name}
+              initial={{ opacity: 0, y: 12 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: i * 0.07, duration: 0.38 }}
+              onMouseEnter={(e) => {
+                const el = e.currentTarget as HTMLDivElement
+                el.style.transform = 'translateY(-3px)'
+                el.style.background = 'rgba(255,255,255,0.7)'
+              }}
+              onMouseLeave={(e) => {
+                const el = e.currentTarget as HTMLDivElement
+                el.style.transform = 'translateY(0)'
+                el.style.background = 'transparent'
+              }}
+              style={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: 12,
+                padding: '20px 16px',
+                borderRight: i < partners.length - 1
+                  ? '1px solid rgba(99,102,241,0.08)'
+                  : 'none',
+                cursor: 'default',
+                userSelect: 'none',
+                transition: 'transform 0.2s ease, background 0.2s ease',
+                borderRadius: 0,
+              }}
+            >
+              {/* Brand icon — 36px, full color */}
+              <img
+                src={`https://cdn.simpleicons.org/${p.slug}/${p.hex}`}
+                width="36"
+                height="36"
+                alt=""
+                style={{ display: 'block', flexShrink: 0 }}
+                onError={(e) => {
+                  const img = e.currentTarget as HTMLImageElement
+                  img.style.display = 'none'
                 }}
-                onMouseLeave={(e) => {
-                  const el = e.currentTarget as HTMLDivElement
-                  el.style.opacity = '0.45'
-                  el.style.filter = 'grayscale(100%)'
-                  el.style.transform = 'translateY(0)'
-                  const span = el.querySelector('span') as HTMLSpanElement | null
-                  if (span) span.style.color = '#374151'
-                }}
+              />
+              {/* Brand name in brand color */}
+              <span
                 style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: 10,
-                  padding: '14px 28px',
-                  borderRight: i < partners.length - 1
-                    ? '1px solid rgba(99,102,241,0.09)'
-                    : 'none',
-                  cursor: 'default',
-                  userSelect: 'none',
-                  opacity: 0.45,
-                  filter: 'grayscale(100%)',
-                  transition: 'opacity 0.22s ease, filter 0.22s ease, transform 0.18s ease',
-                  flexShrink: 0,
+                  fontSize: 13,
+                  fontWeight: 700,
+                  letterSpacing: '-0.02em',
+                  color: `#${p.hex}`,
+                  whiteSpace: 'nowrap',
                 }}
               >
-                {/* Brand icon from Simple Icons CDN */}
-                <img
-                  src={`https://cdn.simpleicons.org/${p.slug}/${p.hex}`}
-                  width="22"
-                  height="22"
-                  alt={p.name}
-                  style={{ display: 'block', flexShrink: 0 }}
-                  onError={(e) => {
-                    (e.currentTarget as HTMLImageElement).style.display = 'none'
-                  }}
-                />
-                {/* Brand name */}
-                <span
-                  style={{
-                    fontSize: 16,
-                    fontWeight: 700,
-                    letterSpacing: '-0.025em',
-                    color: '#374151',
-                    transition: 'color 0.22s ease',
-                    whiteSpace: 'nowrap',
-                  }}
-                >
-                  {p.name}
-                </span>
-              </motion.div>
-            ))}
-          </div>
+                {p.name}
+              </span>
+            </motion.div>
+          ))}
         </div>
       </section>
 
