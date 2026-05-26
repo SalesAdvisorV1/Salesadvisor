@@ -16,12 +16,86 @@ const stats = [
 ]
 
 const partners = [
-  { name: 'lemlist',    slug: 'lemlist',    hex: 'FF4D00' },
-  { name: 'HubSpot',   slug: 'hubspot',    hex: 'FF7A59' },
-  { name: 'Pipedrive', slug: 'pipedrive',  hex: '017737' },
-  { name: 'Brevo',     slug: 'brevo',      hex: '0092FF' },
-  { name: 'aircall',   slug: 'aircall',    hex: '00B388' },
-  { name: 'Salesforce',slug: 'salesforce', hex: '00A1E0' },
+  {
+    name: 'lemlist',
+    color: '#FF4D00',
+    bg: 'rgba(255,77,0,0.09)',
+    desc: 'Séquences email',
+    icon: (
+      <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="#FF4D00" strokeWidth={1.9}>
+        <rect x="3" y="6" width="18" height="13" rx="2" />
+        <path d="M3 9l9 6 9-6" strokeLinecap="round" strokeLinejoin="round" />
+        <path d="M9 14l1.5 1.5" strokeLinecap="round" />
+        <circle cx="17" cy="7" r="2.5" fill="#FF4D00" stroke="none" />
+        <path d="M16 7h2M17 6v2" stroke="#fff" strokeWidth={1.2} strokeLinecap="round" />
+      </svg>
+    ),
+  },
+  {
+    name: 'HubSpot',
+    color: '#FF7A59',
+    bg: 'rgba(255,122,89,0.09)',
+    desc: 'CRM & Automation',
+    icon: (
+      <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="#FF7A59" strokeWidth={1.9}>
+        <circle cx="12" cy="12" r="3" />
+        <path d="M12 2v3M12 19v3M4.22 4.22l2.12 2.12M17.66 17.66l2.12 2.12M2 12h3M19 12h3M4.22 19.78l2.12-2.12M17.66 6.34l2.12-2.12" strokeLinecap="round" />
+      </svg>
+    ),
+  },
+  {
+    name: 'Pipedrive',
+    color: '#017737',
+    bg: 'rgba(1,119,55,0.09)',
+    desc: 'Pipeline de vente',
+    icon: (
+      <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="#017737" strokeWidth={1.9}>
+        <path d="M3 20l4-7 4 3.5 4-8 4 4" strokeLinecap="round" strokeLinejoin="round" />
+        <circle cx="3" cy="20" r="1.5" fill="#017737" stroke="none" />
+        <circle cx="7" cy="13" r="1.5" fill="#017737" stroke="none" />
+        <circle cx="11" cy="16.5" r="1.5" fill="#017737" stroke="none" />
+        <circle cx="15" cy="8.5" r="1.5" fill="#017737" stroke="none" />
+        <circle cx="19" cy="12.5" r="1.5" fill="#017737" stroke="none" />
+      </svg>
+    ),
+  },
+  {
+    name: 'Brevo',
+    color: '#0092FF',
+    bg: 'rgba(0,146,255,0.09)',
+    desc: 'Email marketing',
+    icon: (
+      <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="#0092FF" strokeWidth={1.9}>
+        <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+        <path d="M22 6l-10 7L2 6" strokeLinecap="round" strokeLinejoin="round" />
+      </svg>
+    ),
+  },
+  {
+    name: 'aircall',
+    color: '#00B388',
+    bg: 'rgba(0,179,136,0.09)',
+    desc: 'Téléphonie VoIP',
+    icon: (
+      <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="#00B388" strokeWidth={1.9}>
+        <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 014.07 12 19.79 19.79 0 011 3.18 2 2 0 012.96 1h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L7.91 8.91a16 16 0 006.29 6.29l1.28-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z" strokeLinecap="round" strokeLinejoin="round" />
+      </svg>
+    ),
+  },
+  {
+    name: 'Salesforce',
+    color: '#00A1E0',
+    bg: 'rgba(0,161,224,0.09)',
+    desc: 'CRM Enterprise',
+    icon: (
+      <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="#00A1E0" strokeWidth={1.9}>
+        <path d="M9.5 19H7A5 5 0 017 9h.5" strokeLinecap="round" />
+        <path d="M14.5 5a5 5 0 015 5v1" strokeLinecap="round" />
+        <path d="M6 12a6 6 0 016-6 6 6 0 014.8 2.4" strokeLinecap="round" />
+        <path d="M19 14a3 3 0 010 6H8a4 4 0 110-8" strokeLinecap="round" />
+      </svg>
+    ),
+  },
 ]
 
 const processSteps = [
@@ -616,100 +690,120 @@ export default function LandingPage() {
       </section>
 
       {/* ── SOCIAL PROOF ─────────────────────────────────────────── */}
-      <section
-        style={{
-          padding: '52px 0',
-          borderTop: '1px solid rgba(99,102,241,0.08)',
-          borderBottom: '1px solid rgba(99,102,241,0.08)',
-          background: 'transparent',
-        }}
-      >
-        {/* Eyebrow */}
-        <motion.p
-          initial={{ opacity: 0, y: 8 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.4 }}
-          style={{
-            fontSize: 12,
-            fontWeight: 600,
-            color: '#94a3b8',
-            letterSpacing: '0.08em',
-            textTransform: 'uppercase',
-            textAlign: 'center',
-            marginBottom: 40,
-          }}
-        >
-          Connecté à vos outils commerciaux
-        </motion.p>
+      <section style={{ padding: '80px 24px', background: 'transparent' }}>
+        <div style={{ padding: '0 clamp(32px, 6vw, 120px)' }}>
 
-        {/* Full-width logo strip */}
-        <div
-          style={{
+          {/* Header */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5 }}
+            style={{ textAlign: 'center', marginBottom: 48 }}
+          >
+            <p style={{
+              fontSize: 12,
+              fontWeight: 700,
+              letterSpacing: '0.1em',
+              color: '#6366f1',
+              textTransform: 'uppercase',
+              marginBottom: 12,
+            }}>
+              Intégrations &amp; Partenaires
+            </p>
+            <h2 style={{
+              fontSize: 'clamp(22px, 2.4vw, 34px)',
+              fontWeight: 800,
+              letterSpacing: '-0.03em',
+              color: '#0a0a0a',
+              margin: '0 0 10px',
+              lineHeight: 1.15,
+            }}>
+              Connecté à votre stack commercial
+            </h2>
+            <p style={{ fontSize: 15, color: '#6b7280', maxWidth: 480, margin: '0 auto' }}>
+              +500 équipes qui travaillent déjà avec ces outils font confiance à Sales Advisor
+            </p>
+          </motion.div>
+
+          {/* Partner cards */}
+          <div style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(6, 1fr)',
-            width: '100%',
-          }}
-        >
-          {partners.map((p, i) => (
-            <motion.div
-              key={p.name}
-              initial={{ opacity: 0, y: 12 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: i * 0.07, duration: 0.38 }}
-              onMouseEnter={(e) => {
-                const el = e.currentTarget as HTMLDivElement
-                el.style.transform = 'translateY(-3px)'
-                el.style.background = 'rgba(255,255,255,0.7)'
-              }}
-              onMouseLeave={(e) => {
-                const el = e.currentTarget as HTMLDivElement
-                el.style.transform = 'translateY(0)'
-                el.style.background = 'transparent'
-              }}
-              style={{
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-                justifyContent: 'center',
-                gap: 12,
-                padding: '20px 16px',
-                borderRight: i < partners.length - 1
-                  ? '1px solid rgba(99,102,241,0.08)'
-                  : 'none',
-                cursor: 'default',
-                userSelect: 'none',
-                transition: 'transform 0.2s ease, background 0.2s ease',
-                borderRadius: 0,
-              }}
-            >
-              {/* Brand icon — 36px, full color */}
-              <img
-                src={`https://cdn.simpleicons.org/${p.slug}/${p.hex}`}
-                width="36"
-                height="36"
-                alt=""
-                style={{ display: 'block', flexShrink: 0 }}
-                onError={(e) => {
-                  const img = e.currentTarget as HTMLImageElement
-                  img.style.display = 'none'
-                }}
-              />
-              {/* Brand name in brand color */}
-              <span
+            gridTemplateColumns: 'repeat(3, 1fr)',
+            gap: 16,
+          }}>
+            {partners.map((p, i) => (
+              <motion.div
+                key={p.name}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.08, duration: 0.4 }}
+                whileHover={{ y: -4, boxShadow: '0 12px 32px rgba(99,102,241,0.13)' }}
                 style={{
-                  fontSize: 13,
-                  fontWeight: 700,
-                  letterSpacing: '-0.02em',
-                  color: `#${p.hex}`,
-                  whiteSpace: 'nowrap',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 16,
+                  padding: '20px 22px',
+                  borderRadius: 18,
+                  background: 'rgba(255,255,255,0.82)',
+                  backdropFilter: 'blur(12px)',
+                  WebkitBackdropFilter: 'blur(12px)',
+                  border: '1px solid rgba(255,255,255,0.65)',
+                  boxShadow: '0 4px 18px rgba(99,102,241,0.08), 0 1px 0 rgba(255,255,255,0.8) inset',
+                  cursor: 'default',
+                  transition: 'box-shadow 0.2s ease',
                 }}
               >
-                {p.name}
-              </span>
-            </motion.div>
-          ))}
+                {/* Icon box */}
+                <div style={{
+                  width: 44,
+                  height: 44,
+                  borderRadius: 12,
+                  background: p.bg,
+                  border: `1px solid ${p.color}22`,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  flexShrink: 0,
+                }}>
+                  {p.icon}
+                </div>
+
+                {/* Text */}
+                <div>
+                  <p style={{
+                    fontSize: 14,
+                    fontWeight: 700,
+                    color: '#0f172a',
+                    letterSpacing: '-0.02em',
+                    margin: '0 0 2px',
+                  }}>
+                    {p.name}
+                  </p>
+                  <p style={{
+                    fontSize: 12,
+                    color: '#94a3b8',
+                    margin: 0,
+                    letterSpacing: '-0.01em',
+                  }}>
+                    {p.desc}
+                  </p>
+                </div>
+
+                {/* Brand accent dot */}
+                <div style={{ marginLeft: 'auto', flexShrink: 0 }}>
+                  <div style={{
+                    width: 8,
+                    height: 8,
+                    borderRadius: '50%',
+                    background: p.color,
+                    boxShadow: `0 0 0 3px ${p.bg}`,
+                  }} />
+                </div>
+              </motion.div>
+            ))}
+          </div>
         </div>
       </section>
 
