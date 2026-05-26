@@ -211,13 +211,13 @@ code, kbd, pre, samp {
 
 .text-balance { text-wrap: balance; }
 
-/* ---- Global input focus ring ---- */
+/* ---- Global input focus ring (indigo) ---- */
 input:focus,
 textarea:focus,
 select:focus {
   outline: none;
-  border-color: rgba(0, 0, 0, 0.3) !important;
-  box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.12);
+  border-color: #6366f1 !important;
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.18);
   transition: border-color 150ms ease, box-shadow 150ms ease;
 }
 
