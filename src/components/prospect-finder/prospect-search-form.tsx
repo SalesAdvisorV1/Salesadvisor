@@ -22,6 +22,13 @@ interface GeoCommune {
 const SIZE_OPTIONS = ["TPE", "PME", "ETI", "GE"] as const;
 type CompanySize = typeof SIZE_OPTIONS[number];
 
+const QUICK_PRESETS: { label: string; sector: string; city: string; sizes: CompanySize[] }[] = [
+  { label: "BTP · Paris",         sector: "BTP",       city: "Paris",     sizes: ["PME"] },
+  { label: "Transport · Lyon",    sector: "Transport",  city: "Lyon",      sizes: ["PME", "ETI"] },
+  { label: "Tech · Bordeaux",     sector: "Tech",       city: "Bordeaux",  sizes: ["TPE", "PME"] },
+  { label: "Santé · Marseille",   sector: "Santé",      city: "Marseille", sizes: ["PME"] },
+];
+
 const radiusOptions = ["10 km", "20 km", "50 km", "100 km"] as const;
 
 const inputClass =
@@ -130,6 +137,14 @@ export function ProspectSearchForm({ onSubmit, isLoading }: ProspectSearchFormPr
       : [...selectedSizes, size];
     setSelectedSizes(next);
     setValue("companySize", next.join(", "));
+  };
+
+  const applyPreset = (preset: typeof QUICK_PRESETS[0]) => {
+    setValue("sector", preset.sector);
+    setCityInput(preset.city);
+    setValue("city", preset.city);
+    setSelectedSizes(preset.sizes);
+    setValue("companySize", preset.sizes.join(", "));
   };
 
   return (
@@ -266,7 +281,7 @@ export function ProspectSearchForm({ onSubmit, isLoading }: ProspectSearchFormPr
         <button
           type="submit"
           disabled={isLoading}
-          className="mt-2 text-white font-semibold py-3.5 rounded-full w-full transition-all duration-200 disabled:cursor-not-allowed disabled:opacity-60"
+          className="btn-shimmer mt-2 text-white font-semibold py-3.5 rounded-full w-full transition-all duration-200 disabled:cursor-not-allowed disabled:opacity-60"
           style={{
             background: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)',
             boxShadow: '0 4px 14px rgba(99,102,241,0.28), 0 1px 0 rgba(255,255,255,0.25) inset',
@@ -296,6 +311,43 @@ export function ProspectSearchForm({ onSubmit, isLoading }: ProspectSearchFormPr
             "Lancer la recherche (2 cr.)"
           )}
         </button>
+        {/* Quick preset chips */}
+        <div style={{ marginTop: "14px" }}>
+          <p style={{
+            fontSize: "10px",
+            fontWeight: 700,
+            color: "#94a3b8",
+            textTransform: "uppercase",
+            letterSpacing: "0.07em",
+            marginBottom: "8px",
+          }}>
+            Recherches rapides
+          </p>
+          <div style={{ display: "flex", flexWrap: "wrap", gap: "6px" }}>
+            {QUICK_PRESETS.map((p) => (
+              <button
+                key={p.label}
+                type="button"
+                onClick={() => applyPreset(p)}
+                className="sa-preset-chip"
+                style={{
+                  padding: "6px 12px",
+                  borderRadius: "8px",
+                  border: "1px solid rgba(99,102,241,0.18)",
+                  background: "rgba(99,102,241,0.04)",
+                  color: "#4f46e5",
+                  fontSize: "12px",
+                  fontWeight: 600,
+                  cursor: "pointer",
+                  transition: "all 0.15s ease",
+                  minHeight: "32px",
+                }}
+              >
+                {p.label}
+              </button>
+            ))}
+          </div>
+        </div>
       </form>
     </div>
   );
