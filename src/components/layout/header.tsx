@@ -3,9 +3,13 @@
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { signOut } from '@/lib/supabase/auth';
+import { useEffect, useState } from 'react';
+import { createClient } from '@/lib/supabase/client';
+import { hasCrmAccess } from '@/lib/crm-access';
 
 const PAGE_NAMES: Record<string, string> = {
   '/dashboard':       'Dashboard',
+  '/crm':             'CRM Web Services',
   '/prospect-finder': 'Prospect Finder',
   '/ai-assistant':    'Assistance IA',
   '/history':         'Historique',
@@ -25,6 +29,17 @@ export function Header() {
   const pathname = usePathname();
   const router = useRouter();
   const pageName = getPageName(pathname);
+
+  // Récupérer l'email de l'utilisateur connecté pour gérer l'accès CRM
+  const [userEmail, setUserEmail] = useState<string | null>(null);
+  useEffect(() => {
+    const supabase = createClient();
+    supabase.auth.getUser().then(({ data }) => {
+      setUserEmail(data.user?.email ?? null);
+    });
+  }, []);
+  const canSeeCrm = hasCrmAccess(userEmail);
+
 
   async function handleSignOut() {
     await signOut();
@@ -121,6 +136,46 @@ export function Header() {
 
       {/* Right actions */}
       <div className="flex items-center gap-2 ml-auto">
+        {/* CRM button (visible only for authorized emails) */}
+        {canSeeCrm && (
+          <Link
+            href="/crm"
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '6px',
+              padding: '7px 14px',
+              borderRadius: '9999px',
+              background: pathname.startsWith('/crm')
+                ? 'linear-gradient(135deg, #10b981, #059669)'
+                : 'rgba(16,185,129,0.10)',
+              color: pathname.startsWith('/crm') ? '#ffffff' : '#059669',
+              fontSize: '12px',
+              fontWeight: 700,
+              letterSpacing: '0.02em',
+              textDecoration: 'none',
+              border: pathname.startsWith('/crm') ? 'none' : '1px solid rgba(16,185,129,0.22)',
+              transition: 'all 0.15s ease',
+              boxShadow: pathname.startsWith('/crm') ? '0 2px 8px rgba(16,185,129,0.30)' : 'none',
+            }}
+            onMouseEnter={(e) => {
+              if (!pathname.startsWith('/crm')) {
+                e.currentTarget.style.background = 'rgba(16,185,129,0.18)';
+              }
+            }}
+            onMouseLeave={(e) => {
+              if (!pathname.startsWith('/crm')) {
+                e.currentTarget.style.background = 'rgba(16,185,129,0.10)';
+              }
+            }}
+          >
+            <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.2">
+              <rect x="3" y="7" width="18" height="13" rx="2" />
+              <path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" strokeLinecap="round" />
+            </svg>
+            CRM
+          </Link>
+        )}
         {/* Notification bell */}
         <button
           type="button"

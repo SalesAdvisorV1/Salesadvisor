@@ -1,11 +1,14 @@
 'use client';
 
 import { useState } from 'react';
+import { usePathname } from 'next/navigation';
 import { Sidebar } from "@/components/layout/sidebar";
 import { Header } from "@/components/layout/header";
 
 export function AppShell({ children }: { children: React.ReactNode }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const pathname = usePathname();
+  const isCrmRoute = pathname?.startsWith('/crm') ?? false;
 
   return (
     <div className="min-h-screen relative">
@@ -45,13 +48,15 @@ export function AppShell({ children }: { children: React.ReactNode }) {
         </div>
       </div>
 
-      {/* Desktop sidebar */}
-      <div className="hidden md:block">
-        <Sidebar />
-      </div>
+      {/* Desktop sidebar (cachée sur /crm pour un layout immersif) */}
+      {!isCrmRoute && (
+        <div className="hidden md:block">
+          <Sidebar />
+        </div>
+      )}
 
       {/* Main content */}
-      <div className="md:pl-64">
+      <div className={isCrmRoute ? "" : "md:pl-64"}>
         {/* Mobile header with hamburger */}
         <div
           className="flex items-center gap-3 px-4 py-3 md:hidden"
