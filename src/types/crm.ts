@@ -18,7 +18,7 @@ export interface CrmContact {
   created_at: string;
   updated_at: string;
   owner_id: string;
-  name: string;
+  name: string | null;
   company: string | null;
   email: string | null;
   phone: string | null;
@@ -30,6 +30,7 @@ export interface CrmContact {
   deadline: string | null;
   references_examples: string | null;
   notes: string | null;
+  address: string | null;
 }
 
 export const STATUS_LABELS: Record<CrmStatus, string> = {

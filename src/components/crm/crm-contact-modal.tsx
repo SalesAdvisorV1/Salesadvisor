@@ -39,6 +39,7 @@ export function CrmContactModal({ isOpen, onClose, contact }: CrmContactModalPro
   const [deadline, setDeadline] = useState('');
   const [referencesExamples, setReferencesExamples] = useState('');
   const [notes, setNotes] = useState('');
+  const [address, setAddress] = useState('');
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -55,11 +56,12 @@ export function CrmContactModal({ isOpen, onClose, contact }: CrmContactModalPro
       setDeadline(contact.deadline || '');
       setReferencesExamples(contact.references_examples || '');
       setNotes(contact.notes || '');
+      setAddress(contact.address || '');
     } else {
       setName(''); setCompany(''); setEmail(''); setPhone('');
       setCurrentWebsite(''); setStatus('lead_generated');
       setWebsiteType(''); setBudgetRange(''); setQuoteAmount('');
-      setDeadline(''); setReferencesExamples(''); setNotes('');
+      setDeadline(''); setReferencesExamples(''); setNotes(''); setAddress('');
     }
     setError(null);
   }, [contact, isOpen]);
@@ -71,7 +73,7 @@ export function CrmContactModal({ isOpen, onClose, contact }: CrmContactModalPro
       if (!userData.user) throw new Error('Non connecté');
 
       const payload = {
-        name: name.trim(),
+        name: name.trim() || null,
         company: company.trim() || null,
         email: email.trim() || null,
         phone: phone.trim() || null,
@@ -83,6 +85,7 @@ export function CrmContactModal({ isOpen, onClose, contact }: CrmContactModalPro
         deadline: deadline || null,
         references_examples: referencesExamples.trim() || null,
         notes: notes.trim() || null,
+        address: address.trim() || null,
       };
 
       if (isEditing && contact) {
@@ -124,13 +127,12 @@ export function CrmContactModal({ isOpen, onClose, contact }: CrmContactModalPro
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!name.trim()) { setError('Le nom est requis'); return; }
     setError(null);
     saveMutation.mutate();
   };
 
   const handleDelete = () => {
-    if (confirm(`Supprimer définitivement le contact "${contact?.name}" ?`)) {
+    if (confirm(`Supprimer définitivement le contact "${contact?.name || contact?.company || 'sans nom'}" ?`)) {
       deleteMutation.mutate();
     }
   };
@@ -176,16 +178,16 @@ export function CrmContactModal({ isOpen, onClose, contact }: CrmContactModalPro
                   CRM Web Services
                 </p>
                 <h2 style={{ fontSize: 22, fontWeight: 800, color: '#0a0a0a', letterSpacing: '-0.04em', margin: 0 }}>
-                  {isEditing ? `Éditer · ${contact?.name}` : 'Nouveau contact'}
+                  {isEditing ? `Éditer · ${contact?.name || contact?.company || 'contact'}` : 'Nouveau contact'}
                 </h2>
               </div>
 
               <div style={{ padding: '20px 26px', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14 }}>
-                <Field label="Nom complet *" full>
-                  <Input value={name} onChange={setName} placeholder="Jean Dupont" required autoFocus />
+                <Field label="Entreprise" full>
+                  <Input value={company} onChange={setCompany} placeholder="Acme Corp" autoFocus />
                 </Field>
-                <Field label="Entreprise">
-                  <Input value={company} onChange={setCompany} placeholder="Acme Corp" />
+                <Field label="Nom contact">
+                  <Input value={name} onChange={setName} placeholder="Jean Dupont" />
                 </Field>
                 <Field label="Email">
                   <Input value={email} onChange={setEmail} placeholder="contact@example.com" type="email" />
@@ -195,6 +197,9 @@ export function CrmContactModal({ isOpen, onClose, contact }: CrmContactModalPro
                 </Field>
                 <Field label="Site actuel (s'il en a un)">
                   <Input value={currentWebsite} onChange={setCurrentWebsite} placeholder="https://..." />
+                </Field>
+                <Field label="Adresse" full>
+                  <Input value={address} onChange={setAddress} placeholder="123 rue Example, 75001 Paris" />
                 </Field>
                 <Field label="Statut *">
                   <Select value={status} onChange={(v) => setStatus(v as CrmStatus)}>

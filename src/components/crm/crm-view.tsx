@@ -213,7 +213,7 @@ function ContactsTable({ contacts, onEdit }: { contacts: CrmContact[]; onEdit: (
           {contacts.map(c => (
             <tr key={c.id} style={{ borderTop: '1px solid rgba(0,0,0,0.05)' }}>
               <Td>
-                <div style={{ fontWeight: 700, color: '#0a0a0a', fontSize: 13 }}>{c.name}</div>
+                <div style={{ fontWeight: 700, color: '#0a0a0a', fontSize: 13 }}>{c.name || c.company || '— Sans nom'}</div>
                 {c.company && <div style={{ color: '#6b6b6b', fontSize: 11, marginTop: 2 }}>{c.company}</div>}
                 {c.email && <div style={{ color: '#94a3b8', fontSize: 11, marginTop: 1 }}>{c.email}</div>}
               </Td>
