@@ -180,6 +180,27 @@ export function ProspectSearchForm({ onSubmit, isLoading }: ProspectSearchFormPr
     setValue("companySize", preset.sizes.join(", "));
   };
 
+  // Écoute des clics sur le bandeau QuickSearchesBar (cockpit)
+  useEffect(() => {
+    const handler = (e: Event) => {
+      const detail = (e as CustomEvent).detail;
+      if (detail?.sector && detail?.city) {
+        const match = QUICK_PRESETS.find(
+          (p) => p.sector === detail.sector && p.city === detail.city
+        );
+        applyPreset(match || {
+          label: detail.sector + " · " + detail.city,
+          sector: detail.sector,
+          city: detail.city,
+          sizes: [],
+        });
+      }
+    };
+    window.addEventListener("sa-quick-search", handler);
+    return () => window.removeEventListener("sa-quick-search", handler);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   return (
     <div
       className="rounded-2xl p-6"
@@ -369,43 +390,6 @@ export function ProspectSearchForm({ onSubmit, isLoading }: ProspectSearchFormPr
             "Lancer la recherche (2 cr.)"
           )}
         </button>
-        {/* Quick preset chips */}
-        <div style={{ marginTop: "14px" }}>
-          <p style={{
-            fontSize: "10px",
-            fontWeight: 700,
-            color: "#94a3b8",
-            textTransform: "uppercase",
-            letterSpacing: "0.07em",
-            marginBottom: "8px",
-          }}>
-            Recherches rapides
-          </p>
-          <div style={{ display: "flex", flexWrap: "wrap", gap: "6px" }}>
-            {QUICK_PRESETS.map((p) => (
-              <button
-                key={p.label}
-                type="button"
-                onClick={() => applyPreset(p)}
-                className="sa-preset-chip"
-                style={{
-                  padding: "6px 12px",
-                  borderRadius: "8px",
-                  border: "1px solid rgba(99,102,241,0.18)",
-                  background: "rgba(99,102,241,0.04)",
-                  color: "#4f46e5",
-                  fontSize: "12px",
-                  fontWeight: 600,
-                  cursor: "pointer",
-                  transition: "all 0.15s ease",
-                  minHeight: "32px",
-                }}
-              >
-                {p.label}
-              </button>
-            ))}
-          </div>
-        </div>
       </form>
     </div>
   );

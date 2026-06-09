@@ -9,6 +9,11 @@ import { ProspectSearchForm } from "@/components/prospect-finder/prospect-search
 import { EnrichPanel } from "@/components/prospect-finder/enrich-panel";
 import { DatabaseSearchForm } from "@/components/prospect-finder/database-search-form";
 import { DatabaseResultsTable } from "@/components/prospect-finder/database-results-table";
+import { AdvancedFiltersPanel } from "@/components/prospect-finder/advanced-filters-panel";
+import { CockpitStats } from "@/components/prospect-finder/cockpit/cockpit-stats";
+import { CockpitInsights } from "@/components/prospect-finder/cockpit/cockpit-insights";
+import { CockpitMarket } from "@/components/prospect-finder/cockpit/cockpit-market";
+import { QuickSearchesBar } from "@/components/prospect-finder/cockpit/quick-searches-bar";
 import type { ProspectSearchFormValues } from "@/lib/schemas/prospect-search";
 import { useCreditsStore } from "@/stores/use-credits-store";
 import type { ProspectResult, ProspectSearchResponse } from "@/types/prospect";
@@ -311,7 +316,8 @@ export function ProspectFinderView() {
   const insufficientCreditsDb = initialized && remaining < DB_SEARCH_CREDIT_COST;
 
   return (
-    <div className="mx-auto max-w-[1400px]">
+    <>
+    <div className="mx-auto w-full max-w-[1900px] px-4 lg:px-8 xl:px-10 2xl:px-12">
       {/* ── Header ── */}
       <motion.header className="mb-5" initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }}>
         <div style={{ display: "flex", alignItems: "flex-end", justifyContent: "space-between", flexWrap: "wrap", gap: "12px" }}>
@@ -334,8 +340,9 @@ export function ProspectFinderView() {
         </div>
       </motion.header>
 
-      {/* ── Tabs ── */}
-      <div style={{ display: "flex", gap: "4px", marginBottom: "16px", background: "rgba(99,102,241,0.06)", borderRadius: "12px", padding: "4px", width: "fit-content" }}>
+      {/* ── Tabs + Filtres avancés ── */}
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "16px", gap: "12px", flexWrap: "wrap" }}>
+        <div style={{ display: "flex", gap: "4px", background: "rgba(99,102,241,0.06)", borderRadius: "12px", padding: "4px", width: "fit-content" }}>
         {([
           { key: "targeted" as ActiveTab, label: "Recherche ciblée", icon: <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.2}><circle cx="11" cy="11" r="7" /><path d="M21 21l-4.35-4.35" strokeLinecap="round" /></svg> },
           { key: "database" as ActiveTab, label: "Base de données", icon: <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.2}><ellipse cx="12" cy="6" rx="8" ry="3" /><path d="M4 6v6c0 1.66 3.58 3 8 3s8-1.34 8-3V6" /><path d="M4 12v6c0 1.66 3.58 3 8 3s8-1.34 8-3v-6" /></svg> },
@@ -345,7 +352,13 @@ export function ProspectFinderView() {
             {tab.icon}{tab.label}
           </button>
         ))}
+        </div>
+        <AdvancedFiltersPanel />
       </div>
+
+      <CockpitStats />
+
+      <QuickSearchesBar />
 
       <AnimatePresence mode="wait">
         {/* ══ TARGETED TAB ══ */}
@@ -397,8 +410,29 @@ export function ProspectFinderView() {
                       </span>
                     )}
                   </div>
-                  <div style={{ position: "relative", borderRadius: "10px", overflow: "hidden" }}>
+                  <div style={{ position: "relative", borderRadius: "12px", overflow: "hidden", height: "500px", border: "1px solid rgba(99,102,241,0.12)" }}>
                     <ProspectionMap filters={lastFilters} prospects={mutation.data?.prospects ?? []} />
+
+                    <div style={{ position: "absolute", top: 12, left: 12, zIndex: 10, background: "rgba(255,255,255,0.95)", backdropFilter: "blur(10px)", WebkitBackdropFilter: "blur(10px)", border: "1px solid rgba(99,102,241,0.15)", borderRadius: 9999, padding: "6px 12px", display: "flex", alignItems: "center", gap: 6, boxShadow: "0 2px 8px rgba(15,23,42,0.08)" }}>
+                      <span style={{ width: 6, height: 6, borderRadius: "50%", background: "#10b981", boxShadow: "0 0 8px rgba(16,185,129,0.6)", animation: "sa-live-pulse 1.5s infinite" }} />
+                      <span style={{ fontSize: 11, fontWeight: 700, color: "#0f172a", letterSpacing: "-0.1px" }}>12M+ entreprises visibles</span>
+                    </div>
+
+                    <div style={{ position: "absolute", bottom: 12, left: 12, zIndex: 10, background: "rgba(255,255,255,0.95)", backdropFilter: "blur(10px)", WebkitBackdropFilter: "blur(10px)", border: "1px solid rgba(99,102,241,0.15)", borderRadius: 10, padding: "8px 12px", display: "flex", gap: 14, boxShadow: "0 2px 8px rgba(15,23,42,0.08)" }}>
+                      <div style={{ display: "flex", alignItems: "center", gap: 5 }}>
+                        <span style={{ width: 8, height: 8, borderRadius: "50%", background: "#6366f1" }} />
+                        <span style={{ fontSize: 10, fontWeight: 600, color: "#64748b" }}>Prospect</span>
+                      </div>
+                      <div style={{ display: "flex", alignItems: "center", gap: 5 }}>
+                        <span style={{ width: 8, height: 8, borderRadius: "50%", background: "#10b981" }} />
+                        <span style={{ fontSize: 10, fontWeight: 600, color: "#64748b" }}>Score élevé</span>
+                      </div>
+                      <div style={{ display: "flex", alignItems: "center", gap: 5 }}>
+                        <span style={{ width: 8, height: 8, borderRadius: "50%", background: "#f59e0b" }} />
+                        <span style={{ fontSize: 10, fontWeight: 600, color: "#64748b" }}>À enrichir</span>
+                      </div>
+                    </div>
+
                     <AnimatePresence>
                       {mutation.isPending && (
                         <motion.div key="radar" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} style={{ position: "absolute", inset: 0 }}>
@@ -509,6 +543,18 @@ export function ProspectFinderView() {
           <EnrichPanel prospect={enrichTarget} onClose={() => setEnrichTarget(null)} userId={userId} onCreditsConsumed={consume} />
         )}
       </AnimatePresence>
+
+      {/* ── Cockpit Intelligence (Insights + Market) ── */}
+      <div style={{ marginTop: 20, marginBottom: 16 }}>
+        <p style={{ color: "#6366f1", fontSize: 11, fontWeight: 700, letterSpacing: 2, textTransform: "uppercase", margin: "0 0 12px" }}>
+          Cockpit Intelligence · Augmentation IA
+        </p>
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
+          <CockpitInsights />
+          <CockpitMarket />
+        </div>
+      </div>
     </div>
+  </>
   );
 }

@@ -213,7 +213,7 @@ export function ProspectionMap({ filters, prospects }: ProspectionMapProps) {
   };
 
   return (
-    <div className="relative h-72 overflow-hidden rounded-xl" style={{ border: '1px solid rgba(99,102,241,0.10)' }}>
+    <div className="relative h-full w-full overflow-hidden rounded-xl">
       <GoogleMap
         mapContainerStyle={containerStyle}
         center={centerCoords ?? FRANCE_CENTER}
