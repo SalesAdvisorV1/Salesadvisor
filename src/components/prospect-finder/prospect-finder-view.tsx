@@ -97,35 +97,33 @@ function RadarOverlay() {
     <div style={{ position: "absolute", inset: 0, borderRadius: "inherit", overflow: "hidden", pointerEvents: "none", zIndex: 5 }}>
       <div style={{ position: "absolute", inset: 0, background: "rgba(10,18,40,0.62)", backdropFilter: "blur(1px)" }} />
 
-      {/* Conic sweep */}
+      {/* Pulse rayonnant central (symétrique) */}
       <div style={{
         position: "absolute", top: "50%", left: "50%",
-        width: 260, height: 260,
+        width: "100%", height: "100%",
         transform: "translate(-50%, -50%)",
-        borderRadius: "50%",
-        background: "conic-gradient(from 0deg, transparent 0deg, rgba(99,102,241,0.45) 45deg, transparent 90deg, transparent 360deg)",
-        animation: "sa-radar-sweep 2.4s linear infinite",
+        background: "radial-gradient(circle at center, rgba(99,102,241,0.25) 0%, rgba(99,102,241,0.1) 25%, transparent 60%)",
       }} />
 
       {/* Concentric rings */}
-      {[50, 90, 130].map((r, i) => (
+      {[120, 220, 320, 420, 520].map((r, i) => (
         <div key={i} style={{
           position: "absolute", top: "50%", left: "50%",
           width: r * 2, height: r * 2, marginLeft: -r, marginTop: -r,
           borderRadius: "50%",
-          border: `1px solid rgba(99,102,241,${0.35 - i * 0.08})`,
+          border: `1px solid rgba(99,102,241,${0.4 - i * 0.06})`,
         }} />
       ))}
 
       {/* Center + ping rings */}
       <div style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%,-50%)", width: 10, height: 10, borderRadius: "50%", background: "#6366f1", boxShadow: "0 0 14px 6px rgba(99,102,241,0.55)" }} />
-      {[1, 2].map(i => (
+      {[1, 2, 3].map(i => (
         <div key={i} style={{
           position: "absolute", top: "50%", left: "50%",
-          width: 10, height: 10,
+          width: 20, height: 20, marginLeft: -10, marginTop: -10,
           border: "2px solid rgba(99,102,241,0.7)",
           borderRadius: "50%",
-          animation: `sa-radar-ping 2s ${i * 0.9}s ease-out infinite`,
+          animation: `sa-radar-ping 2.4s ${i * 0.8}s ease-out infinite`,
         }} />
       ))}
 
@@ -435,7 +433,7 @@ export function ProspectFinderView() {
 
                     <AnimatePresence>
                       {mutation.isPending && (
-                        <motion.div key="radar" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} style={{ position: "absolute", inset: 0 }}>
+                        <motion.div key="radar" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0, width: "100%", height: "100%" }}>
                           <RadarOverlay />
                         </motion.div>
                       )}
