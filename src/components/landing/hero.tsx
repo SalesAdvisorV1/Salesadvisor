@@ -57,11 +57,11 @@ function AnimatedHeadline() {
   return (
     <h1
       style={{
-        fontSize: 'clamp(36px, 4.2vw, 62px)',
+        fontSize: 'clamp(40px, 4.3vw, 76px)',
         fontWeight: 800,
         letterSpacing: '-0.04em',
-        lineHeight: 1.05,
-        margin: '0 0 24px',
+        lineHeight: 1.04,
+        margin: '0 0 30px',
         color: '#0a0a0a',
         textAlign: 'left',
       }}
@@ -138,9 +138,9 @@ function MagneticCTA() {
         style={{
           background: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)',
           color: '#fff',
-          padding: '15px 30px',
+          padding: '17px 34px',
           borderRadius: 9999,
-          fontSize: 16,
+          fontSize: 17,
           fontWeight: 600,
           textDecoration: 'none',
           display: 'inline-block',
@@ -532,7 +532,7 @@ function HeroMockup({
           {/* App body */}
           <div style={{ padding: 'clamp(16px, 2.5vw, 28px)' }}>
             {/* Search row */}
-            <div style={{ display: 'flex', gap: 10, marginBottom: 18 }}>
+            <div style={{ display: 'flex', gap: 12, marginBottom: 20 }}>
               <div
                 style={{
                   flex: 1,
@@ -542,22 +542,22 @@ function HeroMockup({
                   background: '#ffffff',
                   border: '1px solid rgba(99,102,241,0.22)',
                   borderRadius: 12,
-                  padding: '11px 16px',
+                  padding: '13px 18px',
                   boxShadow: '0 2px 8px rgba(99,102,241,0.06)',
                 }}
               >
-                <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="#9ca3af" strokeWidth="2">
+                <svg width="17" height="17" fill="none" viewBox="0 0 24 24" stroke="#9ca3af" strokeWidth="2">
                   <circle cx="11" cy="11" r="8" />
                   <path d="M21 21l-4.35-4.35" />
                 </svg>
-                <span style={{ fontSize: 14, color: '#0f172a', fontWeight: 500 }}>
+                <span style={{ fontSize: 15, color: '#0f172a', fontWeight: 500 }}>
                   {typedUrl}
                   <span
                     className="sa-caret"
                     style={{
                       display: 'inline-block',
                       width: 2,
-                      height: 16,
+                      height: 17,
                       background: '#6366f1',
                       marginLeft: 2,
                       verticalAlign: 'middle',
@@ -571,8 +571,8 @@ function HeroMockup({
                   background: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)',
                   color: '#fff',
                   borderRadius: 12,
-                  padding: '11px 22px',
-                  fontSize: 14,
+                  padding: '13px 26px',
+                  fontSize: 15,
                   fontWeight: 600,
                   display: 'flex',
                   alignItems: 'center',
@@ -589,7 +589,7 @@ function HeroMockup({
             </div>
 
             {/* Prospect rows */}
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 10, minHeight: 296 }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 12, minHeight: 332 }}>
               <AnimatePresence mode="popLayout" initial={false}>
                 {rows.map((p, i) => (
                   <motion.div
@@ -606,17 +606,17 @@ function HeroMockup({
                       background: i === 0 ? 'rgba(99,102,241,0.05)' : '#ffffff',
                       border: `1px solid ${i === 0 ? 'rgba(99,102,241,0.22)' : 'rgba(15,23,42,0.06)'}`,
                       borderRadius: 14,
-                      padding: '13px 16px',
+                      padding: '15px 18px',
                     }}
                   >
                     <div
                       style={{
-                        width: 38,
-                        height: 38,
-                        borderRadius: 11,
+                        width: 44,
+                        height: 44,
+                        borderRadius: 12,
                         background: AVATAR_GRADIENTS[p.company.length % AVATAR_GRADIENTS.length],
                         color: '#fff',
-                        fontSize: 13,
+                        fontSize: 14,
                         fontWeight: 700,
                         display: 'flex',
                         alignItems: 'center',
@@ -627,18 +627,18 @@ function HeroMockup({
                       {p.company.slice(0, 2).toUpperCase()}
                     </div>
                     <div style={{ flex: 1, minWidth: 0 }}>
-                      <div style={{ fontSize: 14, fontWeight: 700, color: '#0f172a' }}>{p.company}</div>
-                      <div style={{ fontSize: 12, color: '#9ca3af' }}>{p.sector}</div>
+                      <div style={{ fontSize: 15, fontWeight: 700, color: '#0f172a' }}>{p.company}</div>
+                      <div style={{ fontSize: 13, color: '#9ca3af' }}>{p.sector}</div>
                     </div>
                     <div
                       className="sa-hero-row-status"
                       style={{
-                        fontSize: 12,
+                        fontSize: 13,
                         fontWeight: 600,
                         color: p.status === 'Email généré' ? '#059669' : '#4f46e5',
                         background: p.status === 'Email généré' ? 'rgba(5,150,105,0.08)' : 'rgba(99,102,241,0.08)',
                         borderRadius: 9999,
-                        padding: '5px 12px',
+                        padding: '6px 14px',
                         whiteSpace: 'nowrap',
                       }}
                     >
@@ -646,12 +646,12 @@ function HeroMockup({
                     </div>
                     <div
                       style={{
-                        fontSize: 13,
+                        fontSize: 14,
                         fontWeight: 800,
                         color: '#6366f1',
                         background: 'rgba(99,102,241,0.10)',
                         borderRadius: 9999,
-                        padding: '6px 12px',
+                        padding: '7px 14px',
                         fontVariantNumeric: 'tabular-nums',
                         flexShrink: 0,
                       }}
@@ -742,7 +742,7 @@ export default function Hero() {
 
       <div
         className="sa-hero-grid"
-        style={{ position: 'relative', zIndex: 1, maxWidth: 1380, margin: '0 auto', width: '100%' }}
+        style={{ position: 'relative', zIndex: 1, maxWidth: 1600, margin: '0 auto', width: '100%' }}
       >
         {/* Text column — leaves with layered parallax on scroll */}
         <motion.div style={{ y: textY, opacity: textOpacity }}>
@@ -751,7 +751,7 @@ export default function Hero() {
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.55, ease: EASE }}
-          style={{ display: 'flex', justifyContent: 'flex-start', marginBottom: 26 }}
+          style={{ display: 'flex', justifyContent: 'flex-start', marginBottom: 34 }}
         >
           <span
             style={{
@@ -762,8 +762,8 @@ export default function Hero() {
               backdropFilter: 'blur(12px)',
               border: '1px solid #c7d2fe',
               borderRadius: 9999,
-              padding: '6px 16px',
-              fontSize: 13,
+              padding: '7px 18px',
+              fontSize: 14,
               color: '#4f46e5',
               fontWeight: 500,
               letterSpacing: '-0.01em',
@@ -793,11 +793,11 @@ export default function Hero() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.55, duration: 0.6, ease: EASE }}
           style={{
-            fontSize: 18,
+            fontSize: 'clamp(17px, 1.15vw, 21px)',
             color: '#6b7280',
             lineHeight: 1.65,
-            margin: '0 0 36px',
-            maxWidth: 470,
+            margin: '0 0 44px',
+            maxWidth: 560,
           }}
         >
           Générez des emails personnalisés et préparez vos appels en moins de 30 secondes
@@ -815,7 +815,7 @@ export default function Hero() {
             alignItems: 'center',
             justifyContent: 'flex-start',
             flexWrap: 'wrap',
-            marginBottom: 24,
+            marginBottom: 30,
           }}
         >
           <MagneticCTA />
@@ -825,8 +825,8 @@ export default function Hero() {
               backdropFilter: 'blur(12px)',
               border: '1px solid rgba(15,23,42,0.12)',
               borderRadius: 9999,
-              padding: '13px 24px',
-              fontSize: 15,
+              padding: '15px 28px',
+              fontSize: 16,
               fontWeight: 500,
               cursor: 'pointer',
               display: 'flex',
@@ -882,13 +882,13 @@ export default function Hero() {
             gap: 22,
             flexWrap: 'wrap',
             justifyContent: 'flex-start',
-            marginBottom: 30,
+            marginBottom: 44,
           }}
         >
           {TRUST_ITEMS.map((item) => (
             <span
               key={item}
-              style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 13, color: '#9ca3af' }}
+              style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 14, color: '#9ca3af' }}
             >
               <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
                 <circle cx="7" cy="7" r="7" fill="#d1fae5" />
@@ -907,18 +907,19 @@ export default function Hero() {
           style={{
             display: 'flex',
             alignItems: 'flex-start',
-            gap: 30,
+            justifyContent: 'space-between',
             flexWrap: 'wrap',
+            gap: 24,
             borderTop: '1px solid rgba(15,23,42,0.08)',
-            paddingTop: 24,
-            maxWidth: 560,
+            paddingTop: 32,
+            maxWidth: 660,
           }}
         >
           {STATS.map((s) => (
             <div key={s.label}>
               <div
                 style={{
-                  fontSize: 23,
+                  fontSize: 'clamp(24px, 1.8vw, 32px)',
                   fontWeight: 800,
                   letterSpacing: '-0.03em',
                   color: '#0a0a0a',
@@ -927,7 +928,7 @@ export default function Hero() {
               >
                 <CountUp to={s.to} decimals={s.decimals} prefix={s.prefix ?? ''} suffix={s.suffix ?? ''} />
               </div>
-              <div style={{ fontSize: 12, color: '#9ca3af', marginTop: 5, lineHeight: 1.35, maxWidth: 140 }}>
+              <div style={{ fontSize: 13, color: '#9ca3af', marginTop: 7, lineHeight: 1.35, maxWidth: 150 }}>
                 {s.label}
               </div>
             </div>

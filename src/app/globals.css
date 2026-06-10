@@ -444,7 +444,7 @@ button, a, [role="button"] {
 
 /* Mockup wider than its column → bleeds off the right edge */
 .sa-hero-bleed {
-  width: calc(100% + clamp(24px, 6vw, 110px));
+  width: calc(100% + clamp(24px, 8vw, 170px));
 }
 
 /* Stack below 1080px: text on top, mockup full width below */
