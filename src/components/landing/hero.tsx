@@ -6,7 +6,6 @@ import {
   motion,
   AnimatePresence,
   useMotionValue,
-  useMotionTemplate,
   useSpring,
   useTransform,
   useScroll,
@@ -87,8 +86,17 @@ function AnimatedHeadline() {
                   initial={{ y: '110%', opacity: 0 }}
                   animate={{ y: 0, opacity: 1 }}
                   transition={{ delay: 0.2 + idx * 0.075, duration: 0.75, ease: EASE }}
-                  className={line.gradient ? 'sa-text-shimmer' : undefined}
-                  style={{ display: 'inline-block' }}
+                  style={{
+                    display: 'inline-block',
+                    ...(line.gradient
+                      ? {
+                          background: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)',
+                          WebkitBackgroundClip: 'text',
+                          WebkitTextFillColor: 'transparent',
+                          backgroundClip: 'text',
+                        }
+                      : {}),
+                  }}
                 >
                   {word}
                 </motion.span>
@@ -365,57 +373,6 @@ function HeroMockup({
           pointerEvents: 'none',
         }}
       />
-
-      {/* Connection beams — pulses travel from the mockup to the cards */}
-      <svg
-        className="sa-hero-float"
-        aria-hidden
-        viewBox="0 0 100 100"
-        preserveAspectRatio="none"
-        style={{
-          position: 'absolute',
-          inset: '-36px -50px',
-          zIndex: 2,
-          pointerEvents: 'none',
-          overflow: 'visible',
-        }}
-      >
-        {[
-          { d: 'M 96 4 Q 88 5 78 15', delay: 0 },
-          { d: 'M 4 80 Q 9 76 17 63', delay: 1.1 },
-          { d: 'M 93 96 Q 86 93 76 83', delay: 2.2 },
-        ].map((beam) => (
-          <g key={beam.d}>
-            <path
-              d={beam.d}
-              fill="none"
-              stroke="rgba(99,102,241,0.16)"
-              strokeWidth={1.4}
-              vectorEffect="non-scaling-stroke"
-            />
-            {!reduced && (
-              <motion.path
-                d={beam.d}
-                fill="none"
-                stroke="rgba(139,92,246,0.85)"
-                strokeWidth={2}
-                strokeLinecap="round"
-                vectorEffect="non-scaling-stroke"
-                pathLength={1}
-                strokeDasharray="0.16 0.84"
-                initial={{ strokeDashoffset: 0 }}
-                animate={{ strokeDashoffset: [0, 1] }}
-                transition={{
-                  duration: 3.4,
-                  delay: beam.delay,
-                  repeat: Infinity,
-                  ease: 'linear',
-                }}
-              />
-            )}
-          </g>
-        ))}
-      </svg>
 
       {/* Floating card — IA score ring */}
       <FloatingCard
@@ -736,13 +693,6 @@ export default function Hero() {
   const sSpotX = useSpring(spotX, { stiffness: 80, damping: 24 })
   const sSpotY = useSpring(spotY, { stiffness: 80, damping: 24 })
 
-  /* Dot grid revealed around the cursor */
-  const gridMask = useMotionTemplate`radial-gradient(340px circle at ${sSpotX}px ${sSpotY}px, black 0%, transparent 85%)`
-
-  /* Depth parallax on the headline (opposite of the mockup tilt) */
-  const headlineX = useTransform(smx, [-0.5, 0.5], [-10, 10])
-  const headlineY = useTransform(smy, [-0.5, 0.5], [-6, 6])
-
   return (
     <section
       ref={sectionRef}
@@ -763,36 +713,6 @@ export default function Hero() {
         overflow: 'hidden',
       }}
     >
-      {/* Dot grid — always faintly visible at the top */}
-      <div
-        aria-hidden
-        style={{
-          position: 'absolute',
-          inset: 0,
-          zIndex: 0,
-          pointerEvents: 'none',
-          backgroundImage: 'radial-gradient(rgba(99,102,241,0.16) 1.2px, transparent 1.2px)',
-          backgroundSize: '26px 26px',
-          maskImage: 'linear-gradient(180deg, black 0%, transparent 62%)',
-          WebkitMaskImage: 'linear-gradient(180deg, black 0%, transparent 62%)',
-        }}
-      />
-
-      {/* Dot grid — bright, revealed around the cursor */}
-      <motion.div
-        aria-hidden
-        style={{
-          position: 'absolute',
-          inset: 0,
-          zIndex: 0,
-          pointerEvents: 'none',
-          backgroundImage: 'radial-gradient(rgba(99,102,241,0.5) 1.4px, transparent 1.4px)',
-          backgroundSize: '26px 26px',
-          maskImage: gridMask,
-          WebkitMaskImage: gridMask,
-        }}
-      />
-
       {/* Cursor spotlight */}
       <motion.div
         aria-hidden
@@ -852,10 +772,8 @@ export default function Hero() {
           </span>
         </motion.div>
 
-        {/* Headline — word by word, with depth parallax */}
-        <motion.div style={{ x: headlineX, y: headlineY }}>
-          <AnimatedHeadline />
-        </motion.div>
+        {/* Headline — word by word */}
+        <AnimatedHeadline />
 
         {/* Subtitle */}
         <motion.p
