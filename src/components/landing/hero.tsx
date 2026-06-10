@@ -47,8 +47,8 @@ const TRUST_ITEMS = ['Aucune carte bancaire', 'Annulable à tout moment', 'Onboa
 /* ─── Animated headline — word by word reveal ───────────────────── */
 
 const HEADLINE_LINES: { words: string[]; gradient: boolean }[] = [
-  { words: ['Trouvez', 'vos', 'meilleurs', 'prospects.'], gradient: false },
-  { words: ['Plus', 'vite.'], gradient: false },
+  { words: ['Trouvez', 'vos', 'meilleurs'], gradient: false },
+  { words: ['prospects.', 'Plus', 'vite.'], gradient: false },
   { words: ['Vendez', 'mieux.'], gradient: true },
 ]
 
@@ -57,17 +57,17 @@ function AnimatedHeadline() {
   return (
     <h1
       style={{
-        fontSize: 'clamp(42px, 6vw, 82px)',
+        fontSize: 'clamp(36px, 4.2vw, 62px)',
         fontWeight: 800,
         letterSpacing: '-0.04em',
-        lineHeight: 1.04,
-        margin: '0 0 26px',
+        lineHeight: 1.05,
+        margin: '0 0 24px',
         color: '#0a0a0a',
-        textAlign: 'center',
+        textAlign: 'left',
       }}
     >
       {HEADLINE_LINES.map((line, li) => (
-        <span key={li} style={{ display: li === 0 ? 'block' : 'inline-block', marginRight: li === 1 ? '0.28em' : 0 }}>
+        <span key={li} style={{ display: 'block' }}>
           {line.words.map((word) => {
             const idx = wordIndex++
             return (
@@ -311,13 +311,6 @@ function HeroMockup({
   const reduced = useReducedMotion()
   const typedUrl = useTypewriter()
 
-  /* Scroll: the mockup straightens as it enters the viewport */
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ['start 95%', 'start 35%'],
-  })
-  const scrollRotateX = useTransform(scrollYProgress, [0, 1], [16, 0])
-
   /* Mouse tilt */
   const tiltRotateY = useTransform(smx, [-0.5, 0.5], [-4.5, 4.5])
   const tiltRotateX = useTransform(smy, [-0.5, 0.5], [3, -3])
@@ -353,10 +346,9 @@ function HeroMockup({
   return (
     <div
       ref={containerRef}
+      className="sa-hero-bleed"
       style={{
         position: 'relative',
-        maxWidth: 920,
-        margin: '0 auto',
         perspective: 1500,
       }}
     >
@@ -382,7 +374,7 @@ function HeroMockup({
         parallaxY={fy1}
         delay={1.15}
         floatDuration={5.5}
-        style={{ top: -36, right: -70 }}
+        style={{ top: -34, left: -62 }}
       >
         <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
           <svg width="56" height="56" viewBox="0 0 56 56">
@@ -432,7 +424,7 @@ function HeroMockup({
         parallaxY={fy2}
         delay={1.3}
         floatDuration={6.2}
-        style={{ bottom: 84, left: -86 }}
+        style={{ bottom: 90, left: -78 }}
       >
         <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
           <div
@@ -470,7 +462,7 @@ function HeroMockup({
         parallaxY={fy3}
         delay={1.45}
         floatDuration={4.8}
-        style={{ bottom: -32, right: -56 }}
+        style={{ bottom: -28, right: 40 }}
       >
         <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
           <span className="sa-live-dot" />
@@ -481,8 +473,8 @@ function HeroMockup({
         </div>
       </FloatingCard>
 
-      {/* Tilting frame — scroll straighten + mouse tilt */}
-      <motion.div style={{ rotateX: scrollRotateX, transformStyle: 'preserve-3d', position: 'relative', zIndex: 1 }}>
+      {/* Tilting frame — mouse tilt */}
+      <div style={{ transformStyle: 'preserve-3d', position: 'relative', zIndex: 1 }}>
         <motion.div
           style={{
             rotateY: tiltRotateY,
@@ -672,7 +664,7 @@ function HeroMockup({
             </div>
           </div>
         </motion.div>
-      </motion.div>
+      </div>
     </div>
   )
 }
@@ -718,8 +710,11 @@ export default function Hero() {
       }}
       style={{
         position: 'relative',
-        paddingTop: 150,
-        paddingBottom: 110,
+        minHeight: '100vh',
+        display: 'flex',
+        alignItems: 'center',
+        paddingTop: 120,
+        paddingBottom: 80,
         paddingLeft: 'clamp(24px, 6vw, 120px)',
         paddingRight: 'clamp(24px, 6vw, 120px)',
         overflow: 'hidden',
@@ -745,15 +740,18 @@ export default function Hero() {
         }}
       />
 
-      <div style={{ position: 'relative', zIndex: 1, maxWidth: 1160, margin: '0 auto' }}>
-        {/* Text block — leaves with layered parallax on scroll */}
+      <div
+        className="sa-hero-grid"
+        style={{ position: 'relative', zIndex: 1, maxWidth: 1380, margin: '0 auto', width: '100%' }}
+      >
+        {/* Text column — leaves with layered parallax on scroll */}
         <motion.div style={{ y: textY, opacity: textOpacity }}>
         {/* Badge */}
         <motion.div
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.55, ease: EASE }}
-          style={{ display: 'flex', justifyContent: 'center', marginBottom: 30 }}
+          style={{ display: 'flex', justifyContent: 'flex-start', marginBottom: 26 }}
         >
           <span
             style={{
@@ -798,9 +796,8 @@ export default function Hero() {
             fontSize: 18,
             color: '#6b7280',
             lineHeight: 1.65,
-            margin: '0 auto 38px',
-            maxWidth: 520,
-            textAlign: 'center',
+            margin: '0 0 36px',
+            maxWidth: 470,
           }}
         >
           Générez des emails personnalisés et préparez vos appels en moins de 30 secondes
@@ -816,7 +813,7 @@ export default function Hero() {
             display: 'flex',
             gap: 14,
             alignItems: 'center',
-            justifyContent: 'center',
+            justifyContent: 'flex-start',
             flexWrap: 'wrap',
             marginBottom: 24,
           }}
@@ -884,8 +881,8 @@ export default function Hero() {
             display: 'flex',
             gap: 22,
             flexWrap: 'wrap',
-            justifyContent: 'center',
-            marginBottom: 72,
+            justifyContent: 'flex-start',
+            marginBottom: 30,
           }}
         >
           {TRUST_ITEMS.map((item) => (
@@ -901,42 +898,27 @@ export default function Hero() {
             </span>
           ))}
         </motion.div>
-        </motion.div>
 
-        {/* Product mockup — slower exit = depth */}
+        {/* Stats — compact inline row under the text */}
         <motion.div
-          initial={{ opacity: 0, y: 60, scale: 0.97 }}
-          animate={{ opacity: 1, y: 0, scale: 1 }}
-          transition={{ delay: 0.85, duration: 0.9, ease: EASE }}
-        >
-          <motion.div style={{ y: mockupParallaxY }}>
-            <HeroMockup smx={smx} smy={smy} />
-          </motion.div>
-        </motion.div>
-
-        {/* Stats */}
-        <div
-          className="sa-hero-stats"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 1.05, duration: 0.6 }}
           style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(4, 1fr)',
-            gap: 20,
-            maxWidth: 880,
-            margin: '84px auto 0',
+            display: 'flex',
+            alignItems: 'flex-start',
+            gap: 30,
+            flexWrap: 'wrap',
+            borderTop: '1px solid rgba(15,23,42,0.08)',
+            paddingTop: 24,
+            maxWidth: 560,
           }}
         >
-          {STATS.map((s, i) => (
-            <motion.div
-              key={s.label}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: '-40px' }}
-              transition={{ delay: i * 0.08, duration: 0.5, ease: EASE }}
-              style={{ textAlign: 'center' }}
-            >
+          {STATS.map((s) => (
+            <div key={s.label}>
               <div
                 style={{
-                  fontSize: 'clamp(28px, 3vw, 38px)',
+                  fontSize: 23,
                   fontWeight: 800,
                   letterSpacing: '-0.03em',
                   color: '#0a0a0a',
@@ -945,11 +927,32 @@ export default function Hero() {
               >
                 <CountUp to={s.to} decimals={s.decimals} prefix={s.prefix ?? ''} suffix={s.suffix ?? ''} />
               </div>
-              <div style={{ fontSize: 13, color: '#9ca3af', marginTop: 8, lineHeight: 1.4 }}>
+              <div style={{ fontSize: 12, color: '#9ca3af', marginTop: 5, lineHeight: 1.35, maxWidth: 140 }}>
                 {s.label}
               </div>
-            </motion.div>
+            </div>
           ))}
+        </motion.div>
+        </motion.div>
+
+        {/* Mockup column — 3D perspective, bleeding off the right edge */}
+        <div style={{ perspective: 1600 }}>
+          <motion.div
+            initial={{ opacity: 0, x: 90 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.5, duration: 1, ease: EASE }}
+          >
+            <motion.div
+              style={{
+                y: mockupParallaxY,
+                rotateY: -9,
+                rotateX: 3.5,
+                transformStyle: 'preserve-3d',
+              }}
+            >
+              <HeroMockup smx={smx} smy={smy} />
+            </motion.div>
+          </motion.div>
         </div>
       </div>
 
