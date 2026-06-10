@@ -3,6 +3,7 @@
 import Link from 'next/link'
 import { motion } from 'framer-motion'
 import Hero from '@/components/landing/hero'
+import SmoothScroll from '@/components/landing/smooth-scroll'
 
 /* ─── Data ─────────────────────────────────────────────────────── */
 
@@ -299,6 +300,8 @@ export default function LandingPage() {
         position: 'relative',
       }}
     >
+      <SmoothScroll />
+
       {/* ── NAVBAR ───────────────────────────────────────────────── */}
       <nav
         style={{

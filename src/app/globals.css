@@ -434,11 +434,26 @@ button, a, [role="button"] {
   animation: blink 1.1s step-end infinite;
 }
 
-/* Tablet: hide floating cards around the mockup */
-@media (max-width: 1024px) {
+/* Hide floating cards when there is no room around the mockup */
+@media (max-width: 1200px) {
   .sa-hero-float {
     display: none !important;
   }
+}
+
+/* ---- Lenis smooth scroll ---- */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+.lenis.lenis-stopped {
+  overflow: hidden;
 }
 
 /* Mobile: stats on 2 columns, hide status chips in prospect rows */

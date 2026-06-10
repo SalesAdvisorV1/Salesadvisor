@@ -83,9 +83,9 @@ function AnimatedHeadline() {
                 }}
               >
                 <motion.span
-                  initial={{ y: '110%', opacity: 0 }}
-                  animate={{ y: 0, opacity: 1 }}
-                  transition={{ delay: 0.2 + idx * 0.075, duration: 0.75, ease: EASE }}
+                  initial={{ y: '110%', opacity: 0, filter: 'blur(8px)' }}
+                  animate={{ y: 0, opacity: 1, filter: 'blur(0px)' }}
+                  transition={{ delay: 0.15 + idx * 0.065, duration: 0.7, ease: EASE }}
                   style={{
                     display: 'inline-block',
                     ...(line.gradient
@@ -360,9 +360,11 @@ function HeroMockup({
         perspective: 1500,
       }}
     >
-      {/* Glow behind the mockup */}
-      <div
+      {/* Glow behind the mockup — slow breathing */}
+      <motion.div
         aria-hidden
+        animate={reduced ? undefined : { opacity: [0.75, 1, 0.75], scale: [1, 1.045, 1] }}
+        transition={{ duration: 7, repeat: Infinity, ease: 'easeInOut' }}
         style={{
           position: 'absolute',
           inset: '-8% -12%',
@@ -378,9 +380,9 @@ function HeroMockup({
       <FloatingCard
         parallaxX={fx1}
         parallaxY={fy1}
-        delay={1.4}
+        delay={1.15}
         floatDuration={5.5}
-        style={{ top: -30, right: 'max(-46px, -3vw)' }}
+        style={{ top: -36, right: -70 }}
       >
         <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
           <svg width="56" height="56" viewBox="0 0 56 56">
@@ -428,9 +430,9 @@ function HeroMockup({
       <FloatingCard
         parallaxX={fx2}
         parallaxY={fy2}
-        delay={1.6}
+        delay={1.3}
         floatDuration={6.2}
-        style={{ bottom: 70, left: 'max(-54px, -3.5vw)' }}
+        style={{ bottom: 84, left: -86 }}
       >
         <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
           <div
@@ -466,9 +468,9 @@ function HeroMockup({
       <FloatingCard
         parallaxX={fx3}
         parallaxY={fy3}
-        delay={1.8}
+        delay={1.45}
         floatDuration={4.8}
-        style={{ bottom: -24, right: 'max(-38px, -2.5vw)' }}
+        style={{ bottom: -32, right: -56 }}
       >
         <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
           <span className="sa-live-dot" />
@@ -693,6 +695,16 @@ export default function Hero() {
   const sSpotX = useSpring(spotX, { stiffness: 80, damping: 24 })
   const sSpotY = useSpring(spotY, { stiffness: 80, damping: 24 })
 
+  /* Layered exit parallax — text leaves faster than the mockup */
+  const { scrollYProgress: heroProgress } = useScroll({
+    target: sectionRef,
+    offset: ['start start', 'end start'],
+  })
+  const textY = useTransform(heroProgress, [0, 1], [0, -90])
+  const textOpacity = useTransform(heroProgress, [0, 0.55], [1, 0.2])
+  const mockupParallaxY = useTransform(heroProgress, [0, 1], [0, -34])
+  const scrollCueOpacity = useTransform(heroProgress, [0, 0.15], [1, 0])
+
   return (
     <section
       ref={sectionRef}
@@ -734,6 +746,8 @@ export default function Hero() {
       />
 
       <div style={{ position: 'relative', zIndex: 1, maxWidth: 1160, margin: '0 auto' }}>
+        {/* Text block — leaves with layered parallax on scroll */}
+        <motion.div style={{ y: textY, opacity: textOpacity }}>
         {/* Badge */}
         <motion.div
           initial={{ opacity: 0, y: 16 }}
@@ -779,7 +793,7 @@ export default function Hero() {
         <motion.p
           initial={{ opacity: 0, y: 18 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.7, duration: 0.6, ease: EASE }}
+          transition={{ delay: 0.55, duration: 0.6, ease: EASE }}
           style={{
             fontSize: 18,
             color: '#6b7280',
@@ -797,7 +811,7 @@ export default function Hero() {
         <motion.div
           initial={{ opacity: 0, y: 18 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.85, duration: 0.6, ease: EASE }}
+          transition={{ delay: 0.7, duration: 0.6, ease: EASE }}
           style={{
             display: 'flex',
             gap: 14,
@@ -865,7 +879,7 @@ export default function Hero() {
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ delay: 1.05, duration: 0.6 }}
+          transition={{ delay: 0.9, duration: 0.6 }}
           style={{
             display: 'flex',
             gap: 22,
@@ -887,14 +901,17 @@ export default function Hero() {
             </span>
           ))}
         </motion.div>
+        </motion.div>
 
-        {/* Product mockup */}
+        {/* Product mockup — slower exit = depth */}
         <motion.div
-          initial={{ opacity: 0, y: 60 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 1.0, duration: 0.9, ease: EASE }}
+          initial={{ opacity: 0, y: 60, scale: 0.97 }}
+          animate={{ opacity: 1, y: 0, scale: 1 }}
+          transition={{ delay: 0.85, duration: 0.9, ease: EASE }}
         >
-          <HeroMockup smx={smx} smy={smy} />
+          <motion.div style={{ y: mockupParallaxY }}>
+            <HeroMockup smx={smx} smy={smy} />
+          </motion.div>
         </motion.div>
 
         {/* Stats */}
@@ -935,6 +952,47 @@ export default function Hero() {
           ))}
         </div>
       </div>
+
+      {/* Scroll cue */}
+      <motion.div
+        aria-hidden
+        style={{
+          position: 'absolute',
+          bottom: 26,
+          left: '50%',
+          translateX: '-50%',
+          opacity: scrollCueOpacity,
+          zIndex: 1,
+          pointerEvents: 'none',
+        }}
+      >
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 2, duration: 0.8 }}
+          style={{
+            width: 22,
+            height: 36,
+            borderRadius: 9999,
+            border: '1.5px solid rgba(99,102,241,0.35)',
+            display: 'flex',
+            justifyContent: 'center',
+            paddingTop: 6,
+          }}
+        >
+          <motion.span
+            animate={reduced ? undefined : { y: [0, 10], opacity: [1, 0] }}
+            transition={{ duration: 1.4, repeat: Infinity, ease: 'easeOut' }}
+            style={{
+              width: 4,
+              height: 7,
+              borderRadius: 9999,
+              background: '#6366f1',
+              display: 'block',
+            }}
+          />
+        </motion.div>
+      </motion.div>
     </section>
   )
 }
