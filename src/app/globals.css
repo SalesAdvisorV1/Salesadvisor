@@ -426,6 +426,33 @@ button, a, [role="button"] {
 }
 
 /* =============================================================
+   IMMERSIVE HERO
+   ============================================================= */
+
+/* Blinking caret in the mockup search bar */
+.sa-caret {
+  animation: blink 1.1s step-end infinite;
+}
+
+/* Tablet: hide floating cards around the mockup */
+@media (max-width: 1024px) {
+  .sa-hero-float {
+    display: none !important;
+  }
+}
+
+/* Mobile: stats on 2 columns, hide status chips in prospect rows */
+@media (max-width: 720px) {
+  .sa-hero-stats {
+    grid-template-columns: repeat(2, 1fr) !important;
+    row-gap: 32px !important;
+  }
+  .sa-hero-row-status {
+    display: none !important;
+  }
+}
+
+/* =============================================================
    FLOATING NAVBAR — capsule + glassmorphism
    ============================================================= */
 .sa-navbar {
