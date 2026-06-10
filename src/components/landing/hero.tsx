@@ -36,10 +36,10 @@ const AVATAR_GRADIENTS = [
 ]
 
 const STATS: { to: number; decimals: number; label: string; prefix?: string; suffix?: string }[] = [
-  { to: 500, suffix: '+', decimals: 0, label: 'Équipes' },
-  { to: 4.9, suffix: '/5', decimals: 1, label: 'Note moyenne' },
-  { to: 30, suffix: 's', decimals: 0, label: 'Par prospect' },
-  { to: 47, prefix: '+', decimals: 0, label: "Prospects qualifiés aujourd'hui" },
+  { to: 500, suffix: '+', decimals: 0, label: 'équipes' },
+  { to: 4.9, suffix: '/5', decimals: 1, label: 'note moyenne' },
+  { to: 30, suffix: 's', decimals: 0, label: 'par prospect' },
+  { to: 47, prefix: '+', decimals: 0, label: "prospects qualifiés aujourd'hui" },
 ]
 
 const TRUST_ITEMS = ['Aucune carte bancaire', 'Annulable à tout moment', 'Onboarding en 2 min']
@@ -201,9 +201,9 @@ function CountUp({
 
   return (
     <span ref={ref} style={{ fontVariantNumeric: 'tabular-nums' }}>
-      {prefix}
+      {prefix && <span style={{ color: '#6366f1' }}>{prefix}</span>}
       {value.toFixed(decimals).replace('.', ',')}
-      {suffix}
+      {suffix && <span style={{ color: '#6366f1' }}>{suffix}</span>}
     </span>
   )
 }
@@ -899,41 +899,60 @@ export default function Hero() {
           ))}
         </motion.div>
 
-        {/* Stats — compact inline row under the text */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 1.05, duration: 0.6 }}
+        {/* Stats — flowing inline, no frame */}
+        <div
           style={{
             display: 'flex',
-            alignItems: 'flex-start',
-            justifyContent: 'space-between',
+            alignItems: 'center',
             flexWrap: 'wrap',
-            gap: 24,
-            borderTop: '1px solid rgba(15,23,42,0.08)',
-            paddingTop: 32,
-            maxWidth: 660,
+            columnGap: 22,
+            rowGap: 16,
+            maxWidth: 640,
           }}
         >
-          {STATS.map((s) => (
-            <div key={s.label}>
-              <div
-                style={{
-                  fontSize: 'clamp(24px, 1.8vw, 32px)',
-                  fontWeight: 800,
-                  letterSpacing: '-0.03em',
-                  color: '#0a0a0a',
-                  lineHeight: 1,
-                }}
+          {STATS.map((s, i) => (
+            <div key={s.label} style={{ display: 'flex', alignItems: 'center', gap: 22 }}>
+              {i > 0 && (
+                <span
+                  aria-hidden
+                  style={{
+                    width: 4,
+                    height: 4,
+                    borderRadius: '50%',
+                    background: 'rgba(99,102,241,0.35)',
+                    display: 'inline-block',
+                    flexShrink: 0,
+                  }}
+                />
+              )}
+              <motion.div
+                initial={{ opacity: 0, y: 12 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 1.05 + i * 0.12, duration: 0.55, ease: EASE }}
+                whileHover={{ y: -2 }}
+                style={{ display: 'flex', alignItems: 'baseline', gap: 8, cursor: 'default' }}
               >
-                <CountUp to={s.to} decimals={s.decimals} prefix={s.prefix ?? ''} suffix={s.suffix ?? ''} />
-              </div>
-              <div style={{ fontSize: 13, color: '#9ca3af', marginTop: 7, lineHeight: 1.35, maxWidth: 150 }}>
-                {s.label}
-              </div>
+                <span
+                  style={{
+                    fontSize: 'clamp(22px, 1.6vw, 28px)',
+                    fontWeight: 800,
+                    letterSpacing: '-0.03em',
+                    lineHeight: 1,
+                    background: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)',
+                    WebkitBackgroundClip: 'text',
+                    WebkitTextFillColor: 'transparent',
+                    backgroundClip: 'text',
+                  }}
+                >
+                  <CountUp to={s.to} decimals={s.decimals} prefix={s.prefix ?? ''} suffix={s.suffix ?? ''} />
+                </span>
+                <span style={{ fontSize: 14, color: '#6b7280', whiteSpace: 'nowrap' }}>
+                  {s.label}
+                </span>
+              </motion.div>
             </div>
           ))}
-        </motion.div>
+        </div>
         </motion.div>
 
         {/* Mockup column — 3D perspective, bleeding off the right edge */}
