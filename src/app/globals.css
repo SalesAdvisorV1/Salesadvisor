@@ -351,14 +351,88 @@ button, a, [role="button"] {
   50%      { transform: translate3d(-100px, -120px, 0) scale(1.06); }
 }
 
+/* ---- Light beam from the top (hero) ---- */
+.sa-mesh-bg__beam {
+  position: absolute;
+  top: -12%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 90%;
+  height: 62%;
+  background: radial-gradient(
+    ellipse at 50% 0%,
+    rgba(99, 102, 241, 0.18) 0%,
+    rgba(139, 92, 246, 0.08) 42%,
+    transparent 72%
+  );
+  pointer-events: none;
+}
+
+/* ---- Aurora ribbons — slow conic sweeps behind the blobs ---- */
+.sa-mesh-bg__aurora {
+  position: absolute;
+  width: 120vmax;
+  height: 120vmax;
+  border-radius: 50%;
+  filter: blur(54px);
+  opacity: 0.5;
+  will-change: transform;
+}
+
+.sa-mesh-bg__aurora--1 {
+  top: -62vmax;
+  left: -18vmax;
+  background: conic-gradient(
+    from 90deg at 50% 50%,
+    transparent 0deg,
+    rgba(99, 102, 241, 0.30) 55deg,
+    rgba(139, 92, 246, 0.22) 115deg,
+    rgba(192, 132, 252, 0.10) 160deg,
+    transparent 210deg,
+    transparent 360deg
+  );
+  animation: sa-aurora-spin 90s linear infinite;
+}
+
+.sa-mesh-bg__aurora--2 {
+  bottom: -70vmax;
+  right: -26vmax;
+  background: conic-gradient(
+    from 270deg at 50% 50%,
+    transparent 0deg,
+    rgba(192, 132, 252, 0.24) 65deg,
+    rgba(99, 102, 241, 0.16) 130deg,
+    transparent 195deg,
+    transparent 360deg
+  );
+  animation: sa-aurora-spin 120s linear infinite reverse;
+}
+
+@keyframes sa-aurora-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ---- Film grain — static noise texture above the gradients ---- */
+.sa-mesh-bg__grain {
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E");
+  background-size: 160px 160px;
+  opacity: 0.045;
+  pointer-events: none;
+}
+
 /* Respect accessibility preference */
 @media (prefers-reduced-motion: reduce) {
-  .sa-mesh-bg__blob {
+  .sa-mesh-bg__blob,
+  .sa-mesh-bg__aurora {
     animation: none !important;
   }
 }
 
-/* Mobile: smaller blobs, fewer of them visible */
+/* Mobile: smaller blobs, fewer layers */
 @media (max-width: 720px) {
   .sa-mesh-bg__blob {
     filter: blur(50px);
@@ -368,6 +442,8 @@ button, a, [role="button"] {
   .sa-mesh-bg__blob--3 { display: none; }
   .sa-mesh-bg__blob--4 { width: 380px; height: 380px; }
   .sa-mesh-bg__blob--5 { width: 440px; height: 440px; }
+  .sa-mesh-bg__aurora--2 { display: none; }
+  .sa-mesh-bg__aurora { filter: blur(40px); }
 }
 
 /* ---- Radar animations (map scan overlay) ---- */

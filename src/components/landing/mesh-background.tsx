@@ -38,12 +38,19 @@ export default function MeshBackground() {
           willChange: 'opacity, transform',
         }}
       >
+        {/* Light beam falling from the top, behind the hero */}
+        <span className="sa-mesh-bg__beam" />
+        {/* Slow-spinning aurora ribbons */}
+        <span className="sa-mesh-bg__aurora sa-mesh-bg__aurora--1" />
+        <span className="sa-mesh-bg__aurora sa-mesh-bg__aurora--2" />
         <span className="sa-mesh-bg__blob sa-mesh-bg__blob--1" />
         <span className="sa-mesh-bg__blob sa-mesh-bg__blob--2" />
         <span className="sa-mesh-bg__blob sa-mesh-bg__blob--3" />
         <span className="sa-mesh-bg__blob sa-mesh-bg__blob--4" />
         <span className="sa-mesh-bg__blob sa-mesh-bg__blob--5" />
       </motion.div>
+      {/* Film grain — constant, kills gradient banding */}
+      <span className="sa-mesh-bg__grain" />
     </div>
   )
 }
