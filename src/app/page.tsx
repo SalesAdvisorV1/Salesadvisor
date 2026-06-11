@@ -366,67 +366,63 @@ export default function LandingPage() {
       {/* ── HERO ─────────────────────────────────────────────────── */}
       <Hero />
 
-      {/* ── SOCIAL PROOF ─────────────────────────────────────────── */}
-      <section style={{ padding: '80px 0', background: 'transparent' }}>
-        <div style={{ padding: '0 clamp(32px, 6vw, 120px)' }}>
+      {/* ── SOCIAL PROOF — double marquee infini ─────────────────── */}
+      <section style={{ padding: '50px 0 90px', background: 'transparent' }}>
+        <motion.p
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          style={{
+            fontSize: 12,
+            fontWeight: 700,
+            letterSpacing: '0.1em',
+            color: '#6366f1',
+            textTransform: 'uppercase',
+            textAlign: 'center',
+            marginBottom: 44,
+            padding: '0 24px',
+          }}
+        >
+          Adopté par +500 équipes commerciales B2B
+        </motion.p>
 
-          {/* Eyebrow — même style que les labels de section (PROCESSUS, etc.) */}
-          <motion.p
+        {[
+          { row: clients.slice(0, 6), reverse: false },
+          { row: clients.slice(6, 12), reverse: true },
+        ].map(({ row, reverse }, rowIdx) => (
+          <motion.div
+            key={rowIdx}
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
-            style={{
-              fontSize: 12,
-              fontWeight: 700,
-              letterSpacing: '0.1em',
-              color: '#6366f1',
-              textTransform: 'uppercase',
-              marginBottom: 40,
-            }}
+            transition={{ delay: rowIdx * 0.15, duration: 0.7 }}
+            className="sa-marquee"
+            style={{ marginBottom: rowIdx === 0 ? 30 : 0 }}
           >
-            Adopté par +500 équipes commerciales B2B
-          </motion.p>
-
-          {[clients.slice(0, 6), clients.slice(6, 12)].map((row, rowIdx) => (
-            <div
-              key={rowIdx}
-              style={{
-                display: 'grid',
-                gridTemplateColumns: 'repeat(6, 1fr)',
-                alignItems: 'center',
-                marginBottom: rowIdx === 0 ? 32 : 0,
-              }}
-            >
-              {row.map((c, i) => (
-                <motion.div
-                  key={c.name}
-                  initial={{ opacity: 0, y: 8 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: (rowIdx * 6 + i) * 0.07, duration: 0.36 }}
-                  onMouseEnter={(e) => {
-                    const el = e.currentTarget as HTMLDivElement
-                    el.style.opacity = '1'
-                    el.style.transform = 'translateY(-2px)'
-                  }}
-                  onMouseLeave={(e) => {
-                    const el = e.currentTarget as HTMLDivElement
-                    el.style.opacity = '0.55'
-                    el.style.transform = 'translateY(0)'
-                  }}
+            <div className={`sa-marquee-track${reverse ? ' sa-marquee-track--reverse' : ''}`}>
+              {[...row, ...row, ...row, ...row].map((c, i) => (
+                <div
+                  key={`${c.name}-${i}`}
                   style={{
                     display: 'flex',
                     alignItems: 'center',
-                    gap: 8,
-                    opacity: 0.55,
-                    transition: 'opacity 0.2s ease, transform 0.18s ease',
+                    gap: 10,
+                    padding: '6px clamp(26px, 3vw, 52px)',
+                    opacity: 0.6,
+                    transition: 'opacity 0.2s ease',
                     cursor: 'default',
                     userSelect: 'none',
                   }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.opacity = '1'
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.opacity = '0.6'
+                  }}
                 >
                   <svg
-                    width="22"
-                    height="22"
+                    width="24"
+                    height="24"
                     viewBox="0 0 24 24"
                     fill={c.color}
                     aria-hidden="true"
@@ -434,22 +430,23 @@ export default function LandingPage() {
                   >
                     <path d={c.path} />
                   </svg>
-                  <span style={{
-                    fontSize: 14,
-                    fontWeight: 700,
-                    letterSpacing: '-0.02em',
-                    color: '#0f172a',
-                    whiteSpace: 'nowrap',
-                    fontFamily: 'inherit',
-                  }}>
+                  <span
+                    style={{
+                      fontSize: 15,
+                      fontWeight: 700,
+                      letterSpacing: '-0.02em',
+                      color: '#0f172a',
+                      whiteSpace: 'nowrap',
+                      fontFamily: 'inherit',
+                    }}
+                  >
                     {c.name}
                   </span>
-                </motion.div>
+                </div>
               ))}
             </div>
-          ))}
-
-        </div>
+          </motion.div>
+        ))}
       </section>
 
       {/* ── PROCESS ──────────────────────────────────────────────── */}
