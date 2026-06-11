@@ -3,6 +3,7 @@
 import Link from 'next/link'
 import { motion } from 'framer-motion'
 import Hero from '@/components/landing/hero'
+import Process from '@/components/landing/process'
 import SmoothScroll from '@/components/landing/smooth-scroll'
 
 /* ─── Data ─────────────────────────────────────────────────────── */
@@ -138,49 +139,6 @@ const partners = [
         <path d="M14.5 5a5 5 0 015 5v1" strokeLinecap="round" />
         <path d="M6 12a6 6 0 016-6 6 6 0 014.8 2.4" strokeLinecap="round" />
         <path d="M19 14a3 3 0 010 6H8a4 4 0 110-8" strokeLinecap="round" />
-      </svg>
-    ),
-  },
-]
-
-const processSteps = [
-  {
-    num: '1',
-    title: 'Analyse intelligente',
-    desc: "Collecte de données fiables à partir de multiples sources (site web, LinkedIn, actualités…)",
-    icon: (
-      <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="#6366f1" strokeWidth="2">
-        <circle cx="11" cy="11" r="8" /><path d="M21 21l-4.35-4.35" />
-      </svg>
-    ),
-  },
-  {
-    num: '2',
-    title: 'Qualification IA',
-    desc: "L'IA identifie les décideurs, score le potentiel et priorise vos prospects.",
-    icon: (
-      <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="#6366f1" strokeWidth="2">
-        <path d="M9 3H5a2 2 0 00-2 2v4m6-6h10a2 2 0 012 2v4M9 3v18m0 0h10a2 2 0 002-2V9M9 21H5a2 2 0 01-2-2V9m0 0h18" />
-      </svg>
-    ),
-  },
-  {
-    num: '3',
-    title: 'Email personnalisé',
-    desc: 'Rédaction automatique d\'emails adaptés et percutants pour chaque prospect.',
-    icon: (
-      <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="#6366f1" strokeWidth="2">
-        <path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-      </svg>
-    ),
-  },
-  {
-    num: '4',
-    title: 'Engagement & suivi',
-    desc: 'Suivez les ouvertures, préparez les relances et gérez vos prochains échanges.',
-    icon: (
-      <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="#6366f1" strokeWidth="2">
-        <path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
       </svg>
     ),
   },
@@ -581,130 +539,7 @@ export default function LandingPage() {
       </section>
 
       {/* ── PROCESS ──────────────────────────────────────────────── */}
-      <section id="processus" style={{ padding: '96px 24px' }}>
-        <div
-          style={{
-            padding: '0 clamp(32px, 6vw, 120px)',
-            display: 'grid',
-            gridTemplateColumns: '1fr 1.2fr',
-            gap: 80,
-            alignItems: 'start',
-          }}
-        >
-          {/* Left */}
-          <motion.div
-            initial={{ opacity: 0, y: 24 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5 }}
-          >
-            <p
-              style={{
-                fontSize: 12,
-                fontWeight: 700,
-                letterSpacing: '0.1em',
-                color: '#6366f1',
-                textTransform: 'uppercase',
-                marginBottom: 16,
-              }}
-            >
-              Processus
-            </p>
-            <h2
-              style={{
-                fontSize: 'clamp(26px, 2.8vw, 40px)',
-                fontWeight: 800,
-                letterSpacing: '-0.03em',
-                lineHeight: 1.1,
-                margin: '0 0 20px',
-              }}
-            >
-              De la donnée à la conversation,{' '}
-              <span style={{ color: '#6366f1' }}>propulsé par l&apos;IA</span>
-            </h2>
-            <p
-              style={{
-                fontSize: 16,
-                color: '#6b7280',
-                lineHeight: 1.65,
-                margin: '0 0 28px',
-                maxWidth: 400,
-              }}
-            >
-              Sales Advisor analyse, qualifie et vous aide à engager les bonnes conversations avec
-              les bons décideurs.
-            </p>
-            <Link
-              href="/register"
-              style={{
-                color: '#6366f1',
-                fontSize: 15,
-                fontWeight: 600,
-                textDecoration: 'none',
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: 6,
-              }}
-            >
-              Découvrir le processus{' '}
-              <span style={{ transition: 'transform 0.15s' }}>→</span>
-            </Link>
-          </motion.div>
-
-          {/* Right — 4 step cards */}
-          <div
-            style={{
-              display: 'grid',
-              gridTemplateColumns: '1fr 1fr',
-              gap: 16,
-            }}
-          >
-            {processSteps.map((step, i) => (
-              <motion.div
-                key={step.num}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.1, duration: 0.45 }}
-                style={{
-                  background: 'rgba(255,255,255,0.78)',
-                  backdropFilter: 'blur(10px)',
-                  WebkitBackdropFilter: 'blur(10px)',
-                  border: '1px solid rgba(255,255,255,0.6)',
-                  borderRadius: 18,
-                  padding: '22px 20px',
-                  boxShadow: '0 4px 16px rgba(99,102,241,0.08)',
-                  transition: 'box-shadow 0.2s, transform 0.2s',
-                }}
-                whileHover={{ y: -4, boxShadow: '0 8px 24px rgba(99,102,241,0.1)' }}
-              >
-                <div
-                  style={{
-                    width: 36,
-                    height: 36,
-                    background: '#eef2ff',
-                    borderRadius: 10,
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    marginBottom: 14,
-                  }}
-                >
-                  {step.icon}
-                </div>
-                <div
-                  style={{ fontSize: 13, fontWeight: 700, marginBottom: 6, color: '#0a0a0a' }}
-                >
-                  {step.num}. {step.title}
-                </div>
-                <div style={{ fontSize: 13, color: '#9ca3af', lineHeight: 1.55 }}>
-                  {step.desc}
-                </div>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
+      <Process />
 
       {/* ── FEATURES ─────────────────────────────────────────────── */}
       <section
