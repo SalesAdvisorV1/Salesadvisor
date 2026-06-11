@@ -68,7 +68,7 @@ export default function Navbar() {
         animate={{
           y: 0,
           opacity: 1,
-          maxWidth: scrolled ? 1140 : 1600,
+          maxWidth: scrolled ? 1000 : 1280,
           height: scrolled ? 56 : 64,
           backgroundColor: scrolled ? 'rgba(255,255,255,0.88)' : 'rgba(255,255,255,0.72)',
         }}
@@ -145,7 +145,7 @@ export default function Navbar() {
             flex: 1,
             justifyContent: 'center',
             alignItems: 'center',
-            gap: 2,
+            gap: 6,
             margin: '0 12px',
           }}
         >
