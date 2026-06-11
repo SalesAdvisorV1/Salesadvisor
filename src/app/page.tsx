@@ -366,7 +366,8 @@ export default function LandingPage() {
       {/* ── HERO ─────────────────────────────────────────────────── */}
       <Hero />
 
-      {/* ── SOCIAL PROOF — double marquee infini ─────────────────── */}
+      {/* ── SOCIAL PROOF — double marquee infini (masqué pour l'instant) ── */}
+      {false && (
       <section style={{ padding: '50px 0 90px', background: 'transparent' }}>
         <motion.p
           initial={{ opacity: 0 }}
@@ -448,6 +449,7 @@ export default function LandingPage() {
           </motion.div>
         ))}
       </section>
+      )}
 
       {/* ── PROCESS ──────────────────────────────────────────────── */}
       <Process />
