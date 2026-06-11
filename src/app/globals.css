@@ -251,21 +251,22 @@ button, a, [role="button"] {
   background: #ffffff;
 }
 
-/* Soft top-to-bottom tint to anchor the page */
+/* Tint anchors: colored at the top, soft indigo at the bottom */
 .sa-mesh-bg::before {
   content: '';
   position: absolute;
   inset: 0;
   background:
-    linear-gradient(180deg, rgba(238, 242, 255, 0) 0%, rgba(238, 242, 255, 0.4) 100%);
+    linear-gradient(180deg, rgba(224, 231, 255, 0.75) 0%, rgba(238, 242, 255, 0) 32%),
+    linear-gradient(180deg, rgba(238, 242, 255, 0) 60%, rgba(224, 231, 255, 0.65) 100%);
   pointer-events: none;
 }
 
 .sa-mesh-bg__blob {
   position: absolute;
   border-radius: 50%;
-  filter: blur(70px);
-  opacity: 0.55;
+  filter: blur(60px);
+  opacity: 0.75;
   will-change: transform;
   transform: translate3d(0, 0, 0);
 }
@@ -290,7 +291,7 @@ button, a, [role="button"] {
   animation: sa-mesh-float-2 38s ease-in-out infinite;
 }
 
-/* Blob 3 — soft indigo, middle-center (large, faint) */
+/* Blob 3 — soft indigo, middle-center (large) */
 .sa-mesh-bg__blob--3 {
   width: 980px;
   height: 980px;
@@ -298,18 +299,18 @@ button, a, [role="button"] {
   left: 50%;
   transform: translate3d(-50%, 0, 0);
   background: radial-gradient(circle at 50% 50%, #a78bfa 0%, rgba(167, 139, 250, 0) 70%);
-  opacity: 0.32;
+  opacity: 0.48;
   animation: sa-mesh-float-3 44s ease-in-out infinite;
 }
 
-/* Blob 4 — pink-purple, mid-left lower */
+/* Blob 4 — fuchsia accent, mid-left lower */
 .sa-mesh-bg__blob--4 {
   width: 620px;
   height: 620px;
   top: 55%;
   left: -120px;
-  background: radial-gradient(circle at 50% 50%, #c084fc 0%, rgba(192, 132, 252, 0) 65%);
-  opacity: 0.40;
+  background: radial-gradient(circle at 50% 50%, #d946ef 0%, rgba(217, 70, 239, 0) 65%);
+  opacity: 0.38;
   animation: sa-mesh-float-4 36s ease-in-out infinite;
 }
 
@@ -320,7 +321,7 @@ button, a, [role="button"] {
   bottom: -200px;
   right: -160px;
   background: radial-gradient(circle at 50% 50%, #4f46e5 0%, rgba(79, 70, 229, 0) 65%);
-  opacity: 0.45;
+  opacity: 0.62;
   animation: sa-mesh-float-5 40s ease-in-out infinite;
 }
 
@@ -357,12 +358,12 @@ button, a, [role="button"] {
   top: -12%;
   left: 50%;
   transform: translateX(-50%);
-  width: 90%;
-  height: 62%;
+  width: 100%;
+  height: 68%;
   background: radial-gradient(
     ellipse at 50% 0%,
-    rgba(99, 102, 241, 0.18) 0%,
-    rgba(139, 92, 246, 0.08) 42%,
+    rgba(99, 102, 241, 0.30) 0%,
+    rgba(139, 92, 246, 0.14) 42%,
     transparent 72%
   );
   pointer-events: none;
@@ -374,8 +375,8 @@ button, a, [role="button"] {
   width: 120vmax;
   height: 120vmax;
   border-radius: 50%;
-  filter: blur(54px);
-  opacity: 0.5;
+  filter: blur(48px);
+  opacity: 0.8;
   will-change: transform;
 }
 
@@ -385,9 +386,9 @@ button, a, [role="button"] {
   background: conic-gradient(
     from 90deg at 50% 50%,
     transparent 0deg,
-    rgba(99, 102, 241, 0.30) 55deg,
-    rgba(139, 92, 246, 0.22) 115deg,
-    rgba(192, 132, 252, 0.10) 160deg,
+    rgba(99, 102, 241, 0.42) 55deg,
+    rgba(139, 92, 246, 0.32) 115deg,
+    rgba(217, 70, 239, 0.14) 160deg,
     transparent 210deg,
     transparent 360deg
   );
@@ -400,8 +401,8 @@ button, a, [role="button"] {
   background: conic-gradient(
     from 270deg at 50% 50%,
     transparent 0deg,
-    rgba(192, 132, 252, 0.24) 65deg,
-    rgba(99, 102, 241, 0.16) 130deg,
+    rgba(192, 132, 252, 0.36) 65deg,
+    rgba(99, 102, 241, 0.26) 130deg,
     transparent 195deg,
     transparent 360deg
   );

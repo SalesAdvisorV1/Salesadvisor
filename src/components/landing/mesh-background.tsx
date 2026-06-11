@@ -23,7 +23,7 @@ export default function MeshBackground() {
   const blobOpacity = useTransform(
     smooth,
     [0, 0.16, 0.42, 0.6, 0.8, 1],
-    [1, 0.55, 0.3, 0.45, 0.8, 1]
+    [1, 0.65, 0.42, 0.55, 0.85, 1]
   )
   const blobY = useTransform(smooth, [0, 1], [0, -120])
 
