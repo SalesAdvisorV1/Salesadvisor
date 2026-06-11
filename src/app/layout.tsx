@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Geist } from "next/font/google";
 import { QueryProvider } from "@/components/providers/query-provider";
+import MeshBackground from "@/components/landing/mesh-background";
 import "./globals.css";
 
 const geist = Geist({
@@ -42,14 +43,8 @@ export default function RootLayout({
   return (
     <html lang="fr" className={geist.variable}>
       <body className="antialiased">
-        {/* Animated mesh gradient background — fixed behind all content */}
-        <div className="sa-mesh-bg" aria-hidden="true">
-          <span className="sa-mesh-bg__blob sa-mesh-bg__blob--1" />
-          <span className="sa-mesh-bg__blob sa-mesh-bg__blob--2" />
-          <span className="sa-mesh-bg__blob sa-mesh-bg__blob--3" />
-          <span className="sa-mesh-bg__blob sa-mesh-bg__blob--4" />
-          <span className="sa-mesh-bg__blob sa-mesh-bg__blob--5" />
-        </div>
+        {/* Animated mesh gradient background — fixed, scroll-reactive */}
+        <MeshBackground />
         <QueryProvider>{children}</QueryProvider>
       </body>
     </html>
