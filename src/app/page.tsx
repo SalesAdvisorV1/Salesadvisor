@@ -7,6 +7,7 @@ import Process from '@/components/landing/process'
 import Features from '@/components/landing/features'
 import Testimonials from '@/components/landing/testimonials'
 import Pricing from '@/components/landing/pricing'
+import FinalCta from '@/components/landing/final-cta'
 import SmoothScroll from '@/components/landing/smooth-scroll'
 
 /* ─── Data ─────────────────────────────────────────────────────── */
@@ -463,158 +464,8 @@ export default function LandingPage() {
       {/* ── PRICING ──────────────────────────────────────────────── */}
       <Pricing />
 
-      {/* ── CTA BANNER ───────────────────────────────────────────── */}
-      <section
-        style={{
-          padding: '80px 24px',
-          background: 'linear-gradient(135deg, #1e1b4b 0%, #312e81 50%, #3730a3 100%)',
-        }}
-      >
-        <div
-          style={{
-            padding: '0 clamp(32px, 6vw, 120px)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            gap: 40,
-            flexWrap: 'wrap',
-          }}
-        >
-          <div style={{ flex: 1, minWidth: 280 }}>
-            <h2
-              style={{
-                fontSize: 'clamp(22px, 2.8vw, 36px)',
-                fontWeight: 800,
-                color: '#fff',
-                letterSpacing: '-0.03em',
-                lineHeight: 1.15,
-                margin: '0 0 10px',
-              }}
-            >
-              Prêt à booster vos résultats commerciaux ?
-            </h2>
-            <p style={{ fontSize: 15, color: '#a5b4fc', margin: '0 0 22px', lineHeight: 1.5 }}>
-              Rejoignez des centaines d&apos;équipes qui vendent mieux, chaque jour.
-            </p>
-            <div style={{ display: 'flex', gap: 22, flexWrap: 'wrap' }}>
-              {['Aucune carte bancaire', 'Annulable à tout moment', 'Onboarding en 2 min'].map(
-                (item) => (
-                  <span
-                    key={item}
-                    style={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: 6,
-                      fontSize: 13,
-                      color: '#a5b4fc',
-                    }}
-                  >
-                    <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-                      <circle cx="7" cy="7" r="7" fill="rgba(165,180,252,0.18)" />
-                      <path
-                        d="M4 7l2 2 4-4"
-                        stroke="#a5b4fc"
-                        strokeWidth="1.5"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                    </svg>
-                    {item}
-                  </span>
-                )
-              )}
-            </div>
-          </div>
-
-          <Link
-            href="/register"
-            style={{
-              background: '#6366f1',
-              color: '#fff',
-              padding: '16px 36px',
-              borderRadius: 9999,
-              fontSize: 16,
-              fontWeight: 700,
-              textDecoration: 'none',
-              whiteSpace: 'nowrap',
-              flexShrink: 0,
-              boxShadow: '0 4px 20px rgba(99,102,241,0.5)',
-              display: 'inline-block',
-            }}
-          >
-            Essayer gratuitement — 14 jours
-          </Link>
-        </div>
-      </section>
-
-      {/* ── FOOTER ───────────────────────────────────────────────── */}
-      <footer
-        style={{
-          padding: '28px 24px',
-          borderTop: '1px solid rgba(243,244,246,0.6)',
-          background: 'rgba(255,255,255,0.78)',
-          backdropFilter: 'blur(10px)',
-          WebkitBackdropFilter: 'blur(10px)',
-        }}
-      >
-        <div
-          style={{
-            padding: '0 clamp(32px, 6vw, 120px)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            flexWrap: 'wrap',
-            gap: 16,
-          }}
-        >
-          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-            <div
-              style={{
-                width: 28,
-                height: 28,
-                background: '#6366f1',
-                borderRadius: 6,
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                color: '#fff',
-                fontWeight: 800,
-                fontSize: 11,
-              }}
-            >
-              SA
-            </div>
-            <span style={{ fontSize: 14, fontWeight: 600, color: '#0a0a0a' }}>Sales Advisor</span>
-          </div>
-
-          <div style={{ fontSize: 13, color: '#d1d5db' }}>
-            © 2025 Sales Advisor. Tous droits réservés.
-          </div>
-
-          <div style={{ display: 'flex', gap: 24 }}>
-            {['Mentions légales', 'Confidentialité', 'CGU'].map((item) => (
-              <a
-                key={item}
-                href="#"
-                style={{
-                  fontSize: 13,
-                  color: '#9ca3af',
-                  textDecoration: 'none',
-                  transition: 'color 0.15s',
-                }}
-                onMouseEnter={(e) =>
-                  ((e.currentTarget as HTMLAnchorElement).style.color = '#6366f1')
-                }
-                onMouseLeave={(e) =>
-                  ((e.currentTarget as HTMLAnchorElement).style.color = '#9ca3af')
-                }
-              >
-                {item}
-              </a>
-            ))}
-          </div>
-        </div>
-      </footer>
+      {/* ── CTA BANNER + FOOTER ──────────────────────────────────── */}
+      <FinalCta />
     </div>
   )
 }
