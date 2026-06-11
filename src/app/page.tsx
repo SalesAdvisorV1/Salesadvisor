@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { motion } from 'framer-motion'
 import Hero from '@/components/landing/hero'
 import Process from '@/components/landing/process'
+import Features from '@/components/landing/features'
 import SmoothScroll from '@/components/landing/smooth-scroll'
 
 /* ─── Data ─────────────────────────────────────────────────────── */
@@ -139,45 +140,6 @@ const partners = [
         <path d="M14.5 5a5 5 0 015 5v1" strokeLinecap="round" />
         <path d="M6 12a6 6 0 016-6 6 6 0 014.8 2.4" strokeLinecap="round" />
         <path d="M19 14a3 3 0 010 6H8a4 4 0 110-8" strokeLinecap="round" />
-      </svg>
-    ),
-  },
-]
-
-const features = [
-  {
-    title: 'Prospect Finder',
-    desc: 'Identifiez les entreprises les plus susceptibles d\'acheter grâce au scoring IA en temps réel.',
-    icon: (
-      <svg width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="#6366f1" strokeWidth="2">
-        <circle cx="11" cy="11" r="8" /><path d="M21 21l-4.35-4.35" />
-      </svg>
-    ),
-  },
-  {
-    title: 'Assistance IA',
-    desc: 'Générez un résumé, un pitch personnalisé ou une préparation d\'appel en un clic.',
-    icon: (
-      <svg width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="#6366f1" strokeWidth="2">
-        <path d="M13 10V3L4 14h7v7l9-11h-7z" />
-      </svg>
-    ),
-  },
-  {
-    title: 'Dashboard',
-    desc: 'Visualisez vos performances : recherches, prospects qualifiés, score moyen, crédits.',
-    icon: (
-      <svg width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="#6366f1" strokeWidth="2">
-        <rect x="3" y="3" width="7" height="7" rx="1" /><rect x="14" y="3" width="7" height="7" rx="1" /><rect x="3" y="14" width="7" height="7" rx="1" /><rect x="14" y="14" width="7" height="7" rx="1" />
-      </svg>
-    ),
-  },
-  {
-    title: 'Export CSV',
-    desc: 'Exportez vos prospects qualifiés directement dans votre CRM ou tableur favori.',
-    icon: (
-      <svg width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="#6366f1" strokeWidth="2">
-        <path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
       </svg>
     ),
   },
@@ -542,94 +504,7 @@ export default function LandingPage() {
       <Process />
 
       {/* ── FEATURES ─────────────────────────────────────────────── */}
-      <section
-        id="fonctionnalités"
-        style={{ padding: '96px 24px', background: 'transparent' }}
-      >
-        <div style={{ padding: '0 clamp(32px, 6vw, 120px)' }}>
-          <motion.div
-            initial={{ opacity: 0, y: 24 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            style={{ textAlign: 'center', marginBottom: 60 }}
-          >
-            <p
-              style={{
-                fontSize: 12,
-                fontWeight: 700,
-                letterSpacing: '0.1em',
-                color: '#6366f1',
-                textTransform: 'uppercase',
-                marginBottom: 12,
-              }}
-            >
-              Fonctionnalités
-            </p>
-            <h2
-              style={{
-                fontSize: 'clamp(26px, 2.8vw, 42px)',
-                fontWeight: 800,
-                letterSpacing: '-0.03em',
-                margin: '0 0 14px',
-              }}
-            >
-              Tout ce dont vous avez besoin
-            </h2>
-            <p style={{ fontSize: 17, color: '#6b7280', maxWidth: 520, margin: '0 auto' }}>
-              Une plateforme complète pour trouver, qualifier et engager vos meilleurs prospects.
-            </p>
-          </motion.div>
-
-          <div
-            style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(4, 1fr)',
-              gap: 20,
-            }}
-          >
-            {features.map((f, i) => (
-              <motion.div
-                key={f.title}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.1 }}
-                style={{
-                  background: 'rgba(255,255,255,0.78)',
-                  backdropFilter: 'blur(10px)',
-                  WebkitBackdropFilter: 'blur(10px)',
-                  border: '1px solid rgba(255,255,255,0.6)',
-                  borderRadius: 20,
-                  padding: '28px 24px',
-                  boxShadow: '0 4px 16px rgba(99,102,241,0.08)',
-                }}
-                whileHover={{ y: -4, boxShadow: '0 8px 24px rgba(99,102,241,0.1)' }}
-              >
-                <div
-                  style={{
-                    width: 44,
-                    height: 44,
-                    background: '#eef2ff',
-                    borderRadius: 12,
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    marginBottom: 16,
-                  }}
-                >
-                  {f.icon}
-                </div>
-                <div
-                  style={{ fontSize: 15, fontWeight: 700, marginBottom: 8, color: '#0a0a0a' }}
-                >
-                  {f.title}
-                </div>
-                <div style={{ fontSize: 14, color: '#9ca3af', lineHeight: 1.6 }}>{f.desc}</div>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
+      <Features />
 
       {/* ── TESTIMONIALS ─────────────────────────────────────────── */}
       <section style={{ padding: '96px 24px' }}>
