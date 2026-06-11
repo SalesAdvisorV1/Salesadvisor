@@ -5,6 +5,7 @@ import { motion } from 'framer-motion'
 import Hero from '@/components/landing/hero'
 import Process from '@/components/landing/process'
 import Features from '@/components/landing/features'
+import Testimonials from '@/components/landing/testimonials'
 import SmoothScroll from '@/components/landing/smooth-scroll'
 
 /* ─── Data ─────────────────────────────────────────────────────── */
@@ -169,30 +170,6 @@ const plans = [
     features: ['1 000 crédits / mois', 'Toutes les fonctionnalités', 'Accès API', 'Intégrations CRM', 'Support dédié'],
     highlighted: false,
     badge: null,
-  },
-]
-
-const testimonials = [
-  {
-    quote: "Sales Advisor a multiplié par 3 notre taux de réponse. Les emails générés par l'IA sont vraiment adaptés à chaque prospect.",
-    name: 'Marie L.',
-    role: 'SDR · Scale-up B2B',
-    initials: 'ML',
-    color: '#6366f1',
-  },
-  {
-    quote: "En 30 secondes j'ai un dossier complet sur mon prospect. C'est devenu indispensable avant chaque appel.",
-    name: 'Thomas B.',
-    role: 'Commercial · PME Tech',
-    initials: 'TB',
-    color: '#8b5cf6',
-  },
-  {
-    quote: "La qualité du scoring IA est impressionnante. On perd beaucoup moins de temps sur des leads non qualifiés.",
-    name: 'Sarah M.',
-    role: 'Head of Sales · SaaS',
-    initials: 'SM',
-    color: '#06b6d4',
   },
 ]
 
@@ -507,100 +484,7 @@ export default function LandingPage() {
       <Features />
 
       {/* ── TESTIMONIALS ─────────────────────────────────────────── */}
-      <section style={{ padding: '96px 24px' }}>
-        <div style={{ padding: '0 clamp(32px, 6vw, 120px)' }}>
-          <motion.div
-            initial={{ opacity: 0, y: 24 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            style={{ textAlign: 'center', marginBottom: 56 }}
-          >
-            <h2
-              style={{
-                fontSize: 'clamp(26px, 2.8vw, 40px)',
-                fontWeight: 800,
-                letterSpacing: '-0.03em',
-                margin: '0 0 12px',
-              }}
-            >
-              Ils vendent mieux avec Sales Advisor
-            </h2>
-            <p style={{ fontSize: 16, color: '#9ca3af' }}>
-              Des équipes commerciales qui ont transformé leur prospection
-            </p>
-          </motion.div>
-
-          <div
-            style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(3, 1fr)',
-              gap: 24,
-            }}
-          >
-            {testimonials.map((t, i) => (
-              <motion.div
-                key={t.name}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.1 }}
-                style={{
-                  background: 'rgba(255,255,255,0.78)',
-                  backdropFilter: 'blur(10px)',
-                  WebkitBackdropFilter: 'blur(10px)',
-                  border: '1px solid rgba(255,255,255,0.6)',
-                  borderRadius: 20,
-                  padding: '28px',
-                  boxShadow: '0 4px 16px rgba(99,102,241,0.08)',
-                }}
-              >
-                {/* Stars */}
-                <div style={{ display: 'flex', gap: 3, marginBottom: 16 }}>
-                  {[...Array(5)].map((_, j) => (
-                    <svg key={j} width="14" height="14" viewBox="0 0 24 24" fill="#fbbf24">
-                      <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
-                    </svg>
-                  ))}
-                </div>
-                <p
-                  style={{
-                    fontSize: 15,
-                    color: '#374151',
-                    lineHeight: 1.65,
-                    margin: '0 0 20px',
-                    fontStyle: 'italic',
-                  }}
-                >
-                  &ldquo;{t.quote}&rdquo;
-                </p>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                  <div
-                    style={{
-                      width: 36,
-                      height: 36,
-                      background: t.color,
-                      borderRadius: '50%',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      color: '#fff',
-                      fontWeight: 700,
-                      fontSize: 13,
-                      flexShrink: 0,
-                    }}
-                  >
-                    {t.initials}
-                  </div>
-                  <div>
-                    <div style={{ fontSize: 13, fontWeight: 600, color: '#0a0a0a' }}>{t.name}</div>
-                    <div style={{ fontSize: 12, color: '#9ca3af' }}>{t.role}</div>
-                  </div>
-                </div>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
+      <Testimonials />
 
       {/* ── PRICING ──────────────────────────────────────────────── */}
       <section id="tarifs" style={{ padding: '96px 24px', background: 'transparent' }}>

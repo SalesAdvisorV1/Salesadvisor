@@ -540,6 +540,29 @@ button, a, [role="button"] {
   }
 }
 
+/* =============================================================
+   TESTIMONIALS — staggered rhythm, middle card raised
+   ============================================================= */
+.sa-testi-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  align-items: start;
+}
+
+.sa-testi-side {
+  margin-top: 32px;
+}
+
+@media (max-width: 980px) {
+  .sa-testi-grid {
+    grid-template-columns: 1fr;
+  }
+  .sa-testi-side {
+    margin-top: 0;
+  }
+}
+
 /* ---- Lenis smooth scroll ---- */
 html.lenis,
 html.lenis body {
