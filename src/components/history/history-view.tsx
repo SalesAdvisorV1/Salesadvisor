@@ -35,7 +35,7 @@ export function HistoryView() {
         <button
           type="button"
           onClick={() => refetch()}
-          className="mt-6 rounded-xl bg-gray-900 px-5 py-2.5 text-sm font-medium text-white hover:bg-gray-800 hover:scale-[1.02] active:scale-[0.98] transition-all duration-150 min-h-[44px]"
+          className="sa-btn-primary mt-6 rounded-xl px-5 py-2.5 text-sm font-medium min-h-[44px]"
         >
           Réessayer
         </button>
@@ -96,8 +96,8 @@ export function HistoryView() {
                 animate={{ opacity: 1 }}
                 className="flex flex-col items-center justify-center py-16 text-center"
               >
-                <div className="w-12 h-12 rounded-2xl bg-gray-100 flex items-center justify-center mb-3">
-                  <svg width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="#9ca3af" strokeWidth={1.5}>
+                <div className="w-12 h-12 rounded-2xl bg-indigo-50 flex items-center justify-center mb-3">
+                  <svg width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="#6366f1" strokeWidth={1.5}>
                     <path d="M9 12h6M9 16h6M17 3H7a2 2 0 00-2 2v14a2 2 0 002 2h10a2 2 0 002-2V5a2 2 0 00-2-2z" strokeLinecap="round" strokeLinejoin="round" />
                   </svg>
                 </div>

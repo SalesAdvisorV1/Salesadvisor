@@ -194,6 +194,27 @@ code, kbd, pre, samp {
   transition: left 0.6s ease;
 }
 
+/* ---- Indigo primary button (app pages) ---- */
+.sa-btn-primary {
+  background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+  color: #ffffff;
+  box-shadow: 0 4px 14px rgba(99, 102, 241, 0.35), 0 1px 0 rgba(255, 255, 255, 0.25) inset;
+  transition: transform 0.15s ease, box-shadow 0.2s ease;
+}
+.sa-btn-primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 22px rgba(99, 102, 241, 0.48), 0 1px 0 rgba(255, 255, 255, 0.25) inset;
+}
+.sa-btn-primary:active {
+  transform: translateY(0) scale(0.98);
+}
+.sa-btn-primary:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
 /* ---- Gradient text ---- */
 .gradient-text {
   background: linear-gradient(135deg, #111 0%, #555 100%);

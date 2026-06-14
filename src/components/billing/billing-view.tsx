@@ -36,7 +36,7 @@ export function BillingView() {
         <button
           type="button"
           onClick={() => refetch()}
-          className="mt-6 rounded-xl bg-gray-900 px-5 py-2.5 text-sm font-medium text-white hover:bg-gray-800 hover:scale-[1.02] active:scale-[0.98] transition-all duration-150 min-h-[44px]"
+          className="sa-btn-primary mt-6 rounded-xl px-5 py-2.5 text-sm font-medium min-h-[44px]"
         >
           Réessayer
         </button>
@@ -77,7 +77,17 @@ export function BillingView() {
             <p className="text-sm text-gray-500">Renouvellement le {renewalDate}</p>
           </div>
           <div className="text-right">
-            <span className="text-4xl font-bold text-gray-900 tabular-nums">{remaining}</span>
+            <span
+              className="text-4xl font-bold tabular-nums"
+              style={{
+                background: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+                backgroundClip: 'text',
+              }}
+            >
+              {remaining}
+            </span>
             <span className="ml-2 text-gray-400">/ {total}</span>
           </div>
         </div>

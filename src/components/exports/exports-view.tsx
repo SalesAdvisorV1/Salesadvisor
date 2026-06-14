@@ -118,8 +118,8 @@ export function ExportsView() {
 
         {!loading && !error && entries.length === 0 && (
           <div className="flex flex-col items-center justify-center py-16 text-center">
-            <div className="w-12 h-12 rounded-2xl bg-gray-100 flex items-center justify-center mb-3">
-              <svg width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="#9ca3af" strokeWidth={1.5}>
+            <div className="w-12 h-12 rounded-2xl bg-indigo-50 flex items-center justify-center mb-3">
+              <svg width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="#6366f1" strokeWidth={1.5}>
                 <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4" strokeLinecap="round" />
                 <polyline points="7 10 12 15 17 10" strokeLinecap="round" strokeLinejoin="round" />
                 <line x1="12" y1="15" x2="12" y2="3" strokeLinecap="round" />
@@ -155,7 +155,8 @@ export function ExportsView() {
                     className="mt-2 h-1 rounded-full bg-gray-200 overflow-hidden w-36"
                   >
                     <motion.div
-                      className="h-full bg-gray-900 rounded-full"
+                      className="h-full rounded-full"
+                      style={{ background: 'linear-gradient(90deg, #6366f1 0%, #8b5cf6 100%)' }}
                       initial={{ width: '0%' }}
                       animate={{ width: '100%' }}
                       transition={{ duration: 0.6, ease: 'easeInOut' }}
@@ -169,12 +170,12 @@ export function ExportsView() {
               type="button"
               onClick={() => handleExport(entry)}
               disabled={entry.prospects.length === 0 || exporting.has(entry.id)}
-              className={`shrink-0 text-xs px-4 py-2.5 rounded-lg font-medium transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-40 min-h-[44px] ${
+              className={`shrink-0 text-xs px-4 py-2.5 rounded-lg font-medium transition-all duration-200 disabled:cursor-not-allowed disabled:opacity-40 min-h-[44px] ${
                 exported.has(entry.id)
                   ? "bg-green-50 text-green-700 border border-green-200"
                   : exporting.has(entry.id)
                   ? "bg-gray-100 text-gray-500 border border-gray-200"
-                  : "bg-gray-900 text-white hover:bg-gray-800"
+                  : "sa-btn-primary"
               }`}
             >
               <AnimatePresence mode="wait">

@@ -67,7 +67,7 @@ const sections: SettingsSection[] = [
 ];
 
 const inputClass =
-  "w-full bg-white border border-gray-300 rounded-xl px-4 py-3 text-gray-900 text-sm focus:ring-2 focus:ring-gray-900/10 focus:border-gray-400 focus:outline-none transition-all placeholder:text-gray-400";
+  "w-full bg-white border border-gray-300 rounded-xl px-4 py-3 text-gray-900 text-sm focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-400 focus:outline-none transition-all placeholder:text-gray-400";
 
 export function SettingsView() {
   const [saved, setSaved] = useState(false);
@@ -106,10 +106,10 @@ export function SettingsView() {
         <button
           type="button"
           onClick={handleSave}
-          className={`rounded-xl px-5 py-2.5 text-sm font-semibold transition-colors ${
+          className={`rounded-xl px-5 py-2.5 text-sm font-semibold transition-all ${
             saved
               ? "bg-green-50 text-green-700 border border-green-200"
-              : "bg-gray-900 text-white hover:bg-gray-800"
+              : "sa-btn-primary"
           }`}
         >
           {saved ? "Enregistré ✓" : "Enregistrer"}
@@ -139,7 +139,7 @@ function SettingsFieldRow({ field }: { field: SettingsField }) {
           aria-checked={toggleValue}
           onClick={() => setToggleValue(!toggleValue)}
           className={`relative h-6 w-11 rounded-full transition-colors ${
-            toggleValue ? "bg-gray-900" : "bg-gray-200"
+            toggleValue ? "bg-indigo-500" : "bg-gray-200"
           }`}
         >
           <span

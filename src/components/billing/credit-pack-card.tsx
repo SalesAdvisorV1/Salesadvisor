@@ -9,7 +9,17 @@ export function CreditPackCard({ pack }: { pack: CreditPack }) {
         </span>
       ) : null}
 
-      <div className="text-3xl font-bold text-gray-900">{pack.credits}</div>
+      <div
+        className="text-3xl font-bold"
+        style={{
+          background: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)',
+          WebkitBackgroundClip: 'text',
+          WebkitTextFillColor: 'transparent',
+          backgroundClip: 'text',
+        }}
+      >
+        {pack.credits}
+      </div>
       <div className="mt-1 text-sm text-gray-500">crédits supplémentaires</div>
 
       <div className="mt-4 flex items-baseline gap-1">
@@ -21,7 +31,7 @@ export function CreditPackCard({ pack }: { pack: CreditPack }) {
 
       <button
         type="button"
-        className="mt-6 w-full rounded-xl bg-gray-900 text-white px-4 py-2.5 text-sm font-semibold hover:bg-gray-800 transition-colors"
+        className="sa-btn-primary mt-6 w-full rounded-xl px-4 py-2.5 text-sm font-semibold"
       >
         Acheter ce pack
       </button>
